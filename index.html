@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>Radtraining</title>
+<meta name="theme-color" content="#0D1014">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Radtraining">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="icon" href="icons/icon-192.png">
+<style>
+@font-face{font-family:'Barlow Condensed';font-weight:600;font-style:normal;font-display:swap;src:url(fonts/barlow-condensed-latin-600-normal.woff2) format('woff2')}
+@font-face{font-family:'Barlow Condensed';font-weight:700;font-style:normal;font-display:swap;src:url(fonts/barlow-condensed-latin-700-normal.woff2) format('woff2')}
+@font-face{font-family:'Barlow';font-weight:400;font-style:normal;font-display:swap;src:url(fonts/barlow-latin-400-normal.woff2) format('woff2')}
+@font-face{font-family:'Barlow';font-weight:600;font-style:normal;font-display:swap;src:url(fonts/barlow-latin-600-normal.woff2) format('woff2')}
+:root{
+  --bg:#0D1014; --surf:#161B21; --surf2:#1E242C; --line:#2A313A;
+  --ink:#EEF1F4; --mute:#8C95A1;
+  --z-easy:#7E8BA0; --z-ga1:#1E9E78; --z-hard:#96407F; --z-rec:#3A73BF; --z-sweet:#CC9133;
+  --cur:var(--z-ga1); --cur-ink:#FFFFFF;
+  color-scheme:dark;
+}
+html,body{height:100%;margin:0}
+body{-webkit-tap-highlight-color:transparent;overscroll-behavior:none}
+body{background:var(--bg);color:var(--ink);font-family:Barlow,system-ui,sans-serif;font-size:15px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:720px;margin:0 auto;padding-inline:16px;padding-block:calc(16px + env(safe-area-inset-top,0px)) calc(28px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:16px;min-height:100%;box-sizing:border-box}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+select,button,textarea{font:inherit;color:inherit}
+select{background:var(--surf);border:1px solid var(--line);border-radius:8px;padding:8px 10px;max-width:100%}
+.totals{font-family:"Barlow Condensed",sans-serif;font-size:18px;color:var(--mute);font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.totals b{color:var(--ink);font-weight:600}
+
+.stage{background:linear-gradient(180deg,color-mix(in srgb,var(--cur) 30%,var(--surf)) 0%,var(--surf) 55%);border-radius:18px;padding:22px 20px 18px;position:relative;overflow:hidden;border-top:6px solid var(--cur);transition:border-color .3s}
+.eyebrow{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:color-mix(in srgb,var(--cur) 65%,#fff);font-weight:600;display:flex;justify-content:space-between;gap:8px}
+.bname{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:clamp(30px,7vw,44px);line-height:1.05;margin-top:6px;text-wrap:balance}
+.clock{font-family:"Barlow Condensed",sans-serif;font-weight:600;font-size:clamp(96px,30vw,190px);line-height:.9;font-variant-numeric:tabular-nums;letter-spacing:-.01em;margin:10px 0 4px}
+.stage.flash .clock{animation:pulse .5s ease-out}
+@keyframes pulse{from{color:var(--cur)}to{color:var(--ink)}}
+.target{font-size:clamp(18px,4.4vw,24px);font-weight:600;line-height:1.3}
+.hint{color:var(--mute);margin-top:4px;line-height:1.4}
+.bprog{height:6px;background:var(--surf2);border-radius:3px;margin-top:16px;overflow:hidden}
+.bprog i{display:block;height:100%;width:0;background:var(--cur)}
+
+.next{display:flex;align-items:baseline;gap:10px;padding:12px 16px;background:var(--surf);border-radius:12px;flex-wrap:wrap}
+.next .lbl{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.next .nm{font-weight:600}
+.next .dur{margin-left:auto;font-family:"Barlow Condensed",sans-serif;font-size:20px;font-variant-numeric:tabular-nums;color:var(--mute)}
+
+.timeline{display:flex;height:22px;border-radius:6px;overflow:hidden;gap:2px;position:relative}
+.timeline span{display:block;height:100%;opacity:.6}
+.timeline span.done{opacity:.25}
+.timeline span.now{opacity:1}
+.tl-wrap{position:relative}
+.tl-cursor{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink);border-radius:1px;left:0}
+
+.controls{display:grid;grid-template-columns:1fr 2fr 1fr;gap:10px}
+.controls button{border:0;border-radius:14px;padding:18px 8px;font-size:18px;font-weight:600;background:var(--surf2);cursor:pointer}
+.controls button.main{background:var(--cur);color:var(--cur-ink);font-size:22px}
+.controls button:focus-visible,select:focus-visible,.tog:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.row{display:flex;gap:16px;flex-wrap:wrap;align-items:center;color:var(--mute);font-size:14px}
+.tog{display:flex;align-items:center;gap:6px;cursor:pointer}
+.tog input{accent-color:var(--z-ga1);width:18px;height:18px}
+
+details{background:var(--surf);border-radius:12px;padding:12px 16px}
+summary{cursor:pointer;font-weight:600}
+.plan{margin-top:10px;display:grid;grid-template-columns:auto 1fr auto;gap:6px 12px;font-size:14px;font-variant-numeric:tabular-nums}
+.plan .dot{width:10px;height:10px;border-radius:50%;margin-top:5px}
+.plan .t{color:var(--mute);text-align:right}
+textarea{width:100%;box-sizing:border-box;min-height:180px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px;font-family:ui-monospace,Menlo,monospace;font-size:13px;margin-top:10px}
+.edit-help{color:var(--mute);font-size:13px;line-height:1.45;margin-top:8px}
+.edit-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.edit-btns button{border:1px solid var(--line);background:var(--surf2);border-radius:8px;padding:8px 12px;cursor:pointer}
+.err{color:#FF6B6B;font-size:13px;margin-top:6px}
+@media (max-width:420px){.controls button{padding:16px 4px;font-size:16px}.controls button.main{font-size:20px}}
+@media (prefers-reduced-motion:reduce){.stage.flash .clock{animation:none}}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <header>
+    <select id="preset" aria-label="Einheit wählen"></select>
+    <div class="totals"><b id="elapsed">0:00</b> / <span id="total">0:00</span> · noch <b id="remain">0:00</b></div>
+  </header>
+
+  <section class="stage" id="stage" aria-live="polite">
+    <div class="eyebrow"><span id="zone">GA1</span><span id="rep"></span></div>
+    <div class="bname" id="bname">–</div>
+    <div class="clock" id="clock">0:00</div>
+    <div class="target" id="target"></div>
+    <div class="hint" id="hint"></div>
+    <div class="bprog"><i id="bbar"></i></div>
+  </section>
+
+  <div class="next"><span class="lbl">Danach</span><span class="nm" id="nname">–</span><span class="dur" id="ndur"></span></div>
+
+  <div class="tl-wrap"><div class="timeline" id="timeline"></div><div class="tl-cursor" id="cursor"></div></div>
+
+  <div class="controls">
+    <button id="back" aria-label="Zurück zum Blockanfang">⟲ Block</button>
+    <button id="go" class="main">Start</button>
+    <button id="skip" aria-label="Block überspringen">Weiter ⟶</button>
+  </div>
+
+  <div class="row">
+    <label class="tog"><input type="checkbox" id="optVoice" checked> Ansage</label>
+    <label class="tog"><input type="checkbox" id="optBeep" checked> Piepton</label>
+    <label class="tog"><input type="checkbox" id="optHalf" checked> Halbzeit-Ansage in Intervallen</label>
+    <button id="reset" style="margin-left:auto;background:none;border:0;color:var(--mute);text-decoration:underline;cursor:pointer">Zurücksetzen</button>
+  </div>
+
+  <details id="planBox">
+    <summary>Ablauf der Einheit</summary>
+    <div class="plan" id="plan"></div>
+  </details>
+
+  <details>
+    <summary>Eigene Einheit anlegen</summary>
+    <div class="edit-help">Eine Zeile pro Block: <code>Minuten | Name | Vorgabe | Zone</code>. Zonen: <code>easy</code>, <code>ga1</code>, <code>hard</code>, <code>rec</code>, <code>sweet</code>. Wiederholungen mit <code>5x</code> davor und den Blöcken in eckigen Klammern, getrennt durch <code>;</code>. Sekunden als <code>0:30</code>.<br>
+    Beispiel: <code>5x [4 | EB4' | HF bis &gt;166 | hard ; 4 | Pause | ganz locker | rec]</code></div>
+    <textarea id="custom" spellcheck="false"></textarea>
+    <div class="edit-btns"><button id="loadCur">Aktuelle Einheit übernehmen</button><button id="useCustom">Als eigene Einheit verwenden</button></div>
+    <div class="err" id="err" hidden></div>
+  </details>
+</div>
+
+<script>
+const ZONES={easy:{c:'--z-easy',l:'Locker',ink:'#0B1220'},ga1:{c:'--z-ga1',l:'GA1',ink:'#FFFFFF'},hard:{c:'--z-hard',l:'EB4 · hart',ink:'#FFFFFF'},rec:{c:'--z-rec',l:'Pause',ink:'#FFFFFF'},sweet:{c:'--z-sweet',l:'Z3/Z4',ink:'#1A1200'}};
+
+const PRESETS={
+ rad_eb4:{name:"Rad · EB4' 5×4 min · 100 min (Hotelrad, nach Puls)",src:
+`10 | Einrollen | locker, HF unter 130, Kadenz 85–95 | easy
+15 | Grundlage | HF 134–140 · mit Watt: 161–185 W | ga1
+5x [4 | EB4' hart | HF steigt bis zum Ende über 166 · mit Watt: 286–330 W · Kadenz 90+ | hard ; 4 | Pause | ganz locker treten, HF unter 125 | rec]
+30 | Grundlage | HF 134–140 · nicht nach oben driften | ga1
+5 | Ausrollen | locker, HF runter | easy`},
+ lauf_eb4:{name:"Lauf · EB4' 5×4 min · 60 min (Sa 26.09.)",src:
+`12 | Einlaufen | locker, HF 135–150, 6:15–5:45 /km | ga1
+3 | Steigerungen | 3× 20 s zügig, dazwischen locker | sweet
+5x [4 | EB4' hart | 4:44–4:15 /km · gleichmäßig, letzter so schnell wie erster | hard ; 4 | Gehpause | gehen, locker auslaufen erst am Ende | rec]
+5 | Auslaufen | sehr locker | easy`},
+ rad_ga:{name:"Rad · Grundlage 150 min (Peloton, nach Puls)",src:
+`10 | Einrollen | locker | easy
+135 | Grundlage | HF 134–140 · Wattanzeige nicht geeicht | ga1
+5 | Ausrollen | locker | easy`}
+};
+
+// ---------- parsing ----------
+function parseDur(s){s=s.trim();if(s.includes(':')){const[m,x]=s.split(':');return(+m)*60+(+x)}return Math.round(parseFloat(s.replace(',','.'))*60)}
+function parseBlock(line){const p=line.split('|').map(x=>x.trim());if(p.length<2)throw new Error('Zeile unvollständig: '+line);
+  const sec=parseDur(p[0]);if(!(sec>0))throw new Error('Keine gültige Dauer: '+line);
+  const z=(p[3]||'ga1').toLowerCase();if(!ZONES[z])throw new Error('Unbekannte Zone "'+z+'"');
+  return{sec,name:p[1],target:p[2]||'',zone:z}}
+function parse(src){const out=[];
+  for(let raw of src.split('\n')){const line=raw.trim();if(!line||line.startsWith('#'))continue;
+    const m=line.match(/^(\d+)\s*x\s*\[(.+)\]$/i);
+    if(m){const n=+m[1];const parts=m[2].split(';').map(parseBlock);
+      for(let i=1;i<=n;i++)parts.forEach((b,j)=>{const c={...b,rep:i,reps:n};
+        if(i===n&&j===parts.length-1&&b.zone==='rec')c.lastRec=true;out.push(c)})}
+    else out.push(parseBlock(line))}
+  if(!out.length)throw new Error('Keine Blöcke gefunden');return out}
+
+// ---------- state ----------
+let blocks=[],total=0,starts=[];
+let running=false,t0=0,acc=0,lastIdx=-1,lastSec=-1,halfSaid=-1,presetKey='rad_eb4',customSrc='';
+const $=id=>document.getElementById(id);
+const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+
+function load(key,src){presetKey=key;blocks=parse(src);starts=[];total=0;for(const b of blocks){starts.push(total);total+=b.sec}
+  running=false;acc=0;lastIdx=-1;halfSaid=-1;buildTimeline();buildPlan();render(0);$('go').textContent='Start';save()}
+
+function elapsed(){return Math.min(total,acc+(running?(performance.now()-t0)/1000:0))}
+function idxAt(e){let i=0;while(i<blocks.length-1&&e>=starts[i+1])i++;return i}
+const fmt=s=>{s=Math.max(0,Math.ceil(s-1e-6));const h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60;return(h?h+':'+String(m).padStart(2,'0'):m)+':'+String(x).padStart(2,'0')};
+const fmtDur=s=>s%60?fmt(s):(s/60)+' min';
+
+function buildTimeline(){const tl=$('timeline');tl.innerHTML='';
+  blocks.forEach((b,i)=>{const s=document.createElement('span');s.style.flex=b.sec;s.style.background='var('+ZONES[b.zone].c+')';s.title=b.name;tl.appendChild(s)})}
+function buildPlan(){const p=$('plan');p.innerHTML='';
+  blocks.forEach((b,i)=>{const d=document.createElement('span');d.className='dot';d.style.background='var('+ZONES[b.zone].c+')';
+    const n=document.createElement('span');n.textContent=b.name+(b.rep?' '+b.rep+'/'+b.reps:'')+(b.target?' — '+b.target:'');
+    const t=document.createElement('span');t.className='t';t.textContent=fmt(starts[i])+' · '+fmtDur(b.sec);p.append(d,n,t)})}
+
+function render(e){const i=idxAt(e),b=blocks[i],into=e-starts[i],left=b.sec-into,done=e>=total;
+  document.documentElement.style.setProperty('--cur','var('+ZONES[b.zone].c+')');document.documentElement.style.setProperty('--cur-ink',ZONES[b.zone].ink);
+  $('zone').textContent=done?'Fertig':ZONES[b.zone].l;
+  $('rep').textContent=b.rep?'Intervall '+b.rep+' / '+b.reps:'Block '+(i+1)+' / '+blocks.length;
+  $('bname').textContent=done?'Einheit geschafft':b.name;
+  $('clock').textContent=done?'0:00':fmt(left);
+  $('target').textContent=done?'':b.target;
+  $('hint').textContent=done?'Gesamtzeit '+fmt(total):'';
+  $('bbar').style.width=(done?100:into/b.sec*100)+'%';
+  const nb=blocks[i+1];$('nname').textContent=nb?nb.name+(nb.rep?' '+nb.rep+'/'+nb.reps:'')+(nb.target?' — '+nb.target:''):'Ende';$('ndur').textContent=nb?fmtDur(nb.sec):'';
+  $('elapsed').textContent=fmt(e);$('total').textContent=fmt(total);$('remain').textContent=fmt(total-e);
+  [...$('timeline').children].forEach((s,k)=>{s.className=k<i?'done':k===i?'now':''});
+  $('cursor').style.left='calc('+(e/total*100)+'% - 1px)';
+  return{i,left,into,b,done}}
+
+// ---------- sound & voice ----------
+let ac=null;
+function beep(freq=880,dur=.12,vol=.35){if(!$('optBeep').checked)return;try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();
+  const o=ac.createOscillator(),g=ac.createGain();o.frequency.value=freq;o.type='square';g.gain.value=vol;o.connect(g);g.connect(ac.destination);
+  const t=ac.currentTime;g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.001,t+dur);o.start(t);o.stop(t+dur+.02)}catch(e){}}
+function say(txt){if(!$('optVoice').checked||!window.speechSynthesis)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(txt);u.lang='de-DE';u.rate=1.05;speechSynthesis.speak(u)}catch(e){}}
+function spokenDur(s){const m=Math.floor(s/60),x=s%60;return(m?m+(m===1?' Minute':' Minuten'):'')+(x?(m?' ':'')+x+' Sekunden':'')}
+function announce(b){let t=b.name.replace("EB4'",'E B 4');if(b.rep)t+=', '+b.rep+' von '+b.reps;t+=', '+spokenDur(b.sec);if(b.target)t+='. '+b.target.split('·')[0];say(t)}
+
+// ---------- wake lock ----------
+let wl=null;async function lockScreen(){try{if('wakeLock' in navigator&&!wl){wl=await navigator.wakeLock.request('screen');wl.addEventListener('release',()=>wl=null)}}catch(e){}}
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&running)lockScreen()});
+
+// ---------- loop ----------
+function tick(){const e=elapsed(),r=render(e);
+  if(running){
+    if(r.done){running=false;acc=total;$('go').textContent='Neu starten';beep(660,.5);say('Einheit geschafft. Gut gemacht.');save();requestAnimationFrame(tick);return}
+    if(r.i!==lastIdx){if(lastIdx!==-1){beep(1175,.35);const st=$('stage');st.classList.remove('flash');void st.offsetWidth;st.classList.add('flash')}announce(r.b);lastIdx=r.i;halfSaid=-1}
+    const s=Math.ceil(r.left);
+    if(s!==lastSec){lastSec=s;
+      if(s<=3&&s>=1)beep(880,.1);
+      if(s===10&&r.b.sec>=60&&blocks[r.i+1])say('Noch 10 Sekunden. Gleich: '+blocks[r.i+1].name.replace("EB4'",'E B 4'));
+      if($('optHalf').checked&&r.b.zone==='hard'&&r.b.sec>=120&&halfSaid!==r.i&&r.into>=r.b.sec/2){halfSaid=r.i;say('Halbzeit')}
+      if(r.b.zone==='hard'&&s===60&&r.b.sec>=180)say('Noch eine Minute')}
+    if(Math.floor(e)%5===0)save()}
+  requestAnimationFrame(tick)}
+
+function start(){if(elapsed()>=total){acc=0;lastIdx=-1}
+  try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();ac.resume()}catch(e){}
+  running=true;t0=performance.now();$('go').textContent='Pause';lockScreen()}
+function pause(){acc=elapsed();running=false;$('go').textContent='Weiter';try{speechSynthesis.cancel()}catch(e){}save();if(wl){wl.release();wl=null}}
+function jump(to){const wasRunning=running;acc=Math.max(0,Math.min(total-.01,to));t0=performance.now();lastIdx=wasRunning?-1:lastIdx;render(acc);save()}
+
+$('go').onclick=()=>running?pause():start();
+$('skip').onclick=()=>{const i=idxAt(elapsed());jump(i+1<blocks.length?starts[i+1]:total-.01)};
+$('back').onclick=()=>{const e=elapsed(),i=idxAt(e);jump(e-starts[i]<3&&i>0?starts[i-1]:starts[i])};
+$('reset').onclick=()=>{running=false;acc=0;lastIdx=-1;$('go').textContent='Start';render(0);save()};
+
+// ---------- presets & custom ----------
+function fillSelect(){const s=$('preset');s.innerHTML='';
+  for(const k in PRESETS){const o=document.createElement('option');o.value=k;o.textContent=PRESETS[k].name;s.appendChild(o)}
+  const o=document.createElement('option');o.value='custom';o.textContent='Eigene Einheit';s.appendChild(o)}
+function srcFor(k){return k==='custom'?customSrc:PRESETS[k].src}
+$('preset').onchange=e=>{const k=e.target.value;if(k==='custom'&&!customSrc){$('err').hidden=false;$('err').textContent='Noch keine eigene Einheit – unten anlegen.';e.target.value=presetKey;return}
+  if(running&&!confirmSwitch())return;load(k,srcFor(k))};
+function confirmSwitch(){pause();return true}
+$('loadCur').onclick=()=>{$('custom').value=srcFor(presetKey)};
+$('useCustom').onclick=()=>{const src=$('custom').value;try{parse(src);customSrc=src;$('err').hidden=true;$('preset').value='custom';load('custom',src)}catch(err){$('err').hidden=false;$('err').textContent=err.message}};
+
+function save(){store.set('ivtimer',{presetKey,customSrc,acc:elapsed(),at:Date.now()})}
+
+// ---------- boot ----------
+fillSelect();
+const saved=store.get('ivtimer');
+if(saved&&saved.customSrc)customSrc=saved.customSrc;
+let bootKey=saved&&(saved.presetKey==='custom'?customSrc:PRESETS[saved.presetKey])?saved.presetKey:'rad_eb4';
+$('preset').value=bootKey;load(bootKey,srcFor(bootKey));
+if(saved&&saved.presetKey===bootKey&&saved.acc>0&&saved.acc<total&&Date.now()-saved.at<3*3600e3){acc=saved.acc;$('go').textContent='Weiter';render(acc)}
+$('custom').value=srcFor(bootKey);
+requestAnimationFrame(tick);
+
+// ---------- offline ----------
+if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{})})}
+</script>
+</body>
+</html>
