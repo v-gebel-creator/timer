@@ -1,5 +1,5 @@
 // Radtraining – Offline-Cache. Bei jeder Änderung VERSION hochzählen.
-const VERSION = 'radtraining-v1';
+const VERSION = 'radtraining-v2';
 const FILES = [
   './', 'index.html', 'manifest.webmanifest',
   'icons/icon-180.png', 'icons/icon-192.png', 'icons/icon-512.png',

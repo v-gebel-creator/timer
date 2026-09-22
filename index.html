@@ -70,11 +70,40 @@ summary{cursor:pointer;font-weight:600}
 .plan{margin-top:10px;display:grid;grid-template-columns:auto 1fr auto;gap:6px 12px;font-size:14px;font-variant-numeric:tabular-nums}
 .plan .dot{width:10px;height:10px;border-radius:50%;margin-top:5px}
 .plan .t{color:var(--mute);text-align:right}
-textarea{width:100%;box-sizing:border-box;min-height:180px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px;font-family:ui-monospace,Menlo,monospace;font-size:13px;margin-top:10px}
+textarea{font-size:16px!important;width:100%;box-sizing:border-box;min-height:180px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px;font-family:ui-monospace,Menlo,monospace;font-size:13px;margin-top:10px}
 .edit-help{color:var(--mute);font-size:13px;line-height:1.45;margin-top:8px}
 .edit-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
 .edit-btns button{border:1px solid var(--line);background:var(--surf2);border-radius:8px;padding:8px 12px;cursor:pointer}
 .err{color:#FF6B6B;font-size:13px;margin-top:6px}
+.bk{display:flex;flex-direction:column;gap:14px;margin-top:12px}
+.bk-step{display:flex;flex-direction:column;gap:8px}
+.bk-lbl{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips button{border:1px solid var(--line);background:var(--surf2);border-radius:999px;padding:9px 14px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:7px}
+.chips.small button{padding:7px 12px;font-weight:500;font-size:14px}
+.chips button .sw{width:10px;height:10px;border-radius:50%}
+.chips button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chips button:active{transform:scale(.97)}
+.chips input{font-size:16px!important;width:74px;border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:8px 12px;font:inherit;color:inherit}
+.seg{display:inline-flex;background:var(--surf2);border-radius:10px;padding:3px;align-self:flex-start}
+.seg button{border:0;background:none;padding:8px 18px;border-radius:8px;font-weight:600;cursor:pointer;color:var(--mute)}
+.seg button.on{background:var(--ink);color:var(--bg)}
+.bk-list{display:flex;flex-direction:column;gap:6px}
+.bk-item{display:grid;grid-template-columns:6px 52px 1fr;gap:10px;align-items:start;background:var(--bg);border-radius:8px;padding:9px 10px;font-size:14px}
+.bk-item .bar{align-self:stretch;border-radius:3px}
+.bk-item .d{font-family:"Barlow Condensed",sans-serif;font-size:18px;font-weight:600;font-variant-numeric:tabular-nums}
+.bk-item .n{font-weight:600}
+.bk-item .tg{color:var(--mute)}
+.bk-item.set{grid-template-columns:6px 52px 1fr}
+.bk-item .sub{display:flex;flex-direction:column;gap:4px;margin-top:4px}
+.bk-empty{color:var(--mute);font-size:14px;padding:8px 0}
+.bk-sum{font-family:"Barlow Condensed",sans-serif;font-size:20px;font-weight:600;font-variant-numeric:tabular-nums}
+.bk-save{display:flex;gap:8px;flex-wrap:wrap}
+.bk-save input{font-size:16px!important;flex:1 1 180px;min-width:0;border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:10px 12px;font:inherit;color:inherit}
+.primary{border:0!important;background:var(--z-hard)!important;color:#fff;border-radius:8px;padding:10px 16px;font-weight:600;cursor:pointer}
+.linkbtn{background:none;border:0;color:var(--mute);text-decoration:underline;cursor:pointer;align-self:flex-start;padding:0}
+details.raw{background:var(--bg);padding:10px 12px}
+details.raw summary{font-weight:500;color:var(--mute)}
 @media (max-width:420px){.controls button{padding:16px 4px;font-size:16px}.controls button.main{font-size:20px}}
 @media (prefers-reduced-motion:reduce){.stage.flash .clock{animation:none}}
 </style>
@@ -119,18 +148,56 @@ textarea{width:100%;box-sizing:border-box;min-height:180px;background:var(--bg);
     <div class="plan" id="plan"></div>
   </details>
 
-  <details>
-    <summary>Eigene Einheit anlegen</summary>
-    <div class="edit-help">Eine Zeile pro Block: <code>Minuten | Name | Vorgabe | Zone</code>. Zonen: <code>easy</code>, <code>ga1</code>, <code>hard</code>, <code>rec</code>, <code>sweet</code>. Wiederholungen mit <code>5x</code> davor und den Blöcken in eckigen Klammern, getrennt durch <code>;</code>. Sekunden als <code>0:30</code>.<br>
-    Beispiel: <code>5x [4 | EB4' | HF bis &gt;166 | hard ; 4 | Pause | ganz locker | rec]</code></div>
-    <textarea id="custom" spellcheck="false"></textarea>
-    <div class="edit-btns"><button id="loadCur">Aktuelle Einheit übernehmen</button><button id="useCustom">Als eigene Einheit verwenden</button></div>
-    <div class="err" id="err" hidden></div>
+  <details id="builderBox">
+    <summary>Einheit bauen</summary>
+    <div class="bk">
+      <div class="seg" role="group" aria-label="Sportart">
+        <button type="button" id="spRad" class="on">Rad</button><button type="button" id="spLauf">Lauf</button><button type="button" id="spSchwimm">Schwimmen</button>
+      </div>
+
+      <div class="bk-step"><span class="bk-lbl">1 · Dauer</span>
+        <div class="chips" id="durChips"></div>
+      </div>
+
+      <div class="bk-step"><span class="bk-lbl">2 · Block antippen – wird mit der gewählten Dauer angehängt</span>
+        <div class="chips" id="blockChips"></div>
+      </div>
+
+      <div class="bk-step"><span class="bk-lbl">Zusatz an letzten Block hängen</span>
+        <div class="chips small" id="extraChips"></div>
+      </div>
+
+      <div class="bk-step"><span class="bk-lbl">Letzte 2 Blöcke (Belastung + Pause) wiederholen</span>
+        <div class="chips small" id="repChips"></div>
+      </div>
+
+      <div class="bk-list" id="bkList"></div>
+      <div class="bk-sum" id="bkSum"></div>
+
+      <div class="edit-btns">
+        <button type="button" id="bkUndo">Letzten Block löschen</button>
+        <button type="button" id="bkClear">Alles leeren</button>
+        <button type="button" id="loadCur">Aktuelle Einheit laden</button>
+      </div>
+
+      <div class="bk-save">
+        <input id="bkName" type="text" placeholder="Name, z. B. Schwelle 3×10" autocomplete="off">
+        <button type="button" id="useCustom" class="primary">Speichern &amp; laden</button>
+      </div>
+      <div class="err" id="err" hidden></div>
+      <button type="button" id="bkDel" class="linkbtn" hidden>Diese eigene Einheit löschen</button>
+
+      <details class="raw">
+        <summary>Text direkt bearbeiten</summary>
+        <div class="edit-help">Eine Zeile pro Block: <code>Minuten | Name | Vorgabe | Zone</code>. Zonen: <code>easy</code>, <code>ga1</code>, <code>sweet</code>, <code>hard</code>, <code>rec</code>. Wiederholung: <code>5x [4 | EB4' | … | hard ; 4 | Pause | … | rec]</code>. Sekunden als <code>0:30</code>.</div>
+        <textarea id="custom" spellcheck="false"></textarea>
+      </details>
+    </div>
   </details>
 </div>
 
 <script>
-const ZONES={easy:{c:'--z-easy',l:'Locker',ink:'#0B1220'},ga1:{c:'--z-ga1',l:'GA1',ink:'#FFFFFF'},hard:{c:'--z-hard',l:'EB4 · hart',ink:'#FFFFFF'},rec:{c:'--z-rec',l:'Pause',ink:'#FFFFFF'},sweet:{c:'--z-sweet',l:'Z3/Z4',ink:'#1A1200'}};
+const ZONES={easy:{c:'--z-easy',l:'Locker',ink:'#0B1220'},ga1:{c:'--z-ga1',l:'GA1',ink:'#FFFFFF'},hard:{c:'--z-hard',l:'Hart',ink:'#FFFFFF'},rec:{c:'--z-rec',l:'Pause',ink:'#FFFFFF'},sweet:{c:'--z-sweet',l:'Tempo',ink:'#1A1200'}};
 
 const PRESETS={
  rad_eb4:{name:"Rad · EB4' 5×4 min · 100 min (Hotelrad, nach Puls)",src:
@@ -167,7 +234,7 @@ function parse(src){const out=[];
 
 // ---------- state ----------
 let blocks=[],total=0,starts=[];
-let running=false,t0=0,acc=0,lastIdx=-1,lastSec=-1,halfSaid=-1,presetKey='rad_eb4',customSrc='';
+let running=false,t0=0,acc=0,lastIdx=-1,lastSec=-1,halfSaid=-1,presetKey='rad_eb4';
 const $=id=>document.getElementById(id);
 const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 
@@ -239,27 +306,131 @@ $('skip').onclick=()=>{const i=idxAt(elapsed());jump(i+1<blocks.length?starts[i+
 $('back').onclick=()=>{const e=elapsed(),i=idxAt(e);jump(e-starts[i]<3&&i>0?starts[i-1]:starts[i])};
 $('reset').onclick=()=>{running=false;acc=0;lastIdx=-1;$('go').textContent='Start';render(0);save()};
 
-// ---------- presets & custom ----------
+// ---------- presets & eigene Einheiten ----------
+let customs=store.get('ivtimer_customs')||{};           // {name: src}
 function fillSelect(){const s=$('preset');s.innerHTML='';
-  for(const k in PRESETS){const o=document.createElement('option');o.value=k;o.textContent=PRESETS[k].name;s.appendChild(o)}
-  const o=document.createElement('option');o.value='custom';o.textContent='Eigene Einheit';s.appendChild(o)}
-function srcFor(k){return k==='custom'?customSrc:PRESETS[k].src}
-$('preset').onchange=e=>{const k=e.target.value;if(k==='custom'&&!customSrc){$('err').hidden=false;$('err').textContent='Noch keine eigene Einheit – unten anlegen.';e.target.value=presetKey;return}
-  if(running&&!confirmSwitch())return;load(k,srcFor(k))};
-function confirmSwitch(){pause();return true}
-$('loadCur').onclick=()=>{$('custom').value=srcFor(presetKey)};
-$('useCustom').onclick=()=>{const src=$('custom').value;try{parse(src);customSrc=src;$('err').hidden=true;$('preset').value='custom';load('custom',src)}catch(err){$('err').hidden=false;$('err').textContent=err.message}};
+  const g1=document.createElement('optgroup');g1.label='Vom Coach';
+  for(const k in PRESETS){const o=document.createElement('option');o.value=k;o.textContent=PRESETS[k].name;g1.appendChild(o)}
+  s.appendChild(g1);
+  const names=Object.keys(customs).sort();
+  if(names.length){const g2=document.createElement('optgroup');g2.label='Eigene';
+    for(const n of names){const o=document.createElement('option');o.value='c:'+n;o.textContent=n;g2.appendChild(o)}s.appendChild(g2)}}
+function srcFor(k){return k.startsWith('c:')?customs[k.slice(2)]:PRESETS[k]&&PRESETS[k].src}
+function nameFor(k){return k.startsWith('c:')?k.slice(2):''}
+$('preset').onchange=e=>{const k=e.target.value;if(running)pause();load(k,srcFor(k));$('bkDel').hidden=!k.startsWith('c:')};
 
-function save(){store.set('ivtimer',{presetKey,customSrc,acc:elapsed(),at:Date.now()})}
+// ---------- Baukasten ----------
+const LIB={
+ rad:{
+  blocks:[
+   {n:'Einrollen',z:'easy',t:'locker, HF unter 130, Kadenz 85–95',d:10},
+   {n:'Grundlage',z:'ga1',t:'HF 134–140 · 161–185 W',d:20},
+   {n:'Tempo Z3',z:'sweet',t:'186–240 W · gleichmäßig',d:10},
+   {n:'Schwelle Z4',z:'hard',t:'241–285 W · HF steigt langsam',d:8},
+   {n:"EB4'",z:'hard',t:'HF bis zum Ende über 166 · 286–330 W',d:4},
+   {n:'VO2 kurz',z:'hard',t:'über 330 W · Kadenz 100+',d:1},
+   {n:'Sprint',z:'hard',t:'maximal · im Stehen',d:.25},
+   {n:'Pause',z:'rec',t:'ganz locker treten, HF unter 125',d:4},
+   {n:'Ausrollen',z:'easy',t:'locker, HF runter',d:5}],
+  extras:['Kadenz 85–95','Kadenz 90+','Kadenz 100+','Kadenz 60–70 (Kraft)','sitzend','im Stehen','nicht nach oben driften','nach Puls – Watt nicht geeicht','trinken']},
+ lauf:{
+  blocks:[
+   {n:'Einlaufen',z:'ga1',t:'locker, HF 135–150 · 6:15–5:45 /km',d:12},
+   {n:'Grundlage',z:'ga1',t:'HF 135–155 · 6:15–5:35 /km',d:30},
+   {n:'Tempo Z3',z:'sweet',t:'5:34–5:15 /km · HF 156–162',d:10},
+   {n:'Schwelle Z4',z:'hard',t:'5:14–4:45 /km · HF 163–172',d:8},
+   {n:"EB4'",z:'hard',t:'4:44–4:15 /km · gleichmäßig',d:4},
+   {n:'Steigerung',z:'sweet',t:'20 s zügig, locker auslaufen',d:.5},
+   {n:'Trabpause',z:'rec',t:'locker traben',d:2},
+   {n:'Gehpause',z:'rec',t:'gehen',d:2},
+   {n:'Auslaufen',z:'easy',t:'sehr locker',d:5}],
+  extras:['Kadenz 170+','flach','Hügel','letzter so schnell wie erster','Lufttemperatur notieren','Knie beobachten','trinken']},
+ schwimm:{
+  blocks:[
+   {n:'Einschwimmen',z:'easy',t:'locker, Lagen gemischt',d:8},
+   {n:'Technik',z:'easy',t:'Drills: Abschlag, Faust, Zählen',d:6},
+   {n:'Grundlage',z:'ga1',t:'gleichmäßig kraulen, ruhig atmen',d:15},
+   {n:'Tempo',z:'sweet',t:'zügig, Züge pro Bahn halten',d:4},
+   {n:'Schwelle',z:'hard',t:'hart, aber gleichmäßig über alle Wiederholungen',d:3},
+   {n:'Sprint',z:'hard',t:'25 m maximal',d:.5},
+   {n:'Pause am Rand',z:'rec',t:'stehen, durchatmen',d:.5},
+   {n:'Ausschwimmen',z:'easy',t:'ganz locker',d:5}],
+  extras:['Pull Buoy','Paddles','Flossen','3er-Atmung','Wende üben','Züge zählen','Kraul','Rücken']}
+};
+const DURS=[.25,.5,1,2,3,4,5,8,10,12,15,20,30,45,60,90];
+let sport='rad',dur=null,items=[];   // items: {sec,name,target,zone} oder {rep:n,parts:[..]}
+
+const secTxt=sec=>sec%60?(Math.floor(sec/60)+':'+String(sec%60).padStart(2,'0')):String(sec/60);
+const durLbl=m=>m<1?(m*60)+' s':m+' min';
+function toSrc(){return items.map(it=>it.rep?`${it.rep}x [${it.parts.map(line).join(' ; ')}]`:line(it)).join('\n')}
+function line(b){return `${secTxt(b.sec)} | ${b.name} | ${b.target} | ${b.zone}`}
+function fromSrc(src){const out=[];for(const raw of src.split('\n')){const l=raw.trim();if(!l)continue;
+  const m=l.match(/^(\d+)\s*x\s*\[(.+)\]$/i);if(m)out.push({rep:+m[1],parts:m[2].split(';').map(parseBlock)});else out.push(parseBlock(l))}return out}
+function itemsSec(){return items.reduce((a,it)=>a+(it.rep?it.rep*it.parts.reduce((x,p)=>x+p.sec,0):it.sec),0)}
+
+function chip(label,on,cls){const b=document.createElement('button');b.type='button';b.textContent=label;if(cls)b.className=cls;b.onclick=on;return b}
+function buildChips(){
+  const dc=$('durChips');dc.innerHTML='';
+  const auto=chip('Vorschlag',()=>{dur=null;buildChips()},dur===null?'on':'');dc.appendChild(auto);
+  DURS.forEach(m=>dc.appendChild(chip(durLbl(m),()=>{dur=m;buildChips()},dur===m?'on':'')));
+  const inp=document.createElement('input');inp.type='number';inp.min='1';inp.step='1';inp.placeholder='min';inp.id='durFree';inp.inputMode='numeric';
+  if(dur!==null&&!DURS.includes(dur))inp.value=dur;
+  inp.onchange=()=>{const v=parseFloat(inp.value);if(v>0){dur=v;buildChips()}};dc.appendChild(inp);
+  const bc=$('blockChips');bc.innerHTML='';
+  LIB[sport].blocks.forEach(b=>{const el=chip('',()=>addBlock(b));const sw=document.createElement('span');sw.className='sw';sw.style.background='var('+ZONES[b.z].c+')';
+    el.append(sw,document.createTextNode(b.n+(dur===null?' · '+durLbl(b.d):'')));bc.appendChild(el)});
+  const ec=$('extraChips');ec.innerHTML='';LIB[sport].extras.forEach(x=>ec.appendChild(chip('+ '+x,()=>addExtra(x))));
+  const rc=$('repChips');rc.innerHTML='';[2,3,4,5,6,8,10].forEach(n=>rc.appendChild(chip('× '+n,()=>makeRep(n))));
+  $('spRad').className=sport==='rad'?'on':'';$('spLauf').className=sport==='lauf'?'on':'';$('spSchwimm').className=sport==='schwimm'?'on':'';
+}
+function addBlock(b){const m=dur===null?b.d:dur;items.push({sec:Math.round(m*60),name:b.n,target:b.t,zone:b.z});sync()}
+function lastBlock(){const it=items[items.length-1];if(!it)return null;return it.rep?it.parts[it.parts.length-1]:it}
+function addExtra(x){const b=lastBlock();if(!b){flash('Erst einen Block antippen.');return}b.target=b.target?b.target+' · '+x:x;sync()}
+function makeRep(n){const last=items[items.length-1];
+  if(last&&last.rep){last.rep=n;sync();return}                       // Satz schon da: nur Anzahl ändern
+  const k=items.length>=2&&!items[items.length-2].rep?2:1;
+  if(!items.length){flash('Erst Belastung und Pause antippen.');return}
+  const parts=items.splice(items.length-k,k);items.push({rep:n,parts});sync()}
+function flash(msg){$('err').hidden=false;$('err').textContent=msg;setTimeout(()=>$('err').hidden=true,2500)}
+function renderList(){const L=$('bkList');L.innerHTML='';
+  if(!items.length){L.innerHTML='<div class="bk-empty">Noch leer – Dauer wählen, dann Blöcke antippen.</div>'}
+  items.forEach(it=>{const row=document.createElement('div');row.className='bk-item';
+    const bar=document.createElement('span');bar.className='bar';const d=document.createElement('span');d.className='d';const body=document.createElement('div');
+    if(it.rep){bar.style.background='var(--z-hard)';d.textContent=it.rep+'×';const sub=document.createElement('div');sub.className='sub';
+      it.parts.forEach(p=>{const r=document.createElement('div');r.innerHTML='';const n=document.createElement('span');n.className='n';n.textContent=secTxt(p.sec).replace(/^(\d+)$/,'$1′')+' '+p.name;
+        const t=document.createElement('span');t.className='tg';t.textContent=p.target?' – '+p.target:'';r.append(n,t);sub.appendChild(r)});body.appendChild(sub)}
+    else{bar.style.background='var('+ZONES[it.zone].c+')';d.textContent=secTxt(it.sec).replace(/^(\d+)$/,'$1′');
+      const n=document.createElement('div');n.className='n';n.textContent=it.name;const t=document.createElement('div');t.className='tg';t.textContent=it.target;body.append(n,t)}
+    row.append(bar,d,body);L.appendChild(row)});
+  $('bkSum').textContent=items.length?'Gesamt '+fmt(itemsSec()):'';}
+function sync(){renderList();$('custom').value=toSrc();store.set('ivtimer_draft',{src:$('custom').value,sport,name:$('bkName').value})}
+$('custom').oninput=()=>{try{items=fromSrc($('custom').value);renderList();$('err').hidden=true}catch(e){$('err').hidden=false;$('err').textContent=e.message}};
+$('spRad').onclick=()=>{sport='rad';buildChips()};$('spLauf').onclick=()=>{sport='lauf';buildChips()};$('spSchwimm').onclick=()=>{sport='schwimm';buildChips()};
+$('bkUndo').onclick=()=>{const last=items[items.length-1];if(last&&last.rep){items.pop();items.push(...last.parts)}else items.pop();sync()};
+$('bkClear').onclick=()=>{items=[];$('bkName').value='';sync()};
+$('loadCur').onclick=()=>{items=fromSrc(srcFor(presetKey));const nm=nameFor(presetKey)||(PRESETS[presetKey]||{}).name||'';$('bkName').value=nameFor(presetKey);
+  sport=/^Lauf/.test(nm)?'lauf':/^Schwimm/.test(nm)?'schwimm':'rad';buildChips();sync()};
+$('bkName').oninput=()=>store.set('ivtimer_draft',{src:$('custom').value,sport,name:$('bkName').value});
+$('useCustom').onclick=()=>{const src=toSrc();const name=$('bkName').value.trim();
+  if(!items.length){flash('Die Einheit ist noch leer.');return}
+  if(!name){flash('Bitte einen Namen eingeben.');$('bkName').focus();return}
+  try{parse(src)}catch(e){flash(e.message);return}
+  const pre={rad:'Rad · ',lauf:'Lauf · ',schwimm:'Schwimmen · '}[sport];const full=/^(Rad|Lauf|Schwimmen) · /.test(name)?name:pre+name;
+  customs[full]=src;store.set('ivtimer_customs',customs);fillSelect();$('preset').value='c:'+full;if(running)pause();load('c:'+full,src);$('bkName').value=full;
+  $('bkDel').hidden=false;window.scrollTo({top:0,behavior:'smooth'})};
+$('bkDel').onclick=()=>{const n=nameFor(presetKey);if(!n)return;delete customs[n];store.set('ivtimer_customs',customs);fillSelect();$('preset').value='rad_eb4';load('rad_eb4',srcFor('rad_eb4'));$('bkDel').hidden=true};
+
+function save(){store.set('ivtimer',{presetKey,acc:elapsed(),at:Date.now()})}
 
 // ---------- boot ----------
 fillSelect();
 const saved=store.get('ivtimer');
-if(saved&&saved.customSrc)customSrc=saved.customSrc;
-let bootKey=saved&&(saved.presetKey==='custom'?customSrc:PRESETS[saved.presetKey])?saved.presetKey:'rad_eb4';
-$('preset').value=bootKey;load(bootKey,srcFor(bootKey));
+let bootKey=saved&&srcFor(saved.presetKey)?saved.presetKey:'rad_eb4';
+$('preset').value=bootKey;load(bootKey,srcFor(bootKey));$('bkDel').hidden=!bootKey.startsWith('c:');
 if(saved&&saved.presetKey===bootKey&&saved.acc>0&&saved.acc<total&&Date.now()-saved.at<3*3600e3){acc=saved.acc;$('go').textContent='Weiter';render(acc)}
-$('custom').value=srcFor(bootKey);
+const draft=store.get('ivtimer_draft');
+if(draft&&draft.src){try{items=fromSrc(draft.src)}catch(e){items=[]}sport=draft.sport||'rad';$('bkName').value=draft.name||''}
+buildChips();renderList();$('custom').value=toSrc();
 requestAnimationFrame(tick);
 
 // ---------- offline ----------
