@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0D1014">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Cockpit">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<title>Cockpit</title>
+<style>
+@font-face{font-family:'Barlow Condensed';font-weight:600;font-display:swap;src:url(../fonts/barlow-condensed-latin-600-normal.woff2) format('woff2')}
+@font-face{font-family:'Barlow Condensed';font-weight:700;font-display:swap;src:url(../fonts/barlow-condensed-latin-700-normal.woff2) format('woff2')}
+@font-face{font-family:'Barlow';font-weight:400;font-display:swap;src:url(../fonts/barlow-latin-400-normal.woff2) format('woff2')}
+@font-face{font-family:'Barlow';font-weight:600;font-display:swap;src:url(../fonts/barlow-latin-600-normal.woff2) format('woff2')}
+:root{
+  --bg:#0D1014; --surf:#161B21; --surf2:#1E242C; --line:#2A313A; --soft:#222931;
+  --ink:#EEF1F4; --mute:#8C95A1; --faint:#5E6773; --acc:#1E9E78; --gold:#CC9133;
+  --z-rest:#2A313A; --z-rec:#7E8BA0; --z-ga1:#1E9E78; --z-tempo:#8E9B4A; --z-thr:#CC9133;
+  --z-vo2:#96407F; --z-ana:#7A2F6A; --z-spr:#B23A3A;
+  --ctl:#3987e5; --atl:#d55181;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink)}
+body{font-family:Barlow,system-ui,-apple-system,sans-serif;font-size:15px;-webkit-font-smoothing:antialiased;
+  padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+.wrap{max-width:900px;margin:0 auto;padding:16px 16px 40px}
+h1,h2{font-family:"Barlow Condensed",sans-serif;margin:0;letter-spacing:.01em}
+h1{font-size:26px} h2{font-size:21px;font-weight:600}
+.num{font-family:"Barlow Condensed",sans-serif;font-variant-numeric:tabular-nums}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:14px}
+.sub{color:var(--mute);font-size:13px;margin-top:2px}
+.badge{font-size:12px;color:var(--mute);text-align:right;line-height:1.4}
+.badge b{display:inline-block;padding:2px 8px;border-radius:999px;font-weight:600}
+.on b{background:rgba(30,158,120,.18);color:#5fd3ad} .off b{background:rgba(204,145,51,.18);color:#e0b066}
+.card{background:var(--surf);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:14px}
+.grid{display:grid;gap:8px}
+.stats{grid-template-columns:repeat(2,1fr)} @media(min-width:640px){.stats{grid-template-columns:repeat(5,1fr)}}
+.tile{background:var(--surf2);border:1px solid var(--soft);border-radius:10px;padding:9px 10px}
+.tile .l{font-size:12px;color:var(--mute)} .tile .v{font-family:"Barlow Condensed";font-size:24px;font-weight:700;margin-top:3px}
+.tile .v small{font-size:12px;color:var(--mute);font-family:Barlow;font-weight:400;margin-left:4px}
+.tile .z{font-size:12px;color:var(--gold);margin-top:2px}
+.vit{grid-template-columns:1fr} @media(min-width:640px){.vit{grid-template-columns:1fr 1fr}}
+.vt .row{display:flex;align-items:baseline;gap:6px}
+.vt .big{font-family:"Barlow Condensed";font-size:30px;font-weight:700}
+.vt .d{margin-left:auto;font-size:12px;color:var(--mute)}
+.vt svg{display:block;width:100%;height:56px;margin-top:6px}
+.vt .f{font-size:11.5px;color:var(--faint);margin-top:4px;display:flex;justify-content:space-between;gap:8px}
+.st{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.st .state{grid-column:1/-1;border-left:3px solid var(--sc)}
+.state .v{font-family:Barlow;font-size:17px;font-weight:600;color:var(--ink)}
+.plot{position:relative;margin-top:10px}
+.plot svg{display:block;width:100%;overflow:visible}
+.ax{font-family:"Barlow Condensed";font-size:11px;fill:var(--faint)}
+.leg{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12px;color:var(--mute);margin-top:10px}
+.leg i{display:inline-block;width:12px;height:3px;border-radius:2px;margin-right:5px;vertical-align:middle}
+.leg i.sw{height:10px;width:10px;opacity:.7}
+.tip{position:absolute;top:0;pointer-events:none;opacity:0;background:var(--surf2);border:1px solid var(--line);border-radius:8px;
+  padding:6px 8px;font-size:12px;line-height:1.45;white-space:nowrap;transform:translateX(-50%);z-index:3}
+.plot.hov .tip{opacity:1}
+.days{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.day{background:var(--surf2);border:1px solid var(--soft);border-radius:12px;padding:9px 10px}
+.day.today{border-color:var(--acc)}
+.day h3{margin:0 0 6px;font-size:14px;font-weight:600;display:flex;justify-content:space-between}
+.day h3 span{color:var(--faint);font-weight:400}
+.ses{border-left:3px solid var(--zc);padding:4px 0 4px 8px;margin-top:5px}
+.ses .n{font-weight:600;font-size:14px}.ses.done .n{text-decoration:line-through;color:var(--mute)}
+.ses .m{font-size:12.5px;color:var(--mute);margin-top:2px;line-height:1.4}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{padding:6px;border-bottom:1px solid var(--soft);text-align:right}
+th{color:var(--mute);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.04em}
+th:first-child,td:first-child{text-align:left}
+td.zn{border-left:3px solid var(--zc);padding-left:8px}
+.proto{background:var(--surf2);border-left:3px solid var(--gold);border-radius:10px;padding:9px 10px;margin-top:8px}
+.proto summary{list-style:none;cursor:pointer}.proto summary::-webkit-details-marker{display:none}
+.proto .t{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-weight:600;font-size:14px}
+.proto .t span{color:var(--acc);font-weight:400;font-size:12.5px}
+.proto p{margin:4px 0 0;color:var(--mute);font-size:13px;line-height:1.5}
+.lock{max-width:380px;margin:18vh auto 0;text-align:center;padding:0 20px}
+.lock input{width:100%;font:inherit;font-size:17px;padding:12px;border-radius:10px;border:1px solid var(--line);background:var(--surf);color:var(--ink);margin-top:14px}
+.lock button{width:100%;margin-top:10px;padding:12px;border:0;border-radius:10px;background:var(--acc);color:#fff;font:inherit;font-weight:600;font-size:16px}
+.err{color:#e57b6c;font-size:13px;margin-top:8px;min-height:1em}
+.muted{color:var(--mute);font-size:13px;line-height:1.5}
+.linkbtn{background:none;border:0;color:var(--faint);text-decoration:underline;font:inherit;font-size:12px;padding:0;margin-top:14px;cursor:pointer}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+"use strict";
+const $=s=>document.querySelector(s);
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
+const esc=t=>String(t==null?"":t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const nf=(v,d=0)=>Number(v).toFixed(d).replace(".",",");
+const WD=["So","Mo","Di","Mi","Do","Fr","Sa"];
+const pad=n=>String(n).padStart(2,"0");
+const iso=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+const pIso=s=>{const p=s.split("-");return new Date(+p[0],+p[1]-1,+p[2])};
+const addD=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
+const dm=s=>{const d=pIso(s);return pad(d.getDate())+"."+pad(d.getMonth()+1)+"."};
+const wdm=s=>WD[pIso(s).getDay()]+" "+dm(s);
+const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+
+/* ---------- Entschluesselung: PBKDF2-SHA256 -> HMAC-SHA256-Zaehlermodus + HMAC-Pruefsumme ---------- */
+async function decrypt(env, pass){
+  const enc=new TextEncoder(), salt=b64(env.salt), nonce=b64(env.nonce), ct=b64(env.ct), tag=b64(env.tag);
+  const base=await crypto.subtle.importKey("raw",enc.encode(pass),"PBKDF2",false,["deriveBits"]);
+  const bits=new Uint8Array(await crypto.subtle.deriveBits({name:"PBKDF2",salt,iterations:env.iter,hash:"SHA-256"},base,512));
+  const kEnc=await crypto.subtle.importKey("raw",bits.slice(0,32),{name:"HMAC",hash:"SHA-256"},false,["sign"]);
+  const kMac=await crypto.subtle.importKey("raw",bits.slice(32),{name:"HMAC",hash:"SHA-256"},false,["verify"]);
+  const macData=new Uint8Array(salt.length+nonce.length+ct.length);
+  macData.set(salt,0);macData.set(nonce,salt.length);macData.set(ct,salt.length+nonce.length);
+  if(!await crypto.subtle.verify("HMAC",kMac,tag,macData)) throw new Error("pass");
+  const out=new Uint8Array(ct.length), blocks=Math.ceil(ct.length/32), jobs=[];
+  for(let i=0;i<blocks;i++){
+    const m=new Uint8Array(nonce.length+4);m.set(nonce,0);new DataView(m.buffer).setUint32(nonce.length,i);
+    jobs.push(crypto.subtle.sign("HMAC",kEnc,m).then(ks=>{ks=new Uint8Array(ks);
+      for(let j=0;j<32&&i*32+j<ct.length;j++)out[i*32+j]=ct[i*32+j]^ks[j]}));
+  }
+  await Promise.all(jobs);
+  return JSON.parse(new TextDecoder().decode(out));
+}
+
+async function fetchEnv(){
+  try{const r=await fetch("data.enc?ts="+Date.now(),{cache:"no-store"});if(r.ok){const t=await r.text();store.set("ck_env",t);return {env:JSON.parse(t),live:true}}}catch(e){}
+  const t=store.get("ck_env");return t?{env:JSON.parse(t),live:false}:null;
+}
+
+async function boot(){
+  const got=await fetchEnv();
+  if(!got){$("#app").innerHTML='<div class="lock"><h1>Cockpit</h1><p class="muted">Noch keine Daten auf diesem Gerät. Einmal mit Internet öffnen.</p></div>';return}
+  const pass=store.get("ck_pass");
+  if(pass){try{render(await decrypt(got.env,pass),got.live);return}catch(e){store.del("ck_pass")}}
+  lock(got);
+}
+function lock(got,msg){
+  $("#app").innerHTML='<div class="lock"><h1>Cockpit</h1><p class="muted">Deine Daten sind verschlüsselt. Passwort einmal eingeben – danach merkt sich dieses Gerät es.</p>'+
+    '<input id="pw" type="password" autocomplete="current-password" placeholder="Passwort"><button id="ok">Öffnen</button><div class="err" id="er">'+(msg||"")+'</div></div>';
+  const go=async()=>{const pw=$("#pw").value;if(!pw)return;$("#er").textContent="…";
+    try{const data=await decrypt(got.env,pw);store.set("ck_pass",pw);render(data,got.live)}catch(e){$("#er").textContent="Passwort passt nicht."}};
+  $("#ok").onclick=go;$("#pw").onkeydown=e=>{if(e.key==="Enter")go()};
+}
+
+/* ---------- Darstellung ---------- */
+const ZC={rest:"var(--z-rest)",recovery:"var(--z-rec)",endurance:"var(--z-ga1)",tempo:"var(--z-tempo)",threshold:"var(--z-thr)",vo2max:"var(--z-vo2)",anaerobic:"var(--z-ana)",sprint:"var(--z-spr)"};
+const LZ=[{min:25,c:"#7FB0E8",l:"zu frisch"},{min:5,c:"#0ca30c",l:"frisch – Taper"},{min:-10,c:"#6B7280",l:"neutral"},{min:-30,c:"#ec835a",l:"belastet – Aufbau"},{min:-999,c:"#d03b3b",l:"überlastet"}];
+const lz=f=>LZ.find(z=>f>=z.min);
+const sg=v=>(v>0.05?"+":v<-0.05?"−":"±")+nf(Math.abs(v));
+
+function render(D,live){
+  const today=iso(new Date());
+  let h='<div class="wrap"><div class="top"><div><h1>Ironman Cockpit</h1><div class="sub">Offline-Kopie · nur lesen</div></div>'+
+    '<div class="badge '+(live?"on":"off")+'"><b>'+(live?"aktuell":"offline")+'</b><br>Stand '+esc(D.updated||"–")+'</div></div>';
+
+  const items=(D.stats&&D.stats.items)||[];
+  if(items.length) h+='<div class="grid stats" style="margin-bottom:14px">'+items.map(it=>'<div class="tile"><div class="l">'+esc(it.label)+'</div><div class="v">'+esc(it.ist)+'<small>'+esc(it.unit)+'</small></div><div class="z">→ Ziel '+esc(it.ziel)+'</div></div>').join("")+'</div>';
+
+  h+=vitals(D);
+  h+='<div class="card" id="ld"></div>';
+  h+=week(D,today);
+  h+=zones();
+  const pr=(D.roadmap&&D.roadmap.protocols)||[];
+  if(pr.length) h+='<div class="card"><h2>Protokolle</h2>'+pr.map(p=>'<details class="proto"><summary class="t">'+esc(p.name)+'<span>'+esc(p.window)+'</span></summary><p>'+esc(p.detail)+'</p></details>').join("")+'</div>';
+  const gy=(D.gyms&&D.gyms.orte)||[];
+  if(gy.length) h+='<div class="card"><h2>Trainingsmöglichkeiten</h2><div style="overflow-x:auto"><table style="min-width:560px;margin-top:8px"><tr><th>Ort</th><th>Pool</th><th>Rad</th><th>Kraft</th><th>Laufen</th></tr>'+
+    gy.map(g=>'<tr><td><b>'+esc(g.code)+'</b><br><span class="muted">'+esc(g.ort||"")+'</span></td><td>'+esc(g.pool||"–")+'</td><td>'+esc(g.rad||"–")+'</td><td>'+esc(g.kraft||"–")+'</td><td>'+esc(g.laufen||"–")+'</td></tr>').join("")+'</table></div></div>';
+  h+='<button class="linkbtn" id="logout">Passwort auf diesem Gerät vergessen</button></div>';
+  $("#app").innerHTML=h;
+  $("#logout").onclick=()=>{store.del("ck_pass");location.reload()};
+  load(D.load);
+}
+
+function vitals(D){
+  const cfg=[{k:"hrv",src:"vitals",l:"Herzfrequenzvariabilität",u:"ms",c:"#26A187",dec:1,good:1},{k:"rhr",src:"vitals",l:"Ruhepuls",u:"bpm",c:"#B8862F",dec:0,good:-1}];
+  const out=cfg.map(c=>{
+    const ser=((D[c.src]&&D[c.src].series)||[]).filter(x=>x&&x[c.k]!=null);
+    if(ser.length<2)return"";
+    const last=ser[ser.length-1], pts=ser.slice(-42).map(x=>+x[c.k]);
+    const med=a=>{a=a.slice().sort((x,y)=>x-y);return a.length%2?a[(a.length-1)/2]:(a[a.length/2-1]+a[a.length/2])/2};
+    const m7=med(ser.slice(-7).map(x=>+x[c.k]));
+    const cut=iso(addD(pIso(last.d),-89)), m90=med(ser.filter(x=>x.d>=cut).map(x=>+x[c.k]));
+    const lo=Math.min(...pts)-2,hi=Math.max(...pts)+2,W=300,H=56;
+    const path=pts.map((v,i)=>(i?"L":"M")+(i*W/(pts.length-1)).toFixed(1)+" "+(H-4-(v-lo)/(hi-lo)*(H-8)).toFixed(1)).join(" ");
+    const d=+last[c.k]-m7;
+    return '<div class="tile vt"><div class="l">'+c.l+'</div><div class="row"><span class="big">'+nf(last[c.k],c.dec)+'</span><span class="muted">'+c.u+'</span>'+
+      '<span class="d">'+(d>0?"+":"")+nf(d,c.dec)+' vs. Median 7 T.</span></div>'+
+      '<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none"><path d="'+path+'" fill="none" stroke="'+c.c+'" stroke-width="2" vector-effect="non-scaling-stroke"/></svg>'+
+      '<div class="f"><span>Median 7 T. '+nf(m7,c.dec)+' · 90 T. '+nf(m90,1)+' '+c.u+'</span><span>Stand '+dm(last.d)+'</span></div></div>';
+  }).join("");
+  return out?'<div class="grid vit" style="margin-bottom:14px">'+out+'</div>':"";
+}
+
+function week(D,today){
+  const weeks=D.weeks||{}, all={};
+  Object.values(weeks).forEach(w=>(w.days||[]).forEach(d=>all[d.date]=d.sessions||[]));
+  let h='<div class="card"><h2>Die nächsten 7 Tage</h2><div class="days">';
+  for(let i=0;i<7;i++){
+    const k=iso(addD(new Date(),i)), ss=all[k]||[];
+    h+='<div class="day'+(k===today?" today":"")+'"><h3>'+wdm(k)+(k===today?" · heute":"")+'<span>'+(ss.length?"":"frei")+'</span></h3>'+
+      ss.map(s=>'<div class="ses'+(s.done?" done":"")+'" style="--zc:'+(ZC[s.zone]||"var(--faint)")+'"><div class="n">'+esc(s.name)+'</div>'+
+      '<div class="m">'+(s.duration?s.duration+" min · ":"")+esc(s.target||"")+'</div></div>').join("")+'</div>';
+  }
+  return h+'</div></div>';
+}
+
+function zones(){
+  const run=[["Z1 Regeneration","&gt; 6:20","&lt; 135","rec"],["Z2 GA1","6:15–5:35","135–155","ga1"],["Z3 Medium","5:34–5:15","156–162","tempo"],["Z4 Schwelle","5:14–4:45","163–172","thr"],["Z5a EB4'","4:44–4:15","&gt; 172","vo2"],["Z5b EB2'","4:14–3:55","&gt; 172","ana"]];
+  const bike=[["Z1 Regeneration","&lt; 160","&lt; 134","rec"],["Z2 GA1","161–185","134–140","ga1"],["Z3 Medium","186–240","141–154","tempo"],["Z4 Schwelle","241–285","155–165","thr"],["Z5a EB4'","286–330","&gt; 166","vo2"],["Z5b EB2'","331–360","&gt; 166","ana"],["Z5c EB30''","361–400","&gt; 166","spr"]];
+  const t=(rows,a)=>'<table style="margin-top:8px"><tr><th>Zone</th><th>'+a+'</th><th>HF</th></tr>'+rows.map(r=>'<tr><td class="zn" style="--zc:var(--z-'+r[3]+')">'+r[0]+'</td><td>'+r[1]+'</td><td>'+r[2]+'</td></tr>').join("")+'</table>';
+  return '<div class="card"><h2>Trainingszonen</h2><div class="grid vit" style="margin-top:6px"><div><div class="muted">Laufen · Pace min/km</div>'+t(run,"Pace")+'</div><div><div class="muted">Rad · Watt</div>'+t(bike,"Watt")+'</div></div>'+
+    '<p class="muted" style="margin-top:10px">Rad nach Watt, Hotelrad nach Puls. HFmax 195. Schwellen vorläufig bis zur Testwoche 11.–16.10.</p></div>';
+}
+
+function load(L){
+  const el=$("#ld"); if(!el)return;
+  const act=((L&&L.days)||[]).filter(x=>x.ctl!=null).slice(-42).map(x=>({d:x.d,ctl:+x.ctl,atl:+x.atl,load:+(x.load||0)}));
+  if(!act.length){el.innerHTML='<h2>Belastung</h2><p class="muted">Noch keine Daten aus intervals.icu.</p>';return}
+  const last=act[act.length-1], pl={};
+  ((L.plan)||[]).forEach(p=>{if(p.d>last.d)pl[p.d]=(pl[p.d]||0)+(+p.load||0)});
+  const fc=[];let c=last.ctl,a=last.atl,cur=addD(pIso(last.d),1);const end=Object.keys(pl).sort().pop();
+  while(end&&iso(cur)<=end&&fc.length<28){const l=pl[iso(cur)]||0;c+=(l-c)/42;a+=(l-a)/7;fc.push({d:iso(cur),ctl:c,atl:a,load:l,fc:1});cur=addD(cur,1)}
+  const all=act.concat(fc), n=all.length, nA=act.length, f0=last.ctl-last.atl, z=lz(f0), e=fc.length?fc[fc.length-1]:null;
+  el.innerHTML='<h2>Belastung</h2><div class="st"><div class="tile state" style="--sc:'+z.c+'"><div class="l">Heute · '+dm(last.d)+'</div><div class="v" style="color:'+z.c+'">'+z.l+' · Form '+sg(f0)+'</div></div>'+
+    '<div class="tile"><div class="l">Fitness</div><div class="v">'+nf(last.ctl)+'</div></div><div class="tile"><div class="l">Ermüdung</div><div class="v">'+nf(last.atl)+'</div></div>'+
+    '<div class="tile"><div class="l">Prognose'+(e?" "+wdm(e.d):"")+'</div><div class="v" style="color:'+(e?lz(e.ctl-e.atl).c:"inherit")+'">'+(e?sg(e.ctl-e.atl):"–")+'</div></div></div>'+
+    '<div class="leg"><span><i style="background:var(--ctl)"></i>Fitness</span><span><i style="background:var(--atl)"></i>Ermüdung</span><span><i class="sw" style="background:#0ca30c"></i>frisch</span><span><i class="sw" style="background:#ec835a"></i>belastet</span></div>'+
+    '<div class="plot" id="pl"><div class="tip" id="tp"></div></div>';
+  const host=$("#pl"), W=Math.max(280,host.clientWidth), H=170, Lp=26, R=6, st=(W-Lp-R)/Math.max(1,n-1), X=i=>Lp+i*st;
+  const v=[];all.forEach(x=>v.push(x.ctl,x.atl));let lo=Math.max(0,Math.floor((Math.min(...v)-4)/10)*10),hi=Math.ceil((Math.max(...v)+4)/10)*10;
+  const Y=q=>6+(hi-q)/(hi-lo||1)*(H-12);
+  let g="";for(let q=lo;q<=hi;q+=10)g+='<line x1="'+Lp+'" x2="'+(W-R)+'" y1="'+Y(q)+'" y2="'+Y(q)+'" stroke="#2A313A"/><text class="ax" x="'+(Lp-5)+'" y="'+(Y(q)+3)+'" text-anchor="end">'+q+'</text>';
+  let f="";const quad=(x1,c1,t1,x2,c2,t2,p,o)=>'<path d="M'+x1+' '+Y(c1)+' L'+x2+' '+Y(c2)+' L'+x2+' '+Y(t2)+' L'+x1+' '+Y(t1)+'Z" fill="'+(p?"#0ca30c":"#ec835a")+'" fill-opacity="'+o+'"/>';
+  for(let i=0;i<n-1;i++){const A=all[i],B=all[i+1],da=A.ctl-A.atl,db=B.ctl-B.atl,o=B.fc?.13:.3;
+    if((da>=0)===(db>=0))f+=quad(X(i),A.ctl,A.atl,X(i+1),B.ctl,B.atl,da+db>=0,o);
+    else{const t=da/(da-db),xm=X(i)+t*st,vm=A.ctl+t*(B.ctl-A.ctl);f+=quad(X(i),A.ctl,A.atl,xm,vm,vm,da>=0,o)+quad(xm,vm,vm,X(i+1),B.ctl,B.atl,db>=0,o)}}
+  const ln=(k,a0,a1,col,d)=>{let p="";for(let j=a0;j<=a1;j++)p+=(j===a0?"M":"L")+X(j).toFixed(1)+" "+Y(all[j][k]).toFixed(1)+" ";return'<path d="'+p+'" fill="none" stroke="'+col+'" stroke-width="2"'+(d?' stroke-dasharray="5 4"':'')+'/>'};
+  let l=ln("ctl",0,nA-1,"#3987e5")+ln("atl",0,nA-1,"#d55181");if(n>nA)l+=ln("ctl",nA-1,n-1,"#3987e5",1)+ln("atl",nA-1,n-1,"#d55181",1);
+  const tx=X(nA-1);
+  host.insertAdjacentHTML("afterbegin",'<svg width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'">'+g+f+l+
+    '<line x1="'+tx+'" x2="'+tx+'" y1="6" y2="'+(H-6)+'" stroke="#5E6773" stroke-dasharray="2 3"/><line id="cx" x1="0" x2="0" y1="6" y2="'+(H-6)+'" stroke="#8C95A1" opacity="0"/></svg>');
+  const tp=$("#tp"),cx=$("#cx");
+  const mv=ev=>{const r=host.getBoundingClientRect(),x=(ev.touches?ev.touches[0].clientX:ev.clientX)-r.left,i=Math.max(0,Math.min(n-1,Math.round((x-Lp)/st))),p=all[i],fm=p.ctl-p.atl;
+    cx.setAttribute("x1",X(i));cx.setAttribute("x2",X(i));cx.setAttribute("opacity",".6");
+    tp.innerHTML='<b>'+wdm(p.d)+(p.fc?" · Plan":"")+'</b><br>Fitness '+nf(p.ctl)+' · Ermüdung '+nf(p.atl)+'<br>Form '+sg(fm)+' · '+lz(fm).l;
+    host.classList.add("hov");const w=tp.offsetWidth||150;tp.style.left=Math.max(w/2,Math.min(W-w/2,X(i)))+"px"};
+  const off=()=>{host.classList.remove("hov");cx.setAttribute("opacity","0")};
+  host.addEventListener("mousemove",mv);host.addEventListener("touchmove",mv,{passive:true});host.addEventListener("touchstart",mv,{passive:true});
+  host.addEventListener("mouseleave",off);host.addEventListener("touchend",off);
+}
+
+boot();
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)boot()});
+if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+</script>
+</body>
+</html>
