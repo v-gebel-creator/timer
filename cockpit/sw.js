@@ -1,5 +1,5 @@
 // Cockpit – Offline-Cache. Bei jeder Änderung VERSION hochzählen.
-const VERSION = 'cockpit-v1';
+const VERSION = 'cockpit-v2';
 const FILES = ['./', 'index.html', 'manifest.webmanifest', 'icons/icon-180.png', 'icons/icon-192.png', 'icons/icon-512.png',
   '../fonts/barlow-condensed-latin-600-normal.woff2', '../fonts/barlow-condensed-latin-700-normal.woff2',
   '../fonts/barlow-latin-400-normal.woff2', '../fonts/barlow-latin-600-normal.woff2'];
