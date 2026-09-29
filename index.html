@@ -211,6 +211,16 @@ const PRESETS={
 3 | Steigerungen | 3× 20 s zügig, dazwischen locker | sweet
 5x [4 | EB4' hart | 4:44–4:15 /km · gleichmäßig, letzter so schnell wie erster | hard ; 4 | Gehpause | gehen, locker auslaufen erst am Ende | rec]
 5 | Auslaufen | sehr locker | easy`},
+ rad_schwelle_hotel:{name:"Rad · Schwelle 3×10 min · 120 min (Hotelrad, nach Puls)",src:
+`10 | Einrollen | locker, HF unter 130 | easy
+20 | Grundlage | HF 134–140 | ga1
+3x [10 | Schwelle | HF 150–158 · gleichmäßig, nicht überziehen · Kadenz 85–95 | sweet ; 5 | Locker | ganz locker treten, HF unter 135 | rec]
+40 | Grundlage | HF 134–140 · nicht nach oben driften | ga1
+5 | Ausrollen | locker, HF runter | easy`},
+ rad_ga_hotel60:{name:"Rad · Grundlage 60 min (Hotelrad, nach Puls)",src:
+`10 | Einrollen | locker, HF unter 130 | easy
+45 | Grundlage | HF 134–140 | ga1
+5 | Ausrollen | locker | easy`},
  rad_ga:{name:"Rad · Grundlage 150 min (Peloton, nach Puls)",src:
 `10 | Einrollen | locker | easy
 135 | Grundlage | HF 134–140 · Wattanzeige nicht geeicht | ga1
@@ -241,7 +251,8 @@ const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){retu
 function load(key,src){presetKey=key;blocks=parse(src);starts=[];total=0;for(const b of blocks){starts.push(total);total+=b.sec}
   running=false;acc=0;lastIdx=-1;halfSaid=-1;buildTimeline();buildPlan();render(0);$('go').textContent='Start';save()}
 
-function elapsed(){return Math.min(total,acc+(running?(performance.now()-t0)/1000:0))}
+// Zeit laeuft nach der echten Uhr: auch wenn iOS die App pausiert oder das Handy gesperrt war, stimmt die Position.
+function elapsed(){return Math.min(total,acc+(running?(Date.now()-t0)/1000:0))}
 function idxAt(e){let i=0;while(i<blocks.length-1&&e>=starts[i+1])i++;return i}
 const fmt=s=>{s=Math.max(0,Math.ceil(s-1e-6));const h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60;return(h?h+':'+String(m).padStart(2,'0'):m)+':'+String(x).padStart(2,'0')};
 const fmtDur=s=>s%60?fmt(s):(s/60)+' min';
@@ -270,6 +281,9 @@ function render(e){const i=idxAt(e),b=blocks[i],into=e-starts[i],left=b.sec-into
 
 // ---------- sound & voice ----------
 let ac=null;
+// Mit Musik mischen statt sie anzuhalten (iOS 17+ / Safari 17+).
+function audioMix(){try{if(navigator.audioSession)navigator.audioSession.type='ambient'}catch(e){}}
+audioMix();
 function beep(freq=880,dur=.12,vol=.35){if(!$('optBeep').checked)return;try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();
   const o=ac.createOscillator(),g=ac.createGain();o.frequency.value=freq;o.type='square';g.gain.value=vol;o.connect(g);g.connect(ac.destination);
   const t=ac.currentTime;g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.001,t+dur);o.start(t);o.stop(t+dur+.02)}catch(e){}}
@@ -279,7 +293,7 @@ function announce(b){let t=b.name.replace("EB4'",'E B 4');if(b.rep)t+=', '+b.rep
 
 // ---------- wake lock ----------
 let wl=null;async function lockScreen(){try{if('wakeLock' in navigator&&!wl){wl=await navigator.wakeLock.request('screen');wl.addEventListener('release',()=>wl=null)}}catch(e){}}
-document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&running)lockScreen()});
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){if(running){lockScreen();try{ac&&ac.resume()}catch(e){}}}else save()});
 
 // ---------- loop ----------
 function tick(){const e=elapsed(),r=render(e);
@@ -295,11 +309,11 @@ function tick(){const e=elapsed(),r=render(e);
     if(Math.floor(e)%5===0)save()}
   requestAnimationFrame(tick)}
 
-function start(){if(elapsed()>=total){acc=0;lastIdx=-1}
+function start(){audioMix();if(elapsed()>=total){acc=0;lastIdx=-1}
   try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();ac.resume()}catch(e){}
-  running=true;t0=performance.now();$('go').textContent='Pause';lockScreen()}
+  running=true;t0=Date.now();$('go').textContent='Pause';lockScreen();save()}
 function pause(){acc=elapsed();running=false;$('go').textContent='Weiter';try{speechSynthesis.cancel()}catch(e){}save();if(wl){wl.release();wl=null}}
-function jump(to){const wasRunning=running;acc=Math.max(0,Math.min(total-.01,to));t0=performance.now();lastIdx=wasRunning?-1:lastIdx;render(acc);save()}
+function jump(to){const wasRunning=running;acc=Math.max(0,Math.min(total-.01,to));t0=Date.now();lastIdx=wasRunning?-1:lastIdx;render(acc);save()}
 
 $('go').onclick=()=>running?pause():start();
 $('skip').onclick=()=>{const i=idxAt(elapsed());jump(i+1<blocks.length?starts[i+1]:total-.01)};
@@ -308,14 +322,31 @@ $('reset').onclick=()=>{running=false;acc=0;lastIdx=-1;$('go').textContent='Star
 
 // ---------- presets & eigene Einheiten ----------
 let customs=store.get('ivtimer_customs')||{};           // {name: src}
+// ---------- Wochenplan vom Coach (plan.json neben der App, offline aus dem Speicher) ----------
+let plan=store.get('ivtimer_plan')||{units:[]};
+const isoDay=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+function planUnits(){const y=new Date();y.setDate(y.getDate()-1);const from=isoDay(y);
+  return (plan.units||[]).filter(u=>u&&u.id&&u.src&&u.date>=from).sort((a,b)=>a.date<b.date?-1:1)}
+function todayPlanKey(){const t=isoDay(new Date());const u=planUnits().find(x=>x.date===t);return u?'p:'+u.id:null}
+function planLabel(u){const t=isoDay(new Date());if(u.date!==t)return u.name;const i=u.name.indexOf(' · ');return i>0?u.name.slice(0,i)+' · heute'+u.name.slice(i):u.name+' · heute'}
+async function loadPlan(){try{const r=await fetch('plan.json?ts='+Date.now(),{cache:'no-store'});if(!r.ok)return;
+  const j=await r.json();if(!j||!Array.isArray(j.units))return;plan=j;store.set('ivtimer_plan',j);
+  const keep=$('preset').value;fillSelect();
+  const tk=todayPlanKey();
+  if(!running&&elapsed()===0&&tk&&!keep.startsWith('p:')&&!keep.startsWith('c:')){$('preset').value=tk;load(tk,srcFor(tk));$('bkDel').hidden=true}
+  else if(srcFor(keep))$('preset').value=keep}catch(e){}}
+
 function fillSelect(){const s=$('preset');s.innerHTML='';
+  const pu=planUnits();
+  if(pu.length){const g0=document.createElement('optgroup');g0.label='Wochenplan'+(plan.updated?' · Stand '+plan.updated:'');
+    for(const u of pu){const o=document.createElement('option');o.value='p:'+u.id;o.textContent=planLabel(u);g0.appendChild(o)}s.appendChild(g0)}
   const g1=document.createElement('optgroup');g1.label='Vom Coach';
   for(const k in PRESETS){const o=document.createElement('option');o.value=k;o.textContent=PRESETS[k].name;g1.appendChild(o)}
   s.appendChild(g1);
   const names=Object.keys(customs).sort();
   if(names.length){const g2=document.createElement('optgroup');g2.label='Eigene';
     for(const n of names){const o=document.createElement('option');o.value='c:'+n;o.textContent=n;g2.appendChild(o)}s.appendChild(g2)}}
-function srcFor(k){return k.startsWith('c:')?customs[k.slice(2)]:PRESETS[k]&&PRESETS[k].src}
+function srcFor(k){if(k.startsWith('p:')){const u=(plan.units||[]).find(x=>'p:'+x.id===k);return u&&u.src}return k.startsWith('c:')?customs[k.slice(2)]:PRESETS[k]&&PRESETS[k].src}
 function nameFor(k){return k.startsWith('c:')?k.slice(2):''}
 $('preset').onchange=e=>{const k=e.target.value;if(running)pause();load(k,srcFor(k));$('bkDel').hidden=!k.startsWith('c:')};
 
@@ -420,18 +451,25 @@ $('useCustom').onclick=()=>{const src=toSrc();const name=$('bkName').value.trim(
   $('bkDel').hidden=false;window.scrollTo({top:0,behavior:'smooth'})};
 $('bkDel').onclick=()=>{const n=nameFor(presetKey);if(!n)return;delete customs[n];store.set('ivtimer_customs',customs);fillSelect();$('preset').value='rad_eb4';load('rad_eb4',srcFor('rad_eb4'));$('bkDel').hidden=true};
 
-function save(){store.set('ivtimer',{presetKey,acc:elapsed(),at:Date.now()})}
+function save(){store.set('ivtimer',{presetKey,acc:elapsed(),running,at:Date.now()})}
+window.addEventListener('pagehide',save);
 
 // ---------- boot ----------
 fillSelect();
 const saved=store.get('ivtimer');
-let bootKey=saved&&srcFor(saved.presetKey)?saved.presetKey:'rad_eb4';
+const resumable=saved&&srcFor(saved.presetKey)&&saved.acc>0&&Date.now()-saved.at<4*3600e3;
+let bootKey=resumable?saved.presetKey:(todayPlanKey()||(saved&&srcFor(saved.presetKey)?saved.presetKey:'rad_eb4'));
 $('preset').value=bootKey;load(bootKey,srcFor(bootKey));$('bkDel').hidden=!bootKey.startsWith('c:');
-if(saved&&saved.presetKey===bootKey&&saved.acc>0&&saved.acc<total&&Date.now()-saved.at<3*3600e3){acc=saved.acc;$('go').textContent='Weiter';render(acc)}
+if(saved&&saved.presetKey===bootKey&&saved.acc>0&&Date.now()-saved.at<4*3600e3){
+  // Lief der Timer, als iOS die App beendet hat? Dann an der echten Position weitermachen.
+  const pos=saved.running?saved.acc+(Date.now()-saved.at)/1000:saved.acc;
+  if(pos<total){acc=pos;if(saved.running){running=true;t0=Date.now();lastIdx=idxAt(pos);$('go').textContent='Pause';lockScreen()}else $('go').textContent='Weiter';render(acc)}}
 const draft=store.get('ivtimer_draft');
 if(draft&&draft.src){try{items=fromSrc(draft.src)}catch(e){items=[]}sport=draft.sport||'rad';$('bkName').value=draft.name||''}
 buildChips();renderList();$('custom').value=toSrc();
 requestAnimationFrame(tick);
+loadPlan();
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!running)loadPlan()});
 
 // ---------- offline ----------
 if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{})})}
