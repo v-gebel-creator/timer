@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <title>Radtraining</title>
-<meta name="theme-color" content="#0D1014">
+<meta name="theme-color" content="#0B0B0C">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -18,10 +18,11 @@
 @font-face{font-family:'Barlow';font-weight:400;font-style:normal;font-display:swap;src:url(fonts/barlow-latin-400-normal.woff2) format('woff2')}
 @font-face{font-family:'Barlow';font-weight:600;font-style:normal;font-display:swap;src:url(fonts/barlow-latin-600-normal.woff2) format('woff2')}
 :root{
-  --bg:#0D1014; --surf:#161B21; --surf2:#1E242C; --line:#2A313A;
-  --ink:#EEF1F4; --mute:#8C95A1;
-  --z-easy:#7E8BA0; --z-ga1:#1E9E78; --z-hard:#96407F; --z-rec:#3A73BF; --z-sweet:#CC9133;
-  --cur:var(--z-ga1); --cur-ink:#FFFFFF;
+  /* schwarz + Precision-Fuel-Farben, wie das Cockpit */
+  --bg:#0B0B0C; --surf:#151517; --surf2:#1D1D20; --line:#2A2A2E;
+  --ink:#F4F2EE; --mute:#A3A1A8;
+  --z-easy:#8E8C94; --z-ga1:#E8D200; --z-hard:#D2401A; --z-rec:#B26BC0; --z-sweet:#EE6A3E;
+  --cur:var(--z-ga1); --cur-ink:#0B0B0C;
   color-scheme:dark;
 }
 html,body{height:100%;margin:0}
@@ -74,7 +75,7 @@ textarea{font-size:16px!important;width:100%;box-sizing:border-box;min-height:18
 .edit-help{color:var(--mute);font-size:13px;line-height:1.45;margin-top:8px}
 .edit-btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
 .edit-btns button{border:1px solid var(--line);background:var(--surf2);border-radius:8px;padding:8px 12px;cursor:pointer}
-.err{color:#FF6B6B;font-size:13px;margin-top:6px}
+.err{color:#EE6A3E;font-size:13px;margin-top:6px}
 .bk{display:flex;flex-direction:column;gap:14px;margin-top:12px}
 .bk-step{display:flex;flex-direction:column;gap:8px}
 .bk-lbl{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
@@ -100,7 +101,7 @@ textarea{font-size:16px!important;width:100%;box-sizing:border-box;min-height:18
 .bk-sum{font-family:"Barlow Condensed",sans-serif;font-size:20px;font-weight:600;font-variant-numeric:tabular-nums}
 .bk-save{display:flex;gap:8px;flex-wrap:wrap}
 .bk-save input{font-size:16px!important;flex:1 1 180px;min-width:0;border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:10px 12px;font:inherit;color:inherit}
-.primary{border:0!important;background:var(--z-hard)!important;color:#fff;border-radius:8px;padding:10px 16px;font-weight:600;cursor:pointer}
+.primary{border:0!important;background:#DA5A2E!important;color:#0B0B0C;border-radius:8px;padding:10px 16px;font-weight:600;cursor:pointer}
 .linkbtn{background:none;border:0;color:var(--mute);text-decoration:underline;cursor:pointer;align-self:flex-start;padding:0}
 details.raw{background:var(--bg);padding:10px 12px}
 details.raw summary{font-weight:500;color:var(--mute)}
@@ -197,7 +198,7 @@ details.raw summary{font-weight:500;color:var(--mute)}
 </div>
 
 <script>
-const ZONES={easy:{c:'--z-easy',l:'Locker',ink:'#0B1220'},ga1:{c:'--z-ga1',l:'GA1',ink:'#FFFFFF'},hard:{c:'--z-hard',l:'Hart',ink:'#FFFFFF'},rec:{c:'--z-rec',l:'Pause',ink:'#FFFFFF'},sweet:{c:'--z-sweet',l:'Tempo',ink:'#1A1200'}};
+const ZONES={easy:{c:'--z-easy',l:'Locker',ink:'#0B0B0C'},ga1:{c:'--z-ga1',l:'GA1',ink:'#0B0B0C'},hard:{c:'--z-hard',l:'Hart',ink:'#FFFFFF'},rec:{c:'--z-rec',l:'Pause',ink:'#0B0B0C'},sweet:{c:'--z-sweet',l:'Tempo',ink:'#0B0B0C'}};
 
 const PRESETS={
  rad_eb4:{name:"Rad · EB4' 5×4 min · 100 min (Hotelrad, nach Puls)",src:
