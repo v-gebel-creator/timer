@@ -773,6 +773,7 @@ body{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset
   .tabs-main .tv{font-family:var(--font-display); font-size:1.25rem; font-weight:750; letter-spacing:-.02em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
   .tabs-main .tv small{font-size:.68rem; font-weight:600; color:var(--text-dim); letter-spacing:0; margin-left:3px;}
   .tabs-main .tv .sm{display:none;}
+  .tabs-main .tv em.pc{font-style:normal; font-size:.72rem; font-weight:700; color:var(--c); margin-left:8px; letter-spacing:0;}
   .tabs-main .ts{font-size:.64rem; color:var(--text-faint); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
   .tabs-main button[aria-selected="true"]{background:var(--surface-2); border-color:var(--c, var(--text)); box-shadow:inset 0 0 0 1px var(--c, var(--text));}
   .tabs-main button:hover{border-color:#3A3A40;}
@@ -810,7 +811,7 @@ body{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset
   .sp-load{color:var(--text-faint); font-size:.8rem; padding:30px 0; text-align:center;}
   @media(max-width:560px){ .proto-window{white-space:normal;}
     .tabs-main{grid-template-columns:repeat(4,minmax(0,1fr)); gap:5px;} .tabs-main button{padding:8px 7px 7px 10px; border-radius:13px;}
-    .tabs-main .tn{font-size:.68rem; gap:4px;} .tabs-main .tn i{width:6px; height:6px;} .tabs-main .tv{font-size:.82rem; letter-spacing:-.03em;} .tabs-main .tv small{display:none;} .tabs-main .tv .lg{display:none;} .tabs-main .tv .sm{display:inline;} .tabs-main .ts{display:none;} }
+    .tabs-main .tn{font-size:.68rem; gap:4px;} .tabs-main .tn i{width:6px; height:6px;} .tabs-main .tv{font-size:.82rem; letter-spacing:-.03em;} .tabs-main .tv small{display:none;} .tabs-main .tv .lg{display:none;} .tabs-main .tv .sm{display:inline;} .tabs-main .tv em.pc{display:block; margin:1px 0 0; font-size:.62rem;} .tabs-main .ts{display:none;} }
   [hidden]{display:none!important;}
 </style>
 
@@ -2638,6 +2639,9 @@ body{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset
     }); });
     return {mins:mins, km:km, n:n, nd:nd, vd:vd, vp:vp};
   }
+  function volTv(w, f, unit, fs){ fs = fs || f; var pc = w.vp > 0 ? Math.round(w.vd / w.vp * 100) : null;
+    var pcs = pc === null ? "" : '<em class="pc">'+pc+' %</em>';
+    return '<span class="lg">'+f(w.vd)+" / "+f(w.vp)+'<small>'+unit+'</small>'+pcs+'</span><span class="sm">'+fs(w.vd)+"/"+fs(w.vp)+(pc===null?"":' <em class="pc">'+pc+'%</em>')+'</span>'; }
   function fmtInt(v){ return String(Math.round(v)).replace(/\B(?=(\d{3})+(?!\d))/g, "\u202f"); }
   function statIst(key){ var it = (state.stats.items||[]).filter(function(i){ return i.key===key; })[0]; return it ? it.ist : "–"; }
   function renderSportCards(){
@@ -2645,9 +2649,9 @@ body{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset
     var ftp = ((state.load && state.load.method) ? (/FTP (\d+)/.exec(state.load.method)||[])[1] : null) || "295";
     var ws = weekDone("schwimmen"), wb = weekDone("rad"), wr = weekDone("lauf");
     function set(id, html){ var e = document.getElementById(id); if(e) e.innerHTML = html; }
-    set("tvSwim", '<span class="lg">'+fmtInt(ws.vd)+" / "+fmtInt(ws.vp)+'<small>m</small></span><span class="sm">'+nf(ws.vd/1000,1)+"/"+nf(ws.vp/1000,1)+'</span>'); set("tsSwim", ws.n ? "Woche "+ws.nd+" von "+ws.n+" erledigt" : "letzte Einheit "+esc(SUM.swim.date));
-    set("tvBike", '<span class="lg">'+nf(wb.vd,1)+" / "+nf(wb.vp,1)+'<small>h</small></span><span class="sm">'+nf(wb.vd,1)+"/"+nf(wb.vp,1)+'</span>'); set("tsBike", wb.n ? "Woche "+fmtHM(wb.mins)+" h · "+wb.nd+" von "+wb.n : "eFTP "+esc(statIst("eftp"))+" W");
-    set("tvRun", '<span class="lg">'+nf(wr.vd,1)+" / "+nf(wr.vp,1)+'<small>km</small></span><span class="sm">'+nf(wr.vd,1)+"/"+nf(wr.vp,1)+'</span>'); set("tsRun", "HM in "+daysUntil(SUM.run.race)+" Tagen · Woche "+nf(wr.km,1)+" km");
+    set("tvSwim", volTv(ws, function(v){ return fmtInt(Math.round(v/100)*100); }, "m", function(v){ return nf(Math.round(v/100)/10,1); })); set("tsSwim", ws.n ? "Woche "+ws.nd+" von "+ws.n+" erledigt" : "letzte Einheit "+esc(SUM.swim.date));
+    set("tvBike", volTv(wb, function(v){ return String(Math.round(v)); }, "h")); set("tsBike", wb.n ? "Woche "+fmtHM(wb.mins)+" h · "+wb.nd+" von "+wb.n : "eFTP "+esc(statIst("eftp"))+" W");
+    set("tvRun", volTv(wr, function(v){ return String(Math.round(v)); }, "km")); set("tsRun", "HM in "+daysUntil(SUM.run.race)+" Tagen · Woche "+nf(wr.km,1)+" km");
     var ld = state.load && state.load.days && state.load.days.length ? state.load.days[state.load.days.length-1] : null;
     if(ld && ld.ctl!=null){ var f = ld.ctl-ld.atl; set("tvOv", "Form "+sgn(f)); set("tsOv", ldZone(f).label+" · Fitness "+nf(ld.ctl,0)); }
   }
