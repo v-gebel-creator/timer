@@ -838,6 +838,8 @@ body{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset
   </nav>
 
   <div id="ovWrap">
+    <div class="pull" id="pullBar"><span class="pl">Daten holen</span><code id="pullCmd">sh ~/garmin-sync/holen.sh</code><button type="button" id="pullCopy">Kopieren</button>
+      <span class="ph">Im Terminal auf dem Mac: holt Garmin, Fitbit und die Trainingslast. Danach Claude „done“ schreiben. Mit Alias einfach <b>holen</b> tippen.</span></div>
 
   <section class="stats-grid" id="statsGrid" aria-label="Leistungswerte"></section>
 
@@ -2944,6 +2946,13 @@ body{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset
     try{ state.db.doc("plan/season").onSnapshot(function(snap){ season = (snap.exists && snap.data()) ? snap.data() : null; if(season){ var cur=iso(mondayOf(new Date())); if(ssOpen[cur]===undefined) ssOpen[cur]=true; } renderSeason(); }, function(){}); }catch(e){}
   }
 
+
+  (function(){ var b=document.getElementById("pullCopy"), c=document.getElementById("pullCmd"); if(!b) return;
+    b.addEventListener("click", function(){ var t=c.textContent;
+      var ok=function(){ b.textContent="Kopiert ✓"; setTimeout(function(){ b.textContent="Kopieren"; },1600); };
+      if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(t).then(ok, function(){ sel(); }); } else sel();
+      function sel(){ var r=document.createRange(); r.selectNodeContents(c); var w=window.getSelection(); w.removeAllRanges(); w.addRange(r); try{ document.execCommand("copy"); ok(); }catch(e){} }
+    }); })();
   /* ---------------- boot ---------------- */
   try{
     var savedWin = JSON.parse(localStorage.getItem("cockpitTileWindow") || "{}");
