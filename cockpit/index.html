@@ -115,7 +115,7 @@ body{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset
     --accent-soft:rgba(218,90,46,.16);
     --gold:#E8D200;
     /* Sportfarben (Precision Fuel): Schwimmen Lila, Rad Gelb, Lauf Rot-Orange */
-    --c-swim:#B26BC0; --c-bike:#E8D200; --c-run:#EE6A3E;
+    --c-swim:#B26BC0; --c-bike:#E8D200; --c-run:#EE6A3E; --c-season:#2CC5BD;
 
     --zone-recovery:#6E6C74;
     --zone-endurance:#E8D200;
@@ -834,7 +834,7 @@ body{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset
     <button type="button" role="tab" data-view="schwimmen" aria-selected="false" style="--c:var(--c-swim)"><span class="tn"><i></i>Schwimmen</span><span class="tv" id="tvSwim">–</span><span class="ts" id="tsSwim"></span></button>
     <button type="button" role="tab" data-view="rad" aria-selected="false" style="--c:var(--c-bike)"><span class="tn"><i></i>Rad</span><span class="tv" id="tvBike">–</span><span class="ts" id="tsBike"></span></button>
     <button type="button" role="tab" data-view="lauf" aria-selected="false" style="--c:var(--c-run)"><span class="tn"><i></i>Lauf</span><span class="tv" id="tvRun">–</span><span class="ts" id="tsRun"></span></button>
-    <button type="button" role="tab" data-view="saison" aria-selected="false" style="--c:var(--accent)"><span class="tn"><i></i>Saison</span><span class="tv" id="tvSeason">Plan</span><span class="ts" id="tsSeason">bis Leipzig</span></button>
+    <button type="button" role="tab" data-view="saison" aria-selected="false" style="--c:var(--c-season)"><span class="tn"><i></i>Saison</span><span class="tv" id="tvSeason">Plan</span><span class="ts" id="tsSeason">bis Leipzig</span></button>
   </nav>
 
   <div id="ovWrap">
@@ -1051,8 +1051,8 @@ body{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset
     <section class="ss-card" aria-labelledby="ssPhT">
       <h2 id="ssPhT">Phasen</h2>
       <div class="ss-sub">Phase antippen · Woche aufklappen · Einheit aufklappen für Ablauf, Puls und Hinweise</div>
-      <div class="ss-tl" id="ssTl" role="group" aria-label="Phasen"></div>
-      <div class="ss-tlx" id="ssTlx"></div>
+      <div class="ss-ov" id="ssOv" aria-hidden="true"></div>
+      <div class="ss-rail" id="ssTl" role="group" aria-label="Phasen"></div>
       <div id="ssPh"></div>
       <div class="ss-lg"><span><b class="st done">✓ erledigt</b></span><span><b class="st plan">geplant</b> Wochenplan</span><span><b class="st draft">Entwurf</b> mit Dienstplan, noch nicht final</span><span><b class="st tpl">Vorlage</b> Phase, wird 1–3 Wochen vorher konkret</span></div>
       <div id="ssWeeks"></div>
@@ -2872,17 +2872,37 @@ body{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset
       +'<div class="ss-k"><div class="l">70.3 Leipzig</div><div class="v">'+Math.max(0,ssDays(tdy,g.date))+'<small>Tage</small></div><div class="d">So 08.08.2027 · Ziel '+esc(g.target)+'</div></div>';
     ssHrv();
     var first = season.phases[0].from, last = season.phases[season.phases.length-1].to, tot = ssDays(first,last)+1;
+    var pct = function(dIso){ return Math.max(0, Math.min(100, 100*ssDays(first,dIso)/tot)); };
+    var ov = season.phases.map(function(p){ return '<span style="flex-grow:'+(ssDays(p.from,p.to)+1)+'; background:'+p.color+'"></span>'; }).join("");
+    season.phases.filter(function(p){return p.type==="race";}).forEach(function(p){
+      var x = pct(p.to); ov += '<i class="rc" style="left:'+x+'%"></i><b class="rl'+(x>90?' end':'')+'" style="left:'+(x>90?100:x)+'%">'+esc(p.short==="HM"?"HM Hannover":"70.3 Leipzig")+'</b>';
+    });
+    if(tdy>=first && tdy<=last) ov += '<i class="now" style="left:'+pct(tdy)+'%"></i><b class="nl" style="left:'+Math.max(3,pct(tdy))+'%">heute</b>';
+    document.getElementById("ssOv").innerHTML = ov;
     var tl = document.getElementById("ssTl");
-    tl.innerHTML = season.phases.map(function(p){
-      var w = ssDays(p.from,p.to)+1, dark = (p.color==="#6E6C74"||p.color==="#7E2A88");
-      return '<button type="button" data-ph="'+p.id+'" aria-pressed="'+(ssPhase&&ssPhase.id===p.id)+'" title="'+esc(p.name+" · "+ssFmt(ssD(p.from))+"–"+ssFmt(ssD(p.to)))+'" class="'+(dark?'dark':'')+'" style="flex-grow:'+w+'; background:'+p.color+'">'+esc(p.short)+'</button>';
-    }).join("") + (tdy>=first && tdy<=last ? '<i class="now" style="left:'+(100*ssDays(first,tdy)/tot)+'%"></i>' : '');
-    document.getElementById("ssTlx").innerHTML = '<span>'+ssFmt(ssD(first))+'2026</span><span>HM 11.04.</span><span>Leipzig 08.08.2027</span>';
-    var p = ssPhase;
-    document.getElementById("ssPh").innerHTML = '<div class="ss-ph"><div><h3 style="color:'+(p.color==="#FFFFFF"?"var(--text)":p.color)+'">'+esc(p.name)+'</h3>'
-      +'<div class="meta"><span class="ss-chip">'+ssFmt(ssD(p.from))+'–'+ssFmt(ssD(p.to))+' · '+ssPhaseWeeks(p).length+' Wo.</span><span class="ss-chip">'+esc(p.hours)+'</span>'+(p.race?'<span class="ss-chip" style="color:var(--accent)">'+esc(p.race)+'</span>':'')+'</div>'
-      +'<ul>'+p.focus.map(function(f){return '<li>'+esc(f)+'</li>';}).join("")+'</ul></div>'
-      +'<div class="side"><b>Intensität</b>'+esc(p.dist)+(p.longRun&&p.longRun[1]?'<br><br><b>Langer Lauf</b>'+p.longRun[0]+' → '+p.longRun[1]+' min':'')+(p.tests?'<br><br><b>Tests</b>'+p.tests.map(esc).join("<br>"):'')+'<br><br><b>Grundlage</b>'+p.src.map(esc).join(" · ")+'</div></div>';
+    tl.innerHTML = season.phases.map(function(p, i){
+      var ws = ssPhaseWeeks(p), cur = tdy>=p.from && tdy<=p.to, past = tdy>p.to;
+      var prog = past ? 100 : (cur ? Math.round(100*(ssDays(p.from,tdy)+1)/(ssDays(p.from,p.to)+1)) : 0);
+      var st = past ? "abgeschlossen" : cur ? ("jetzt · Woche "+(Math.floor(ssDays(p.from,tdy)/7)+1)+" von "+ws.length) : ("in "+Math.ceil(ssDays(tdy,p.from)/7)+" Wochen");
+      return '<button type="button" class="ss-pc'+(cur?' cur':'')+(past?' past':'')+(p.type==="race"?' race':'')+'" data-ph="'+p.id+'" aria-pressed="'+(ssPhase&&ssPhase.id===p.id)+'" style="--pc:'+p.color+'">'
+        +'<span class="no">Phase '+(i+1)+'</span><span class="nm">'+esc(p.short)+'</span>'
+        +'<span class="dt">'+ssFmt(ssD(p.from))+'–'+ssFmt(ssD(p.to))+' · '+ws.length+' Wo.</span>'
+        +'<span class="pg"><i style="width:'+prog+'%"></i></span><span class="ps">'+esc(st)+'</span></button>';
+    }).join("");
+    var p = ssPhase, pi = season.phases.indexOf(p), pws = ssPhaseWeeks(p), pcur = tdy>=p.from && tdy<=p.to;
+    var hard = 100-(p.easy||80);
+    var lrTxt = (p.longRun && p.longRun[1]) ? (p.longRun[0]===p.longRun[1] ? p.longRun[0]+'<small>min</small>' : p.longRun[0]+' → '+p.longRun[1]+'<small>min</small>') : '–';
+    document.getElementById("ssPh").innerHTML = '<div class="ss-pd" style="--pc:'+p.color+'">'
+      +'<div class="hd"><div class="ey">Phase '+(pi+1)+' von '+season.phases.length+(pcur?' · jetzt':'')+' · '+ssFmt(ssD(p.from))+'–'+ssFmt(ssD(p.to))+'</div><h3>'+esc(p.name)+'</h3>'+(p.race?'<div class="rc">⚑ '+esc(p.race)+'</div>':'')+'</div>'
+      +'<div class="ss-pk"><div><div class="l">Dauer</div><div class="v">'+pws.length+'<small>'+(pws.length===1?'Woche':'Wochen')+'</small></div></div>'
+      +'<div><div class="l">Umfang / Woche</div><div class="v">'+esc(p.hours.replace(/ h.*$/,''))+'<small>h</small></div></div>'
+      +'<div><div class="l">Langer Lauf</div><div class="v">'+lrTxt+'</div></div></div>'
+      +'<div class="ss-int"><div class="l"><span><b>'+(p.easy||80)+' %</b> locker</span><span><b>'+hard+' %</b> intensiv</span></div>'
+      +'<div class="bar"><i style="width:'+(p.easy||80)+'%; background:color-mix(in srgb, '+p.color+' 55%, var(--border))"></i><i style="width:'+hard+'%; background:var(--accent)"></i></div>'
+      +'<div class="tx">'+esc(p.dist)+'</div></div>'
+      +'<div class="ss-pb"><div><h4>Schwerpunkte</h4><ul>'+p.focus.map(function(f){return '<li>'+esc(f)+'</li>';}).join("")+'</ul></div>'
+      +'<div>'+(p.tests?'<h4>Tests</h4><div class="tst">'+p.tests.map(function(t){ var m=t.match(/^(\S+)\s(.*)$/); return '<span><b>'+esc(m?m[1]:"")+'</b>'+esc(m?m[2]:t)+'</span>'; }).join("")+'</div>':'')
+      +'<h4>Methodik</h4><div class="chips">'+p.src.map(function(x){return '<span class="ss-chip">'+esc(x)+'</span>';}).join("")+'</div></div></div></div>';
     ssRenderWeeks();
     var gEl = document.getElementById("ssGoal");
     gEl.innerHTML = '<table><thead><tr><th>Teil</th><th>Ziel</th><th>Tempo/Leistung</th><th>Messpunkt</th></tr></thead><tbody>'
