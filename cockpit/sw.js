@@ -1,5 +1,5 @@
 // Cockpit – Offline-Cache. Bei jeder Änderung VERSION hochzählen.
-const VERSION = 'cockpit-v5';
+const VERSION = 'cockpit-v6';
 const FILES = ['./', 'index.html', 'manifest.webmanifest', 'icons/icon-180.png', 'icons/icon-192.png', 'icons/icon-512.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(VERSION).then(c => c.addAll(FILES)).then(() => self.skipWaiting()));
