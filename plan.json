@@ -1,70 +1,190 @@
 {
- "updated": "03.10. 11:06",
+ "updated": "04.10. 17:56",
  "units": [
   {
-   "id": "2026-09-28-Ride-81f665",
-   "date": "2026-09-28",
-   "name": "28.09. Mo · RAD GA 60 (161-185 W) – vor Abreise",
-   "src": "10 | Einfahren | 130–160 W | easy\n45 | Grundlage | 161–185 W | ga1\n5 | Ausfahren | 100–150 W | easy"
+   "id": "2026-10-05-Ride-d195eb",
+   "date": "2026-10-05",
+   "name": "05.10. Mo · RAD GA 90 (175-200 W) nach MED",
+   "src": "10 | Einfahren | 140–175 W | easy\n75 | Grundlage | 175–200 W | ga1\n5 | Ausfahren | 100–150 W | easy"
   },
   {
-   "id": "2026-09-29-Run-9ea9d7",
-   "date": "2026-09-29",
-   "name": "29.09. Di · LAUF GA1 60 locker (ATL)",
-   "src": "60 | Grundlage | HF 135–155 | ga1"
-  },
-  {
-   "id": "2026-09-30-Ride-8db916",
-   "date": "2026-09-30",
-   "name": "30.09. Mi · RAD Hotel/Peloton Schwelle 3x10 nach Puls (ATL)",
-   "src": "30 | Einfahren | HF 125–140 | easy\n3x [10 | Schwelle | HF 150–158 | sweet ; 5 | Pause | HF 110–135 | rec]\n40 | Grundlage | HF 134–140 | ga1\n5 | Locker | HF 100–130 | easy"
-  },
-  {
-   "id": "2026-10-01-Ride-9271ec",
-   "date": "2026-10-01",
-   "name": "01.10. Do · RAD Peloton GA 90 nach Puls (ATL)",
-   "src": "10 | Einfahren | HF 110–130 | easy\n75 | Grundlage | HF 134–140 | ga1\n5 | Ausfahren | HF 100–130 | easy"
-  },
-  {
-   "id": "2026-10-01-Run-2a46aa",
-   "date": "2026-10-01",
-   "name": "01.10. Do · LAUF Koppellauf 15 locker (ATL)",
-   "src": "15 | Grundlage | HF 135–150 | ga1"
-  },
-  {
-   "id": "2026-10-01-WeightTraining-14160d",
-   "date": "2026-10-01",
-   "name": "01.10. Do · STABI Hüfte + McGill Big 3 (20 min)",
+   "id": "2026-10-05-WeightTraining-14160d",
+   "date": "2026-10-05",
+   "name": "05.10. Mo · STABI Hüfte + McGill Big 3 (20 min)",
    "src": "1:00 | Katze-Kuh | langsam, 6–8×, Rücken nur mobilisieren | easy\n0:15 | Wechsel | auf die linke Seite legen, Rücken an die Wand | rec\n0:45 | Beinheben seitlich RECHTS | Ferse führt, Fußspitze leicht nach unten, 2 s oben halten | sweet\n0:45 | Beinheben seitlich links | Ferse führt, 2 s oben halten | ga1\n0:45 | Beinheben seitlich RECHTS | Extrasatz – gleiche Wdh-Zahl wie Satz 1 | sweet\n0:20 | Pause | Miniband an die Knie (wenn vorhanden) | rec\n0:45 | Clamshell RECHTS | Füße zusammen, Becken nicht nach hinten kippen, 2 s oben | sweet\n0:45 | Clamshell links | Füße zusammen, 2 s oben | ga1\n0:45 | Clamshell RECHTS | Extrasatz | sweet\n0:20 | Pause | auf den Rücken legen | rec\n0:45 | Glute Bridge einbeinig RECHTS | Becken bleibt waagerecht, oben 2 s drücken | sweet\n0:45 | Glute Bridge einbeinig links | Becken waagerecht | ga1\n0:45 | Glute Bridge einbeinig RECHTS | Extrasatz | sweet\n0:20 | Pause | aufstehen, Hand an die Wand | rec\n0:45 | RDL einbeinig RECHTS | 3 s runter, Knie über 2. Zeh, Hüfte bleibt gerade | sweet\n0:45 | RDL einbeinig links | 3 s runter | ga1\n0:45 | RDL einbeinig RECHTS | Extrasatz – nur so tief wie sauber | sweet\n0:20 | Pause | auf den Rücken legen – McGill Big 3 | rec\n1:20 | McGill Curl-up | ein Bein angestellt, Hände unter LWS, 6× 10 s halten | ga1\n0:15 | Wechsel | auf die rechte Seite, Unterarm | rec\n1:00 | Seitstütz RECHTS | 5× 10 s halten, kurz ablegen | sweet\n1:00 | Seitstütz links | 5× 10 s halten | ga1\n0:15 | Wechsel | Vierfüßlerstand | rec\n1:20 | Bird Dog | abwechselnd, je 10 s halten, Faust machen, Hüfte ruhig | ga1\n0:20 | Pause | Runde 2 kürzer | rec\n0:50 | McGill Curl-up | 4× 10 s, anderes Bein angestellt | ga1\n0:40 | Seitstütz RECHTS | 3× 10 s | sweet\n0:40 | Seitstütz links | 3× 10 s | ga1\n0:50 | Bird Dog | abwechselnd, 4 pro Seite × 10 s | ga1"
   },
   {
-   "id": "2026-10-02-Run-5c3e1e",
-   "date": "2026-10-02",
-   "name": "02.10. Fr · LAUF Shake-out 30-40 locker",
-   "src": "35 | Grundlage | HF 135–150 | ga1"
+   "id": "2026-10-06-Run-263eb4",
+   "date": "2026-10-06",
+   "name": "06.10. Di · LAUF Schwelle 3x8' (5:05-5:10)",
+   "src": "15 | Einlaufen (dazu 3x20 s Steigerung) | HF 130–145 | easy\n3x [8 | Intervall hart | 5:05–5:10 /km | hard ; 2 | Pause | HF 110–145 | rec]\n10 | Auslaufen | HF 130–145 | easy"
   },
   {
-   "id": "2026-10-02-WeightTraining-14160d",
-   "date": "2026-10-02",
-   "name": "02.10. Fr · STABI Hüfte + McGill Big 3 (20 min)",
+   "id": "2026-10-07-Run-9915df",
+   "date": "2026-10-07",
+   "name": "07.10. Mi · LAUF locker 40 + Steigerungen",
+   "src": "30 | Grundlage | HF 140–148 | ga1\n8 | Steigerungen 6x20 s bis ~4:30/km, je 1' traben | frei | hard\n5 | Auslaufen | HF 120–145 | easy"
+  },
+  {
+   "id": "2026-10-08-Ride-b6bfa9",
+   "date": "2026-10-08",
+   "name": "08.10. Do · RAD Schwelle 3x12 (241-285 W)",
+   "src": "20 | Einfahren | 150–200 W | easy\n3x [12 | Schwelle | 241–285 W | sweet ; 5 | Pause | 140–160 W | rec]\n10 | Ausfahren | 100–160 W | easy"
+  },
+  {
+   "id": "2026-10-08-Run-496877",
+   "date": "2026-10-08",
+   "name": "08.10. Do · LAUF locker 35 (nach dem Rad)",
+   "src": "35 | Grundlage | HF 140–148 | ga1"
+  },
+  {
+   "id": "2026-10-08-WeightTraining-14160d",
+   "date": "2026-10-08",
+   "name": "08.10. Do · STABI Hüfte + McGill Big 3 (20 min)",
    "src": "1:00 | Katze-Kuh | langsam, 6–8×, Rücken nur mobilisieren | easy\n0:15 | Wechsel | auf die linke Seite legen, Rücken an die Wand | rec\n0:45 | Beinheben seitlich RECHTS | Ferse führt, Fußspitze leicht nach unten, 2 s oben halten | sweet\n0:45 | Beinheben seitlich links | Ferse führt, 2 s oben halten | ga1\n0:45 | Beinheben seitlich RECHTS | Extrasatz – gleiche Wdh-Zahl wie Satz 1 | sweet\n0:20 | Pause | Miniband an die Knie (wenn vorhanden) | rec\n0:45 | Clamshell RECHTS | Füße zusammen, Becken nicht nach hinten kippen, 2 s oben | sweet\n0:45 | Clamshell links | Füße zusammen, 2 s oben | ga1\n0:45 | Clamshell RECHTS | Extrasatz | sweet\n0:20 | Pause | auf den Rücken legen | rec\n0:45 | Glute Bridge einbeinig RECHTS | Becken bleibt waagerecht, oben 2 s drücken | sweet\n0:45 | Glute Bridge einbeinig links | Becken waagerecht | ga1\n0:45 | Glute Bridge einbeinig RECHTS | Extrasatz | sweet\n0:20 | Pause | aufstehen, Hand an die Wand | rec\n0:45 | RDL einbeinig RECHTS | 3 s runter, Knie über 2. Zeh, Hüfte bleibt gerade | sweet\n0:45 | RDL einbeinig links | 3 s runter | ga1\n0:45 | RDL einbeinig RECHTS | Extrasatz – nur so tief wie sauber | sweet\n0:20 | Pause | auf den Rücken legen – McGill Big 3 | rec\n1:20 | McGill Curl-up | ein Bein angestellt, Hände unter LWS, 6× 10 s halten | ga1\n0:15 | Wechsel | auf die rechte Seite, Unterarm | rec\n1:00 | Seitstütz RECHTS | 5× 10 s halten, kurz ablegen | sweet\n1:00 | Seitstütz links | 5× 10 s halten | ga1\n0:15 | Wechsel | Vierfüßlerstand | rec\n1:20 | Bird Dog | abwechselnd, je 10 s halten, Faust machen, Hüfte ruhig | ga1\n0:20 | Pause | Runde 2 kürzer | rec\n0:50 | McGill Curl-up | 4× 10 s, anderes Bein angestellt | ga1\n0:40 | Seitstütz RECHTS | 3× 10 s | sweet\n0:40 | Seitstütz links | 3× 10 s | ga1\n0:50 | Bird Dog | abwechselnd, 4 pro Seite × 10 s | ga1"
   },
   {
-   "id": "2026-10-03-Ride-302eba",
-   "date": "2026-10-03",
-   "name": "03.10. Sa · RAD GA 150 (161-185 W)",
-   "src": "10 | Einfahren | 130–160 W | easy\n135 | Grundlage | 161–185 W | ga1\n5 | Ausfahren | 100–150 W | easy"
+   "id": "2026-10-09-Ride-9ba57e",
+   "date": "2026-10-09",
+   "name": "09.10. Fr · RAD GA 60 (175-200 W)",
+   "src": "10 | Einfahren | 140–175 W | easy\n45 | Grundlage | 175–200 W | ga1\n5 | Ausfahren | 100–150 W | easy"
   },
   {
-   "id": "2026-10-04-Run-76f8d1",
-   "date": "2026-10-04",
-   "name": "04.10. So · LAUF lang 80 (HF 140-150, ab 60 min bis 155)",
+   "id": "2026-10-10-Ride-ecd6e3",
+   "date": "2026-10-10",
+   "name": "10.10. Sa · RAD GA lang 210 (175-200 W)",
+   "src": "10 | Einfahren | 140–175 W | easy\n195 | Grundlage | 175–200 W | ga1\n5 | Ausfahren | 100–150 W | easy"
+  },
+  {
+   "id": "2026-10-11-Run-20503b",
+   "date": "2026-10-11",
+   "name": "11.10. So · LAUF lang 85 (HF 140-150, ab 60 min bis 155)",
+   "src": "60 | Grundlage | HF 140–150 | ga1\n25 | Grundlage | HF 140–155 | ga1"
+  },
+  {
+   "id": "2026-10-11-WeightTraining-14160d",
+   "date": "2026-10-11",
+   "name": "11.10. So · STABI Hüfte + McGill Big 3 (20 min)",
+   "src": "1:00 | Katze-Kuh | langsam, 6–8×, Rücken nur mobilisieren | easy\n0:15 | Wechsel | auf die linke Seite legen, Rücken an die Wand | rec\n0:45 | Beinheben seitlich RECHTS | Ferse führt, Fußspitze leicht nach unten, 2 s oben halten | sweet\n0:45 | Beinheben seitlich links | Ferse führt, 2 s oben halten | ga1\n0:45 | Beinheben seitlich RECHTS | Extrasatz – gleiche Wdh-Zahl wie Satz 1 | sweet\n0:20 | Pause | Miniband an die Knie (wenn vorhanden) | rec\n0:45 | Clamshell RECHTS | Füße zusammen, Becken nicht nach hinten kippen, 2 s oben | sweet\n0:45 | Clamshell links | Füße zusammen, 2 s oben | ga1\n0:45 | Clamshell RECHTS | Extrasatz | sweet\n0:20 | Pause | auf den Rücken legen | rec\n0:45 | Glute Bridge einbeinig RECHTS | Becken bleibt waagerecht, oben 2 s drücken | sweet\n0:45 | Glute Bridge einbeinig links | Becken waagerecht | ga1\n0:45 | Glute Bridge einbeinig RECHTS | Extrasatz | sweet\n0:20 | Pause | aufstehen, Hand an die Wand | rec\n0:45 | RDL einbeinig RECHTS | 3 s runter, Knie über 2. Zeh, Hüfte bleibt gerade | sweet\n0:45 | RDL einbeinig links | 3 s runter | ga1\n0:45 | RDL einbeinig RECHTS | Extrasatz – nur so tief wie sauber | sweet\n0:20 | Pause | auf den Rücken legen – McGill Big 3 | rec\n1:20 | McGill Curl-up | ein Bein angestellt, Hände unter LWS, 6× 10 s halten | ga1\n0:15 | Wechsel | auf die rechte Seite, Unterarm | rec\n1:00 | Seitstütz RECHTS | 5× 10 s halten, kurz ablegen | sweet\n1:00 | Seitstütz links | 5× 10 s halten | ga1\n0:15 | Wechsel | Vierfüßlerstand | rec\n1:20 | Bird Dog | abwechselnd, je 10 s halten, Faust machen, Hüfte ruhig | ga1\n0:20 | Pause | Runde 2 kürzer | rec\n0:50 | McGill Curl-up | 4× 10 s, anderes Bein angestellt | ga1\n0:40 | Seitstütz RECHTS | 3× 10 s | sweet\n0:40 | Seitstütz links | 3× 10 s | ga1\n0:50 | Bird Dog | abwechselnd, 4 pro Seite × 10 s | ga1"
+  },
+  {
+   "id": "2026-10-12-Run-966ba6",
+   "date": "2026-10-12",
+   "name": "12.10. Mo · LAUF 30-Minuten-Test",
+   "src": "15 | Einlaufen (dazu 3x20 s Steigerung) | HF 130–145 | easy\n5 | Locker | HF 120–145 | easy\n30 | 30' Zeitversuch gleichmaessig so schnell wie moeglich (flach, ohne Ampeln) | frei | hard\n10 | Auslaufen | HF 130–145 | easy"
+  },
+  {
+   "id": "2026-10-12-Ride-803bd8",
+   "date": "2026-10-12",
+   "name": "12.10. Mo · RAD GA 60 locker (175-200 W)",
+   "src": "10 | Einfahren | 140–175 W | easy\n45 | Grundlage | 175–200 W | ga1\n5 | Ausfahren | 100–150 W | easy"
+  },
+  {
+   "id": "2026-10-12-WeightTraining-14160d",
+   "date": "2026-10-12",
+   "name": "12.10. Mo · STABI Hüfte + McGill Big 3 (20 min)",
+   "src": "1:00 | Katze-Kuh | langsam, 6–8×, Rücken nur mobilisieren | easy\n0:15 | Wechsel | auf die linke Seite legen, Rücken an die Wand | rec\n0:45 | Beinheben seitlich RECHTS | Ferse führt, Fußspitze leicht nach unten, 2 s oben halten | sweet\n0:45 | Beinheben seitlich links | Ferse führt, 2 s oben halten | ga1\n0:45 | Beinheben seitlich RECHTS | Extrasatz – gleiche Wdh-Zahl wie Satz 1 | sweet\n0:20 | Pause | Miniband an die Knie (wenn vorhanden) | rec\n0:45 | Clamshell RECHTS | Füße zusammen, Becken nicht nach hinten kippen, 2 s oben | sweet\n0:45 | Clamshell links | Füße zusammen, 2 s oben | ga1\n0:45 | Clamshell RECHTS | Extrasatz | sweet\n0:20 | Pause | auf den Rücken legen | rec\n0:45 | Glute Bridge einbeinig RECHTS | Becken bleibt waagerecht, oben 2 s drücken | sweet\n0:45 | Glute Bridge einbeinig links | Becken waagerecht | ga1\n0:45 | Glute Bridge einbeinig RECHTS | Extrasatz | sweet\n0:20 | Pause | aufstehen, Hand an die Wand | rec\n0:45 | RDL einbeinig RECHTS | 3 s runter, Knie über 2. Zeh, Hüfte bleibt gerade | sweet\n0:45 | RDL einbeinig links | 3 s runter | ga1\n0:45 | RDL einbeinig RECHTS | Extrasatz – nur so tief wie sauber | sweet\n0:20 | Pause | auf den Rücken legen – McGill Big 3 | rec\n1:20 | McGill Curl-up | ein Bein angestellt, Hände unter LWS, 6× 10 s halten | ga1\n0:15 | Wechsel | auf die rechte Seite, Unterarm | rec\n1:00 | Seitstütz RECHTS | 5× 10 s halten, kurz ablegen | sweet\n1:00 | Seitstütz links | 5× 10 s halten | ga1\n0:15 | Wechsel | Vierfüßlerstand | rec\n1:20 | Bird Dog | abwechselnd, je 10 s halten, Faust machen, Hüfte ruhig | ga1\n0:20 | Pause | Runde 2 kürzer | rec\n0:50 | McGill Curl-up | 4× 10 s, anderes Bein angestellt | ga1\n0:40 | Seitstütz RECHTS | 3× 10 s | sweet\n0:40 | Seitstütz links | 3× 10 s | ga1\n0:50 | Bird Dog | abwechselnd, 4 pro Seite × 10 s | ga1"
+  },
+  {
+   "id": "2026-10-13-Ride-867bb8",
+   "date": "2026-10-13",
+   "name": "13.10. Di · RAD GA 90 (175-200 W)",
+   "src": "10 | Einfahren | 140–175 W | easy\n75 | Grundlage | 175–200 W | ga1\n5 | Ausfahren | 100–150 W | easy"
+  },
+  {
+   "id": "2026-10-14-Ride-4f626c",
+   "date": "2026-10-14",
+   "name": "14.10. Mi · RAD FTP-Test 20 min",
+   "src": "20 | Einfahren | 150–200 W | easy\n3x [1 | Intervall hart | 290–310 W | hard ; 1 | Pause | 100–150 W | rec]\n5 | Locker | 100–150 W | easy\n5 | 5' all-out | frei | hard\n10 | Locker | 140–160 W | easy\n20 | 20' Zeitversuch so gleichmaessig wie moeglich (FTP = 95 % vom Schnitt) | frei | hard\n10 | Ausfahren | 100–150 W | easy"
+  },
+  {
+   "id": "2026-10-15-Run-815d23",
+   "date": "2026-10-15",
+   "name": "15.10. Do · LAUF locker 45 + Steigerungen",
+   "src": "35 | Grundlage | HF 140–148 | ga1\n8 | Steigerungen 6x20 s bis ~4:30/km, je 1' traben | frei | hard\n5 | Auslaufen | HF 120–145 | easy"
+  },
+  {
+   "id": "2026-10-15-WeightTraining-14160d",
+   "date": "2026-10-15",
+   "name": "15.10. Do · STABI Hüfte + McGill Big 3 (20 min)",
+   "src": "1:00 | Katze-Kuh | langsam, 6–8×, Rücken nur mobilisieren | easy\n0:15 | Wechsel | auf die linke Seite legen, Rücken an die Wand | rec\n0:45 | Beinheben seitlich RECHTS | Ferse führt, Fußspitze leicht nach unten, 2 s oben halten | sweet\n0:45 | Beinheben seitlich links | Ferse führt, 2 s oben halten | ga1\n0:45 | Beinheben seitlich RECHTS | Extrasatz – gleiche Wdh-Zahl wie Satz 1 | sweet\n0:20 | Pause | Miniband an die Knie (wenn vorhanden) | rec\n0:45 | Clamshell RECHTS | Füße zusammen, Becken nicht nach hinten kippen, 2 s oben | sweet\n0:45 | Clamshell links | Füße zusammen, 2 s oben | ga1\n0:45 | Clamshell RECHTS | Extrasatz | sweet\n0:20 | Pause | auf den Rücken legen | rec\n0:45 | Glute Bridge einbeinig RECHTS | Becken bleibt waagerecht, oben 2 s drücken | sweet\n0:45 | Glute Bridge einbeinig links | Becken waagerecht | ga1\n0:45 | Glute Bridge einbeinig RECHTS | Extrasatz | sweet\n0:20 | Pause | aufstehen, Hand an die Wand | rec\n0:45 | RDL einbeinig RECHTS | 3 s runter, Knie über 2. Zeh, Hüfte bleibt gerade | sweet\n0:45 | RDL einbeinig links | 3 s runter | ga1\n0:45 | RDL einbeinig RECHTS | Extrasatz – nur so tief wie sauber | sweet\n0:20 | Pause | auf den Rücken legen – McGill Big 3 | rec\n1:20 | McGill Curl-up | ein Bein angestellt, Hände unter LWS, 6× 10 s halten | ga1\n0:15 | Wechsel | auf die rechte Seite, Unterarm | rec\n1:00 | Seitstütz RECHTS | 5× 10 s halten, kurz ablegen | sweet\n1:00 | Seitstütz links | 5× 10 s halten | ga1\n0:15 | Wechsel | Vierfüßlerstand | rec\n1:20 | Bird Dog | abwechselnd, je 10 s halten, Faust machen, Hüfte ruhig | ga1\n0:20 | Pause | Runde 2 kürzer | rec\n0:50 | McGill Curl-up | 4× 10 s, anderes Bein angestellt | ga1\n0:40 | Seitstütz RECHTS | 3× 10 s | sweet\n0:40 | Seitstütz links | 3× 10 s | ga1\n0:50 | Bird Dog | abwechselnd, 4 pro Seite × 10 s | ga1"
+  },
+  {
+   "id": "2026-10-16-Ride-3d58ba",
+   "date": "2026-10-16",
+   "name": "16.10. Fr · RAD GA 120 (175-200 W) nach Standby",
+   "src": "10 | Einfahren | 140–175 W | easy\n105 | Grundlage | 175–200 W | ga1\n5 | Ausfahren | 100–150 W | easy"
+  },
+  {
+   "id": "2026-10-17-Run-7d9621",
+   "date": "2026-10-17",
+   "name": "17.10. Sa · LAUF locker 35 (RUH, nach Ankunft)",
+   "src": "35 | Grundlage | HF 140–148 | ga1"
+  },
+  {
+   "id": "2026-10-18-Run-6c3260",
+   "date": "2026-10-18",
+   "name": "18.10. So · LAUF lang 90 (RUH, frueh)",
+   "src": "60 | Grundlage | HF 140–150 | ga1\n30 | Grundlage | HF 140–155 | ga1"
+  },
+  {
+   "id": "2026-10-18-WeightTraining-14160d",
+   "date": "2026-10-18",
+   "name": "18.10. So · STABI Hüfte + McGill Big 3 (20 min)",
+   "src": "1:00 | Katze-Kuh | langsam, 6–8×, Rücken nur mobilisieren | easy\n0:15 | Wechsel | auf die linke Seite legen, Rücken an die Wand | rec\n0:45 | Beinheben seitlich RECHTS | Ferse führt, Fußspitze leicht nach unten, 2 s oben halten | sweet\n0:45 | Beinheben seitlich links | Ferse führt, 2 s oben halten | ga1\n0:45 | Beinheben seitlich RECHTS | Extrasatz – gleiche Wdh-Zahl wie Satz 1 | sweet\n0:20 | Pause | Miniband an die Knie (wenn vorhanden) | rec\n0:45 | Clamshell RECHTS | Füße zusammen, Becken nicht nach hinten kippen, 2 s oben | sweet\n0:45 | Clamshell links | Füße zusammen, 2 s oben | ga1\n0:45 | Clamshell RECHTS | Extrasatz | sweet\n0:20 | Pause | auf den Rücken legen | rec\n0:45 | Glute Bridge einbeinig RECHTS | Becken bleibt waagerecht, oben 2 s drücken | sweet\n0:45 | Glute Bridge einbeinig links | Becken waagerecht | ga1\n0:45 | Glute Bridge einbeinig RECHTS | Extrasatz | sweet\n0:20 | Pause | aufstehen, Hand an die Wand | rec\n0:45 | RDL einbeinig RECHTS | 3 s runter, Knie über 2. Zeh, Hüfte bleibt gerade | sweet\n0:45 | RDL einbeinig links | 3 s runter | ga1\n0:45 | RDL einbeinig RECHTS | Extrasatz – nur so tief wie sauber | sweet\n0:20 | Pause | auf den Rücken legen – McGill Big 3 | rec\n1:20 | McGill Curl-up | ein Bein angestellt, Hände unter LWS, 6× 10 s halten | ga1\n0:15 | Wechsel | auf die rechte Seite, Unterarm | rec\n1:00 | Seitstütz RECHTS | 5× 10 s halten, kurz ablegen | sweet\n1:00 | Seitstütz links | 5× 10 s halten | ga1\n0:15 | Wechsel | Vierfüßlerstand | rec\n1:20 | Bird Dog | abwechselnd, je 10 s halten, Faust machen, Hüfte ruhig | ga1\n0:20 | Pause | Runde 2 kürzer | rec\n0:50 | McGill Curl-up | 4× 10 s, anderes Bein angestellt | ga1\n0:40 | Seitstütz RECHTS | 3× 10 s | sweet\n0:40 | Seitstütz links | 3× 10 s | ga1\n0:50 | Bird Dog | abwechselnd, 4 pro Seite × 10 s | ga1"
+  },
+  {
+   "id": "2026-10-19-Run-f8fcce",
+   "date": "2026-10-19",
+   "name": "19.10. Mo · LAUF Schwelle 2x10' (RUH, Laufband 1 %)",
+   "src": "15 | Einlaufen | HF 130–145 | easy\n2x [10 | Intervall hart | 5:05–5:15 /km | hard ; 3 | Pause | HF 110–145 | rec]\n10 | Auslaufen | HF 130–145 | easy"
+  },
+  {
+   "id": "2026-10-19-Ride-d71c3c",
+   "date": "2026-10-19",
+   "name": "19.10. Mo · RAD Hotel GA 60 nach Puls (RUH, optional)",
+   "src": "10 | Einfahren | HF 110–130 | easy\n45 | Grundlage | HF 134–140 | ga1\n5 | Ausfahren | HF 100–130 | easy"
+  },
+  {
+   "id": "2026-10-21-Run-70206f",
+   "date": "2026-10-21",
+   "name": "21.10. Mi · LAUF locker 45 (HKG)",
+   "src": "45 | Grundlage | HF 140–148 | ga1"
+  },
+  {
+   "id": "2026-10-21-WeightTraining-14160d",
+   "date": "2026-10-21",
+   "name": "21.10. Mi · STABI Hüfte + McGill Big 3 (20 min)",
+   "src": "1:00 | Katze-Kuh | langsam, 6–8×, Rücken nur mobilisieren | easy\n0:15 | Wechsel | auf die linke Seite legen, Rücken an die Wand | rec\n0:45 | Beinheben seitlich RECHTS | Ferse führt, Fußspitze leicht nach unten, 2 s oben halten | sweet\n0:45 | Beinheben seitlich links | Ferse führt, 2 s oben halten | ga1\n0:45 | Beinheben seitlich RECHTS | Extrasatz – gleiche Wdh-Zahl wie Satz 1 | sweet\n0:20 | Pause | Miniband an die Knie (wenn vorhanden) | rec\n0:45 | Clamshell RECHTS | Füße zusammen, Becken nicht nach hinten kippen, 2 s oben | sweet\n0:45 | Clamshell links | Füße zusammen, 2 s oben | ga1\n0:45 | Clamshell RECHTS | Extrasatz | sweet\n0:20 | Pause | auf den Rücken legen | rec\n0:45 | Glute Bridge einbeinig RECHTS | Becken bleibt waagerecht, oben 2 s drücken | sweet\n0:45 | Glute Bridge einbeinig links | Becken waagerecht | ga1\n0:45 | Glute Bridge einbeinig RECHTS | Extrasatz | sweet\n0:20 | Pause | aufstehen, Hand an die Wand | rec\n0:45 | RDL einbeinig RECHTS | 3 s runter, Knie über 2. Zeh, Hüfte bleibt gerade | sweet\n0:45 | RDL einbeinig links | 3 s runter | ga1\n0:45 | RDL einbeinig RECHTS | Extrasatz – nur so tief wie sauber | sweet\n0:20 | Pause | auf den Rücken legen – McGill Big 3 | rec\n1:20 | McGill Curl-up | ein Bein angestellt, Hände unter LWS, 6× 10 s halten | ga1\n0:15 | Wechsel | auf die rechte Seite, Unterarm | rec\n1:00 | Seitstütz RECHTS | 5× 10 s halten, kurz ablegen | sweet\n1:00 | Seitstütz links | 5× 10 s halten | ga1\n0:15 | Wechsel | Vierfüßlerstand | rec\n1:20 | Bird Dog | abwechselnd, je 10 s halten, Faust machen, Hüfte ruhig | ga1\n0:20 | Pause | Runde 2 kürzer | rec\n0:50 | McGill Curl-up | 4× 10 s, anderes Bein angestellt | ga1\n0:40 | Seitstütz RECHTS | 3× 10 s | sweet\n0:40 | Seitstütz links | 3× 10 s | ga1\n0:50 | Bird Dog | abwechselnd, 4 pro Seite × 10 s | ga1"
+  },
+  {
+   "id": "2026-10-23-Ride-9ba57e",
+   "date": "2026-10-23",
+   "name": "23.10. Fr · RAD GA 60 (175-200 W)",
+   "src": "10 | Einfahren | 140–175 W | easy\n45 | Grundlage | 175–200 W | ga1\n5 | Ausfahren | 100–150 W | easy"
+  },
+  {
+   "id": "2026-10-24-Ride-8f3dc6",
+   "date": "2026-10-24",
+   "name": "24.10. Sa · RAD lang 180 mit 3x15 Z3",
+   "src": "30 | Einrollen | 175–200 W | easy\n3x [15 | Schwelle | 201–240 W | sweet ; 10 | Pause | 175–200 W | rec]\n70 | Grundlage | 175–200 W | ga1\n5 | Ausfahren | 100–150 W | easy"
+  },
+  {
+   "id": "2026-10-24-Run-f96c87",
+   "date": "2026-10-24",
+   "name": "24.10. Sa · LAUF Koppellauf 20",
+   "src": "20 | Grundlage | HF 140–150 | ga1"
+  },
+  {
+   "id": "2026-10-25-Run-76f8d1",
+   "date": "2026-10-25",
+   "name": "25.10. So · LAUF lang 80 (HF 140-150, ab 60 min bis 155)",
    "src": "60 | Grundlage | HF 140–150 | ga1\n20 | Grundlage | HF 140–155 | ga1"
   },
   {
-   "id": "2026-10-04-WeightTraining-14160d",
-   "date": "2026-10-04",
-   "name": "04.10. So · STABI Hüfte + McGill Big 3 (20 min)",
+   "id": "2026-10-25-WeightTraining-14160d",
+   "date": "2026-10-25",
+   "name": "25.10. So · STABI Hüfte + McGill Big 3 (20 min)",
    "src": "1:00 | Katze-Kuh | langsam, 6–8×, Rücken nur mobilisieren | easy\n0:15 | Wechsel | auf die linke Seite legen, Rücken an die Wand | rec\n0:45 | Beinheben seitlich RECHTS | Ferse führt, Fußspitze leicht nach unten, 2 s oben halten | sweet\n0:45 | Beinheben seitlich links | Ferse führt, 2 s oben halten | ga1\n0:45 | Beinheben seitlich RECHTS | Extrasatz – gleiche Wdh-Zahl wie Satz 1 | sweet\n0:20 | Pause | Miniband an die Knie (wenn vorhanden) | rec\n0:45 | Clamshell RECHTS | Füße zusammen, Becken nicht nach hinten kippen, 2 s oben | sweet\n0:45 | Clamshell links | Füße zusammen, 2 s oben | ga1\n0:45 | Clamshell RECHTS | Extrasatz | sweet\n0:20 | Pause | auf den Rücken legen | rec\n0:45 | Glute Bridge einbeinig RECHTS | Becken bleibt waagerecht, oben 2 s drücken | sweet\n0:45 | Glute Bridge einbeinig links | Becken waagerecht | ga1\n0:45 | Glute Bridge einbeinig RECHTS | Extrasatz | sweet\n0:20 | Pause | aufstehen, Hand an die Wand | rec\n0:45 | RDL einbeinig RECHTS | 3 s runter, Knie über 2. Zeh, Hüfte bleibt gerade | sweet\n0:45 | RDL einbeinig links | 3 s runter | ga1\n0:45 | RDL einbeinig RECHTS | Extrasatz – nur so tief wie sauber | sweet\n0:20 | Pause | auf den Rücken legen – McGill Big 3 | rec\n1:20 | McGill Curl-up | ein Bein angestellt, Hände unter LWS, 6× 10 s halten | ga1\n0:15 | Wechsel | auf die rechte Seite, Unterarm | rec\n1:00 | Seitstütz RECHTS | 5× 10 s halten, kurz ablegen | sweet\n1:00 | Seitstütz links | 5× 10 s halten | ga1\n0:15 | Wechsel | Vierfüßlerstand | rec\n1:20 | Bird Dog | abwechselnd, je 10 s halten, Faust machen, Hüfte ruhig | ga1\n0:20 | Pause | Runde 2 kürzer | rec\n0:50 | McGill Curl-up | 4× 10 s, anderes Bein angestellt | ga1\n0:40 | Seitstütz RECHTS | 3× 10 s | sweet\n0:40 | Seitstütz links | 3× 10 s | ga1\n0:50 | Bird Dog | abwechselnd, 4 pro Seite × 10 s | ga1"
   }
  ]
