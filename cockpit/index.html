@@ -1009,6 +1009,7 @@ body{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset
   #ssPh .ss-pd .hd{background:linear-gradient(120deg, color-mix(in srgb, var(--pc) 34%, var(--surface)), var(--surface) 70%) !important;}
 
   .session-meta span{display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;}
+.vital-delta.ok{color:#8BD17C;}
 </style>
 
 <div class="app">
@@ -2008,17 +2009,34 @@ body{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset
       if(cfg.target && tline){
         var known = tline.filter(function(x){ return x!=null; });
         var soll = known[known.length-1];
-        var d1 = last.v - soll;
-        cls = Math.abs(d1) < cfg.flat ? "flat" : (d1<0 ? "up" : "down");
-        dtxt = (Math.abs(d1) < cfg.flat ? "auf Kurs"
-              : (d1>0?"+":"−")+nf(Math.abs(d1),1)+" kg vs. Soll");
-        foot1 = "Soll heute "+nf(soll,1)+" kg · Ziel "+nf(doc.target.to.v,1)+" kg";
+        // Wochenvergleich: Schnitt der Messungen der letzten 7 Tage gegen den Soll-Schnitt derselben Tage
+        var cut7 = iso(addDays(parseIso(last.d), -6));
+        var wk7 = pts.filter(function(p){ return p.d >= cut7; });
+        var ist7 = 0, soll7 = 0, n7 = 0;
+        wk7.forEach(function(p){ var t = targetAt(doc.target, p.d); if(t!=null){ ist7 += p.v; soll7 += t; n7++; } });
+        if(n7){ ist7 /= n7; soll7 /= n7; } else { ist7 = last.v; soll7 = soll; }
+        var d1 = ist7 - soll7;
+        cls = d1 <= cfg.flat ? "ok" : "down";   // im Soll (oder darunter) = grün, darüber = rot
+        dtxt = Math.abs(d1) < cfg.flat ? "Woche im Soll"
+              : d1 < 0 ? "Woche −"+nf(-d1,1)+" kg unter Soll"
+              : "Woche +"+nf(d1,1)+" kg über Soll";
+        foot1 = "Ø 7 T. "+nf(ist7,1)+" kg · Soll "+nf(soll7,1)+" kg ("+n7+" Messungen) · Ziel "+nf(doc.target.to.v,1)+" kg";
       } else if(cfg.band && band){
         var below = last.v - band[0], above = last.v - band[1];
         if(last.v < band[0]){ cls="down"; dtxt = "−"+nf(Math.abs(below),1)+" h unter Korridor"; }
         else if(last.v > band[1]){ cls="up"; dtxt = "+"+nf(above,1)+" h über Korridor"; }
         else { cls="flat"; dtxt = "im Korridor"; }
         foot1 = "Zielkorridor "+nf(band[0],0)+"–"+nf(band[1],0)+" h";
+        // Schnitt im gewählten Zeitfenster – gezählt erst ab Trainingsstart (15.09.2026)
+        var VSTART = "2026-09-15";
+        var inWin = pts.filter(function(p){ return p.d >= VSTART; });
+        if(inWin.length){
+          var av = inWin.reduce(function(a,p){ return a+p.v; },0)/inWin.length;
+          var from = inWin[0].d, wl = (state.tileWindow[cfg.key]!==undefined ? state.tileWindow[cfg.key] : cfg.window);
+          var lab = (wl ? (wl/7)+" Wo." : "gesamt") + (from===VSTART ? " ab Start 15.09." : " ab "+fmtDay(from));
+          var dd = av < band[0] ? "−"+nf(band[0]-av,1)+" h unter Korridor" : av > band[1] ? "+"+nf(av-band[1],1)+" h über Korridor" : "im Korridor";
+          foot1 = "Ø "+lab+": "+nf(av,1)+" h/Wo. → "+dd+" ("+nf(band[0],0)+"–"+nf(band[1],0)+" h)";
+        }
       } else {
         var w = vals.slice(-7).slice().sort(function(a,b){return a-b;});
         var med = w.length%2 ? w[(w.length-1)/2] : (w[w.length/2-1]+w[w.length/2])/2;
@@ -2194,6 +2212,10 @@ body{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset
     var act = s.act.slice(-state.ldWin), fc = s.fc;
     var all = act.concat(fc);
     var now = act[act.length-1];
+    // Morgens zählt der Stand nach gestern (wie TrainingPeaks): solange heute noch nichts trainiert ist,
+    // nicht den Wert "nach einem kompletten Ruhetag" zeigen.
+    var morning = now.d === todayIso() && !now.load && act.length > 1;
+    if(morning) now = act[act.length-2];
     var nowForm = now.ctl - now.atl, z = ldZone(nowForm);
     var wk = s.act.length>7 ? s.act[s.act.length-8] : s.act[0];
     var ramp = now.ctl - wk.ctl;
@@ -2205,7 +2227,7 @@ body{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset
     var status =
       '<div class="ld-status">' +
         '<div class="ld-card ld-state" style="--st-c:'+z.c+'">' +
-          '<div class="l">Heute · '+esc(fmtDay(now.d))+'</div>' +
+          '<div class="l">'+(morning ? 'Heute früh · Stand nach '+esc(fmtDay(now.d)) : 'Heute · '+esc(fmtDay(now.d)))+'</div>' +
           '<div class="v">'+z.icon+'<span>'+esc(z.long)+'</span></div>' +
           '<div class="d">Form '+sgn(nowForm)+' = Fitness '+nf(now.ctl,0)+' − Ermüdung '+nf(now.atl,0) +
             (now.icu ? ' · zum Vergleich intervals.icu: Form '+sgn(now.icu.ctl-now.icu.atl) : '')+'</div>' +
@@ -2844,7 +2866,17 @@ body{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset
 
   /* ---------------- Sportkarten + Insights ---------------- */
   var SUM = {}; try{ SUM = JSON.parse(document.getElementById("sumSrc").textContent); }catch(e){}
-  var osWeek = null, osWeekKey = null, osWeeks = {}, osDraft = null;
+  var osWeek = null, osWeekKey = null, osWeeks = {}, osDraft = null; var osUnsubs = [];
+  /* Wochenwechsel: Kacheln und Wochenansicht springen montags von selbst um – auch wenn die Seite seit gestern offen ist */
+  function ckRollover(){
+    try{
+      subscribeOsWeek();
+      if(state.mode === "week"){ var mNow = iso(mondayOf(new Date())); if(state.lastAutoMonday !== mNow){ var had = state.lastAutoMonday; state.lastAutoMonday = mNow; if(had && iso(state.anchor) === had) setAnchor(new Date()); } }
+    }catch(e){}
+  }
+  document.addEventListener("visibilitychange", function(){ if(!document.hidden) ckRollover(); });
+  window.addEventListener("focus", ckRollover);
+  setInterval(ckRollover, 5*60*1000);
   function fmtHM(min){ min = Math.round(min); return Math.floor(min/60)+":"+pad(min%60); }
   function spark(vals, color){
     var W = 300, H = 38, n = vals.length, mx = Math.max.apply(null, vals.concat([0.0001]));
@@ -2875,10 +2907,12 @@ body{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset
     var ftp = ((state.load && state.load.method) ? (/FTP (\d+)/.exec(state.load.method)||[])[1] : null) || "295";
     var ws = weekDone("schwimmen"), wb = weekDone("rad"), wr = weekDone("lauf");
     function set(id, html){ var e = document.getElementById(id); if(e) e.innerHTML = html; }
-    set("tvSwim", volTv(ws, function(v){ return fmtInt(Math.round(v/100)*100); }, "m", function(v){ return nf(Math.round(v/100)/10,1); })); set("tsSwim", ws.n ? "Woche "+ws.nd+" von "+ws.n+" erledigt" : "letzte Einheit "+esc(SUM.swim.date));
-    set("tvBike", volTv(wb, function(v){ return String(Math.round(v)); }, "h")); set("tsBike", wb.n ? "Woche "+fmtHM(wb.mins)+" h · "+wb.nd+" von "+wb.n : "eFTP "+esc(statIst("eftp"))+" W");
-    set("tvRun", volTv(wr, function(v){ return String(Math.round(v)); }, "km")); set("tsRun", "HM in "+daysUntil(SUM.run.race)+" Tagen · Woche "+nf(wr.km,1)+" km");
-    var ld = state.load && state.load.days && state.load.days.length ? state.load.days[state.load.days.length-1] : null;
+    set("tvSwim", volTv(ws, function(v){ return fmtInt(Math.round(v/100)*100); }, "m", function(v){ return nf(Math.round(v/100)/10,1); })); var wkLab = "ab Mo "+(osWeekKey ? osWeekKey.slice(8,10)+"."+osWeekKey.slice(5,7)+"." : ""); set("tsSwim", ws.n ? wkLab+" · "+ws.nd+" von "+ws.n+" erledigt" : (osWeekKey ? wkLab+" · nichts geplant" : "letzte Einheit "+esc(SUM.swim.date)));
+    set("tvBike", volTv(wb, function(v){ return String(Math.round(v)); }, "h")); set("tsBike", wb.n ? wkLab+" · "+fmtHM(wb.mins)+" h · "+wb.nd+" von "+wb.n : "eFTP "+esc(statIst("eftp"))+" W");
+    set("tvRun", volTv(wr, function(v){ return String(Math.round(v)); }, "km")); set("tsRun", wkLab+" · "+wr.nd+" von "+wr.n+" · HM in "+daysUntil(SUM.run.race)+" T.");
+    var LDD = state.load && state.load.days ? state.load.days : [];
+    var ld = LDD.length ? LDD[LDD.length-1] : null;
+    if(ld && LDD.length > 1 && ld.d === todayIso() && !ld.load) ld = LDD[LDD.length-2];
     if(ld && ld.ctl!=null){ var f = ld.ctl-ld.atl; set("tvOv", "Form "+sgn(f)); set("tsOv", ldZone(f).label+" · Fitness "+nf(ld.ctl,0)); }
   }
   function renderInsights(){
@@ -2930,13 +2964,19 @@ body{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset
     if(!state.db) return;
     var key = iso(mondayOf(new Date()));
     if(osWeekKey === key) return;
-    osWeekKey = key;
-    state.db.doc(weekDocPath(key)).onSnapshot(function(snap){
+    var first = osWeekKey === null;
+    osWeekKey = key; osWeek = null; osWeeks = {};
+    osUnsubs.forEach(function(u){ try{ u(); }catch(e){} }); osUnsubs = [];
+    renderSportCards();
+    var u0 = state.db.doc(weekDocPath(key)).onSnapshot(function(snap){
+      if(key !== osWeekKey) return;
       if(snap.exists && snap.data()){ osWeek = snap.data(); osWeeks[key] = osWeek; renderSportCards(); osSend(); }
     }, function(){});
+    if(typeof u0 === "function") osUnsubs.push(u0);
     [1,2,3].forEach(function(k){ var mk = iso(addDays(mondayOf(new Date()), 7*k));
-      state.db.doc(weekDocPath(mk)).onSnapshot(function(snap){ if(snap.exists && snap.data()){ osWeeks[mk] = snap.data(); osSend(); } }, function(){}); });
-    state.db.doc("plan/draft").onSnapshot(function(snap){ osDraft = (snap.exists && snap.data()) ? snap.data() : null; osSend(); }, function(){});
+      var u = state.db.doc(weekDocPath(mk)).onSnapshot(function(snap){ if(key !== osWeekKey) return; if(snap.exists && snap.data()){ osWeeks[mk] = snap.data(); osSend(); } }, function(){});
+      if(typeof u === "function") osUnsubs.push(u); });
+    if(first) state.db.doc("plan/draft").onSnapshot(function(snap){ osDraft = (snap.exists && snap.data()) ? snap.data() : null; osSend(); }, function(){});
   }
 
   /* ---------------- Saisonplan (Reiter "Saison") ----------------
@@ -3194,8 +3234,9 @@ body{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset
   }catch(e){}
   var startToday = new Date();
   state.anchor = state.mode==="week"
-    ? mondayOf(startToday.getDay()===0 ? addDays(startToday,1) : startToday)
+    ? mondayOf(startToday)
     : new Date(startToday.getFullYear(), startToday.getMonth(), startToday.getDate());
+  state.lastAutoMonday = iso(mondayOf(startToday));
 
   renderLegend();
   renderStats();
