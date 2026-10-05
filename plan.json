@@ -1,17 +1,11 @@
 {
- "updated": "05.10. 07:50",
+ "updated": "05.10. 08:31",
  "units": [
   {
-   "id": "2026-10-05-Ride-d195eb",
+   "id": "2026-10-05-Ride-27970c",
    "date": "2026-10-05",
-   "name": "05.10. Mo · RAD GA 90 (175-200 W) nach MED",
-   "src": "10 | Einfahren | 140–175 W | easy\n75 | Grundlage | 175–200 W | ga1\n5 | Ausfahren | 100–150 W | easy"
-  },
-  {
-   "id": "2026-10-05-Run-7615ef",
-   "date": "2026-10-05",
-   "name": "05.10. Mo · LAUF Koppellauf 30 (nach dem Rad)",
-   "src": "30 | Grundlage | HF 140–150 | ga1"
+   "name": "05.10. Mo · RAD GA 120 (175-200 W) nach MED",
+   "src": "10 | Einfahren | 140–175 W | easy\n105 | Grundlage | 175–200 W | ga1\n5 | Ausfahren | 100–150 W | easy"
   },
   {
    "id": "2026-10-05-WeightTraining-14160d",
@@ -23,7 +17,7 @@
    "id": "2026-10-06-Run-263eb4",
    "date": "2026-10-06",
    "name": "06.10. Di · LAUF Schwelle 3x8' (5:05-5:10)",
-   "src": "15 | Einlaufen (dazu 3x20 s Steigerung) | HF 130–145 | easy\n3x [8 | Intervall hart | 5:05–5:10 /km | hard ; 2 | Pause | HF 110–145 | rec]\n10 | Auslaufen | HF 130–145 | easy"
+   "src": "15 | Einlaufen (dazu 3x20 s Steigerung) | HF 130–145 | easy\n3x [8 | Intervall hart | 5:05–5:10 /km | hard ; 2 | Pause | HF 110–145 | rec]\n30 | Auslaufen locker (ersetzt den Koppellauf vom Mo) | HF 130–145 | easy"
   },
   {
    "id": "2026-10-07-Ride-fe795b",
