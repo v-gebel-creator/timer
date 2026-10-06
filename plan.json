@@ -1,5 +1,5 @@
 {
- "updated": "05.10. 08:31",
+ "updated": "06.10. 10:49",
  "units": [
   {
    "id": "2026-10-05-Ride-27970c",
@@ -50,6 +50,12 @@
    "src": "10 | Einfahren | HF 110–130 | easy\n45 | Grundlage | HF 134–140 | ga1\n5 | Ausfahren | HF 100–130 | easy"
   },
   {
+   "id": "2026-10-11-Ride-217ff2",
+   "date": "2026-10-11",
+   "name": "11.10. So · RAD GA lang 150 (175-200 W) nach HKG",
+   "src": "10 | Einfahren | 140–175 W | easy\n135 | Grundlage | 175–200 W | ga1\n5 | Ausfahren | 100–150 W | easy"
+  },
+  {
    "id": "2026-10-12-Run-966ba6",
    "date": "2026-10-12",
    "name": "12.10. Mo · LAUF 30-Minuten-Test",
@@ -98,9 +104,9 @@
    "src": "10 | Einfahren | 140–175 W | easy\n105 | Grundlage | 175–200 W | ga1\n5 | Ausfahren | 100–150 W | easy"
   },
   {
-   "id": "2026-10-17-Run-7d9621",
+   "id": "2026-10-17-Run-5259ac",
    "date": "2026-10-17",
-   "name": "17.10. Sa · LAUF locker 35 (RUH, nach Ankunft)",
+   "name": "17.10. Sa · LAUF locker 35 (Leipzig, vor Abflug)",
    "src": "35 | Grundlage | HF 140–148 | ga1"
   },
   {
