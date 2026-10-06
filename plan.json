@@ -1,5 +1,5 @@
 {
- "updated": "06.10. 10:49",
+ "updated": "06.10. 21:54",
  "units": [
   {
    "id": "2026-10-05-Ride-27970c",
@@ -18,12 +18,6 @@
    "date": "2026-10-06",
    "name": "06.10. Di · LAUF Schwelle 3x8' (5:05-5:10)",
    "src": "15 | Einlaufen (dazu 3x20 s Steigerung) | HF 130–145 | easy\n3x [8 | Intervall hart | 5:05–5:10 /km | hard ; 2 | Pause | HF 110–145 | rec]\n30 | Auslaufen locker (ersetzt den Koppellauf vom Mo) | HF 130–145 | easy"
-  },
-  {
-   "id": "2026-10-07-Ride-fe795b",
-   "date": "2026-10-07",
-   "name": "07.10. Mi · RAD 2h mit Schwelle 3x12 (241-285 W)",
-   "src": "20 | Einfahren | 150–200 W | easy\n3x [12 | Schwelle | 241–285 W | sweet ; 5 | Pause | 140–160 W | rec]\n40 | Grundlage | 175–200 W | ga1\n9 | Ausfahren | 100–150 W | easy"
   },
   {
    "id": "2026-10-08-Run-8e9daf",
