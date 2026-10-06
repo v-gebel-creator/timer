@@ -65,7 +65,7 @@ body{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset
   window.claude={use:n=>n==="db"?dbP:Promise.resolve(null)};
   function makeDb(S){
     const M={"athlete/status":S.stats,"athlete/vitals":S.vitals,"athlete/weight":S.weight,"athlete/load":S.load,"athlete/roadmap":S.roadmap,
-      "travel/gyms":S.gyms,"athlete/volume":S.volume,"bike/fit":S.fit,"log/changes":S.changes,"plan/draft":S.draft,"plan/season":S.season,"athlete/acts":S.acts};
+      "travel/gyms":S.gyms,"athlete/volume":S.volume,"bike/fit":S.fit,"log/changes":S.changes,"plan/draft":S.draft,"plan/season":S.season,"athlete/acts":S.acts,"athlete/briefing":S.briefing};
     Object.keys(S.weeks||{}).forEach(k=>{ M["weeks/"+k]=S.weeks[k]; });
     const doc=p=>({onSnapshot(cb){ setTimeout(()=>cb({exists:M[p]!=null,data:()=>M[p]}),0); return ()=>{}; },
       set(){ return Promise.resolve(); }, update(){ return Promise.resolve(); }, get(){ return Promise.resolve({exists:M[p]!=null,data:()=>M[p]}); }});
@@ -1010,6 +1010,48 @@ body{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset
 
   .session-meta span{display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;}
 .vital-delta.ok{color:#8BD17C;}
+
+/* ---------- Morgen-Briefing (nur Werte) ---------- */
+.mb{background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:14px 14px 12px; margin:0 0 18px;}
+.mb.stale{opacity:.55}
+.mb-h{display:flex; justify-content:space-between; align-items:baseline; margin:0 2px 10px; font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--text-faint); font-weight:650}
+.mb-h b{color:#2CC5BD; font-weight:700}
+.mb-g{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px}
+.mb-t{position:relative; background:#1B1B1E; border-radius:14px; padding:12px 12px 10px; overflow:hidden; min-width:0}
+.mb-t:before{content:""; position:absolute; left:0; right:0; top:0; height:3px; background:var(--k)}
+.mb-l{font-size:11px; color:var(--text-dim); font-weight:600; letter-spacing:.02em}
+.mb-v{display:flex; align-items:baseline; gap:8px; margin-top:4px; flex-wrap:wrap}
+.mb-v b{font-size:26px; font-weight:750; letter-spacing:-.03em; line-height:1; color:var(--vc, var(--text)); font-variant-numeric:tabular-nums}
+.mb-v small{font-size:11px; color:var(--text-faint); font-weight:600}
+.mb-v i{font-style:normal; color:var(--border); font-size:20px}
+.mb-s{font-size:11.5px; color:var(--text-faint); margin-top:5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.mb-d{display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--vc); margin-right:5px; vertical-align:1px}
+.mb-today{display:flex; flex-wrap:wrap; gap:8px; margin-top:8px}
+.mb-x{display:flex; align-items:center; gap:9px; background:#1B1B1E; border-radius:12px; padding:9px 12px; border-left:3px solid var(--k); min-width:0; flex:1 1 220px}
+.mb-x b{font-size:13.5px; font-weight:650; white-space:nowrap}
+.mb-x span{font-size:13px; color:var(--k); font-weight:650; font-variant-numeric:tabular-nums}
+@media (max-width:640px){ .mb-g{grid-template-columns:repeat(2,minmax(0,1fr))} .mb-v b{font-size:24px} }
+.mb-p{display:grid; grid-template-columns:1fr 1fr; margin-top:4px}
+.mb-p>div{min-width:0}
+.mb-p>div+div{border-left:1px solid var(--border); padding-left:10px}
+.mb-p b{display:block; font-size:26px; font-weight:750; letter-spacing:-.03em; line-height:1; color:var(--vc, var(--text)); font-variant-numeric:tabular-nums}
+.mb-p small{display:block; font-size:10.5px; color:var(--text-faint); font-weight:600; margin-top:3px}
+@media (max-width:640px){ .mb-p b{font-size:24px} .mb-s{white-space:normal} }
+/* ---------- Belastung im intervals-Stil ---------- */
+.lx-top{text-align:center; margin:4px 0 14px}
+.lx-date{font-size:15px; color:var(--text-dim); font-weight:600}
+.lx-state{font-size:46px; font-weight:800; letter-spacing:-.02em; line-height:1.1; margin:2px 0 12px}
+.lx-kpi{display:inline-grid; grid-template-columns:repeat(4,auto); gap:6px 22px; background:#1B1B1E; border-radius:18px; padding:12px 20px 13px}
+.lx-kpi div{display:flex; flex-direction:column; align-items:center; min-width:0}
+.lx-kpi span{font-size:15px; color:var(--text); font-weight:500}
+.lx-kpi i{display:block; width:100%; height:3px; border-radius:2px; margin:5px 0 8px}
+.lx-kpi i.dot{background:repeating-linear-gradient(90deg,var(--c) 0 3px,transparent 3px 6px)}
+.lx-kpi b{font-size:21px; font-weight:650; font-variant-numeric:tabular-nums; display:flex; align-items:center; gap:6px}
+.lx-cap{display:flex; justify-content:center; gap:16px; font-size:13.5px; color:var(--text-dim); margin:16px 0 4px}
+.lx-cap span, .lx-cap{align-items:center}
+.lx-cap i{display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:6px; vertical-align:-1px}
+#ldPlot .ax{fill:#A3A1A8; font-size:11.5px}
+@media (max-width:640px){ .lx-state{font-size:40px} .lx-kpi{gap:4px 14px; padding:10px 12px} .lx-kpi span{font-size:13px} .lx-kpi b{font-size:18px} }
 </style>
 
 <div class="app">
@@ -1037,6 +1079,8 @@ body{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset
   <div id="ovWrap">
     <div class="pull" id="pullBar"><span class="pl">Daten holen</span><code id="pullCmd">sh ~/garmin-sync/holen.sh</code><button type="button" id="pullCopy">Kopieren</button>
       <span class="ph">Im Terminal auf dem Mac: holt Garmin, Fitbit und die Trainingslast. Danach Claude „done“ schreiben. Mit Alias einfach <b>holen</b> tippen.</span></div>
+
+  <section class="mb" id="mbCard" aria-label="Morgen-Briefing" hidden></section>
 
   <section class="stats-grid" id="statsGrid" aria-label="Leistungswerte"></section>
 
@@ -2132,23 +2176,21 @@ body{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset
   var elLdBody = document.getElementById("ldBody");
   var elLdSub  = document.getElementById("ldSub");
   var elLdWin  = document.getElementById("ldWin");
-  var LD_WINDOWS = [{l:"30 T.", n:30},{l:"45 T.", n:45},{l:"90 T.", n:90},{l:"Jahr", n:365}];
+  var LD_WINDOWS = [{l:"14T", n:14},{l:"42T", n:42},{l:"3M", n:91},{l:"6M", n:182},{l:"1J", n:365}];
   state.load = null;
-  state.ldWin = 30;
-  try{ var _lw = parseInt(localStorage.getItem("cockpitLoadWin2"),10); if(_lw) state.ldWin = _lw; }catch(e){}
+  state.ldWin = 42;
+  try{ var _lw = parseInt(localStorage.getItem("cockpitLoadWin3"),10); if(_lw) state.ldWin = _lw; }catch(e){}
+  state.ldPlan = false; try{ state.ldPlan = localStorage.getItem("cockpitLoadPlan")==="1"; }catch(e){}
 
+  /* Formzonen wie intervals.icu */
   var LD_ZONES = [
-    {k:"trans",   min:25,   c:"#79C7E3", label:"zu frisch",   long:"zu frisch – Fitness geht verloren",
-     icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg>'},
-    {k:"fresh",   min:5,    c:"#7BE07B", label:"frisch",      long:"frisch – Taper / wettkampfbereit",
-     icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.8 2.8L16.5 9"/></svg>'},
-    {k:"neutral", min:-10,  c:"#E3C61B", label:"neutral",     long:"neutral – Erhaltung",
-     icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M8 12h8"/></svg>'},
-    {k:"load",    min:-30,  c:"#F08A24", label:"belastet",    long:"belastet – produktives Training",
-     icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></svg>'},
-    {k:"risk",    min:-999, c:"#E0362C", label:"überlastet",  long:"überlastet – Risiko, Entlastung einplanen",
-     icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18v.01"/></svg>'}
+    {k:"trans",   min:25,   c:"#E8D200", label:"Übergang",     long:"Übergang"},
+    {k:"fresh",   min:5,    c:"#3B8EEA", label:"Frisch",       long:"Frisch"},
+    {k:"neutral", min:-10,  c:"#8A8890", label:"Graue Zone",   long:"Graue Zone"},
+    {k:"load",    min:-30,  c:"#5CC95C", label:"Optimal",      long:"Optimal"},
+    {k:"risk",    min:-999, c:"#E0362C", label:"Hohes Risiko", long:"Hohes Risiko"}
   ];
+  var LD_C = {ctl:"#3B8EEA", atl:"#C25BE0"};
   function ldZone(f){ for(var i=0;i<LD_ZONES.length;i++){ if(f>=LD_ZONES[i].min) return LD_ZONES[i]; } return LD_ZONES[LD_ZONES.length-1]; }
   function sgn(v, dec){ var s = nf(Math.abs(v), dec||0); return (v>0.05?"+":(v<-0.05?"−":"±"))+s; }
 
@@ -2187,12 +2229,13 @@ body{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset
   function ldWinCtrl(){
     elLdWin.innerHTML = LD_WINDOWS.map(function(w){
       return '<button type="button" data-win="'+w.n+'" aria-pressed="'+(w.n===state.ldWin)+'">'+w.l+'</button>';
-    }).join("");
+    }).join("") + '<button type="button" data-plan="1" aria-pressed="'+(!!state.ldPlan)+'">+Plan</button>';
   }
   elLdWin.addEventListener("click", function(e){
     var b = e.target.closest("button"); if(!b) return;
+    if(b.dataset.plan){ state.ldPlan = !state.ldPlan; try{ localStorage.setItem("cockpitLoadPlan", state.ldPlan?"1":"0"); }catch(err){} renderLoad(); return; }
     state.ldWin = parseInt(b.dataset.win,10);
-    try{ localStorage.setItem("cockpitLoadWin2", String(state.ldWin)); }catch(err){}
+    try{ localStorage.setItem("cockpitLoadWin3", String(state.ldWin)); }catch(err){}
     renderLoad();
   });
 
@@ -2201,206 +2244,155 @@ body{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset
     var s = ldSeries();
     if(!s){
       elLdSub.textContent = "Berechnung Coach";
-      elLdBody.innerHTML = '<p class="ld-empty">Noch keine Daten. Sie kommen mit dem ersten intervals.icu-Export ' +
-        'vom Mac – danach steht hier jeden Morgen, ob du gerade aufbaust, belastet bist oder frisch wirst.</p>';
+      elLdBody.innerHTML = '<p class="ld-empty">Noch keine Daten.</p>';
       return;
     }
     var doc = state.load;
-    elLdSub.textContent = (doc.source==="Coach" ? "Berechnung Coach · "+(doc.method||"") : "Quelle intervals.icu") +
-      (doc.updated ? " · Stand "+doc.updated : "");
+    elLdSub.textContent = (doc.source==="Coach" ? "Berechnung Coach" : "Quelle intervals.icu") + (doc.updated ? " · Stand "+doc.updated : "");
 
-    var act = s.act.slice(-state.ldWin), fc = s.fc;
+    // Ramp = Fitness-Änderung über 7 Tage, für die ganze Reihe vorab
+    var full = s.act.concat(s.fc);
+    full.forEach(function(x,i){ var j = Math.max(0,i-7); x.ramp = x.ctl - full[j].ctl; });
+    var act = s.act.slice(-state.ldWin), fc = state.ldPlan ? s.fc : [];
     var all = act.concat(fc);
     var now = act[act.length-1];
-    // Morgens zählt der Stand nach gestern (wie TrainingPeaks): solange heute noch nichts trainiert ist,
-    // nicht den Wert "nach einem kompletten Ruhetag" zeigen.
     var morning = now.d === todayIso() && !now.load && act.length > 1;
-    if(morning) now = act[act.length-2];
+    var nowIdx = morning ? act.length-2 : act.length-1;
+    now = act[nowIdx];
     var nowForm = now.ctl - now.atl, z = ldZone(nowForm);
-    var wk = s.act.length>7 ? s.act[s.act.length-8] : s.act[0];
-    var ramp = now.ctl - wk.ctl;
-    var rampTxt = ramp>8 ? "sehr steil" : ramp>=3 ? "Aufbau" : ramp>=0 ? "moderat" : "Fitness sinkt";
-    var load7 = s.act.slice(-7).reduce(function(a,x){ return a+x.load; },0);
-    var endFc = fc.length ? fc[fc.length-1] : null;
-    var zEnd = endFc ? ldZone(endFc.ctl-endFc.atl) : null;
+    var rampC = now.ramp >= 2 ? "#5CC95C" : now.ramp < 0 ? "#8A8890" : LD_C.ctl;
+    var p = now.d.split("-"), wd = ["So","Mo","Di","Mi","Do","Fr","Sa"][parseIso(now.d).getDay()];
 
-    var status =
-      '<div class="ld-status">' +
-        '<div class="ld-card ld-state" style="--st-c:'+z.c+'">' +
-          '<div class="l">'+(morning ? 'Heute früh · Stand nach '+esc(fmtDay(now.d)) : 'Heute · '+esc(fmtDay(now.d)))+'</div>' +
-          '<div class="v">'+z.icon+'<span>'+esc(z.long)+'</span></div>' +
-          '<div class="d">Form '+sgn(nowForm)+' = Fitness '+nf(now.ctl,0)+' − Ermüdung '+nf(now.atl,0) +
-            (now.icu ? ' · zum Vergleich intervals.icu: Form '+sgn(now.icu.ctl-now.icu.atl) : '')+'</div>' +
+    elLdBody.innerHTML =
+      '<div class="lx-top">' +
+        '<div class="lx-date">'+(morning ? 'Heute früh · Stand ' : '')+wd+'. '+(+p[2])+'. '+["Jan.","Feb.","März","Apr.","Mai","Juni","Juli","Aug.","Sept.","Okt.","Nov.","Dez."][+p[1]-1]+' '+p[0]+'</div>' +
+        '<div class="lx-state" style="color:'+z.c+'">'+esc(z.label)+'</div>' +
+        '<div class="lx-kpi">' +
+          '<div><span>Fitness</span><i style="background:'+LD_C.ctl+'"></i><b>'+nf(now.ctl,0)+'</b></div>' +
+          '<div><span>Ermüdung</span><i class="dot" style="--c:'+LD_C.atl+'"></i><b>'+nf(now.atl,0)+'</b></div>' +
+          '<div><span>Form</span><i style="background:'+z.c+'"></i><b>'+sgn(nowForm).replace("±","")+'</b></div>' +
+          '<div><span>Rampe</span><i style="background:'+rampC+'"></i><b>'+nf(now.ramp,1)+(now.ramp>=0?' <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="'+rampC+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/><path d="M3 21h18" opacity=".5"/></svg>':'')+'</b></div>' +
         '</div>' +
-        '<div class="ld-card"><div class="l"><i class="ld-key" style="background:var(--c-ctl)"></i>Fitness</div>' +
-          '<div class="v">'+nf(now.ctl,0)+'</div>' +
-          '<div class="d">'+sgn(ramp,1)+' in 7 Tagen · '+rampTxt+'</div></div>' +
-        '<div class="ld-card"><div class="l"><i class="ld-key" style="background:var(--c-atl)"></i>Ermüdung</div>' +
-          '<div class="v">'+nf(now.atl,0)+'</div>' +
-          '<div class="d">Last 7 Tage '+nf(load7,0)+'</div></div>' +
-        '<div class="ld-card"><div class="l">Prognose'+(endFc?' '+esc(shortDay(endFc.d)):'')+'</div>' +
-          (endFc
-            ? '<div class="v" style="color:'+zEnd.c+'">'+sgn(endFc.ctl-endFc.atl)+'</div><div class="d">'+esc(zEnd.label)+' · nach Plan</div>'
-            : '<div class="v">–</div><div class="d">kein Plan hinterlegt</div>') +
-        '</div>' +
-      '</div>';
+      '</div>' +
+      '<div class="ld-plot" id="ldPlot">' +
+        '<div class="lx-cap"><i style="background:linear-gradient(90deg,'+LD_C.ctl+',#5CC95C)"></i>Ramp Rate</div><div id="ldR"></div>' +
+        '<div class="lx-cap"><span><i style="background:'+LD_C.ctl+'"></i>Fitness</span><span><i style="background:'+LD_C.atl+'"></i>Ermüdung</span></div><div id="ldA"></div>' +
+        '<div class="lx-cap"><i style="background:conic-gradient(#3B8EEA 0 25%,#5CC95C 0 50%,#8A8890 0 75%,#E0362C 0)"></i>Form</div><div id="ldB"></div>' +
+        '<div class="ld-tip" id="ldTip"></div></div>' +
+      '<details class="ld-table"><summary>Werte als Tabelle</summary><table><thead><tr>' +
+        '<th>Tag</th><th>Last</th><th>Fitness</th><th>Ermüdung</th><th>Form</th><th>Rampe</th></tr></thead><tbody>' +
+        s.act.slice(-14).concat(fc).map(function(x){
+          var f = x.ctl-x.atl;
+          return '<tr'+(x.fc?' class="fc"':'')+'><td>'+esc(shortDay(x.d))+(x.fc?' (Plan)':'')+'</td><td>'+nf(x.load,0)+'</td><td>'+nf(x.ctl,0)+
+            '</td><td>'+nf(x.atl,0)+'</td><td>'+sgn(f)+'</td><td>'+nf(x.ramp,1)+'</td></tr>';
+        }).join("") + '</tbody></table></details>';
 
-    var legend =
-      '<div class="ld-controls"><div class="ld-legend">' +
-        '<span><i class="ln" style="background:var(--c-ctl)"></i>Fitness (42 T.)</span>' +
-        '<span><i class="ln" style="background:var(--c-atl)"></i>Ermüdung (7 T.)</span>' +
-        '<span><i class="sw" style="background:var(--st-fresh)"></i>Fitness über Ermüdung</span>' +
-        '<span><i class="sw" style="background:var(--st-load)"></i>Ermüdung über Fitness</span>' +
-        (fc.length ? '<span><i class="dash"></i>Prognose nach Plan</span>' : '') +
-      '</div></div>';
-
-    var formLegend = '<div class="ld-legend" style="margin-top:6px">' + LD_ZONES.slice().reverse().map(function(q){
-      var rng = q.k==="risk" ? "< −30" : q.k==="load" ? "−30 bis −10" : q.k==="neutral" ? "−10 bis +5" : q.k==="fresh" ? "+5 bis +25" : "> +25";
-      return '<span><i class="sw" style="background:'+q.c+';opacity:.8"></i>'+q.label+' '+rng+'</span>';
-    }).join("") + '</div>';
-
-    var table = '<details class="ld-table"><summary>Werte als Tabelle</summary><table><thead><tr>' +
-      '<th>Tag</th><th>Last</th><th>Fitness</th><th>Ermüdung</th><th>Form</th><th>Zustand</th></tr></thead><tbody>' +
-      s.act.slice(-14).concat(fc).map(function(x){
-        var f = x.ctl-x.atl;
-        return '<tr'+(x.fc?' class="fc"':'')+'><td>'+esc(shortDay(x.d))+(x.fc?' (Plan)':'')+'</td><td>'+nf(x.load,0)+'</td><td>'+nf(x.ctl,0)+
-          '</td><td>'+nf(x.atl,0)+'</td><td>'+sgn(f)+'</td><td>'+ldZone(f).label+'</td></tr>';
-      }).join("") + '</tbody></table></details>';
-
-    elLdBody.innerHTML = status + legend +
-      '<div class="ld-plot" id="ldPlot"><div id="ldA"></div>' +
-        '<div class="ld-cap"><span>Form = Fitness − Ermüdung</span><span id="ldZoneNow"></span></div>' +
-        '<div id="ldB"></div><div class="ld-tip" id="ldTip"></div></div>' +
-      formLegend + table +
-      '<div class="ld-foot"><strong>Lesart</strong> — Grüne Fläche: Fitness liegt über der Ermüdung, du wirst frisch (Taper, Entlastung). ' +
-      'Orange Fläche: die Ermüdung (lila) liegt darüber, du baust gerade auf. Die Formbalken laufen von Hellgrün (frisch) über Gelb (neutral) und Orange (belastet) bis Rot (überlastet); Hellblau heißt zu lange zu frisch. Gewollt ist im Aufbau eine Form zwischen −10 und −30; ' +
-      'unter −30 wird es riskant. Vor dem Rennen soll die Form auf +5 bis +25 steigen, ohne dass die weiße Fitness-Linie stark fällt.<br><br>' +
-      '<strong>Berechnung</strong> — Last je Einheit vom Coach aus den Rohdaten: Rad nach Watt, Laufen nach steigungsbereinigtem Tempo, ' +
-      'Hotelrad, Laufband, Schwimmen und Kraft nach Puls. intervals.icu läuft im Tooltip zum Vergleich mit.</div>';
-
-    drawLoadCharts(all, act.length);
+    drawLoadCharts(all, act.length, nowIdx);
   }
 
-  function drawLoadCharts(all, nAct){
+  function drawLoadCharts(all, nAct, nowIdx){
     var host = document.getElementById("ldPlot");
     if(!host) return;
     var W = Math.max(280, host.clientWidth || 600);
-    var L = 30, R = 8, n = all.length;
+    var L = 6, R = 34, n = all.length;
     var step = (W-L-R)/Math.max(1,n-1);
     function X(i){ return L + i*step; }
+    function path(vals, Y, from, to){ var d=""; for(var j=from;j<=to;j++){ d += (j===from?"M":"L")+X(j).toFixed(1)+" "+Y(vals[j]).toFixed(1)+" "; } return d; }
+    function gridY(v, Y, txt){ return '<line x1="'+L+'" x2="'+(W-R)+'" y1="'+Y(v).toFixed(1)+'" y2="'+Y(v).toFixed(1)+'" stroke="#2A2A2E" stroke-width="1"/>' +
+      '<text class="ax" x="'+(W-R+6)+'" y="'+(Y(v)+3.5).toFixed(1)+'">'+(txt!=null?txt:v)+'</text>'; }
+    // Wochenlinien + Datum (Montage)
+    var mondays = []; all.forEach(function(x,i){ if(parseIso(x.d).getDay()===1) mondays.push(i); });
+    var every = Math.max(1, Math.ceil(mondays.length*62/(W-L-R)));
+    var MON = ["Jan.","Feb.","März","Apr.","Mai","Juni","Juli","Aug.","Sept.","Okt.","Nov.","Dez."];
+    function vlines(H){ return mondays.filter(function(_,k){ return k%every===0; }).map(function(i){
+      return '<line x1="'+X(i).toFixed(1)+'" x2="'+X(i).toFixed(1)+'" y1="0" y2="'+H+'" stroke="#3A3A40" stroke-width="1" stroke-dasharray="3 4"/>'; }).join(""); }
+    function xlabels(y){ return mondays.filter(function(_,k){ return k%every===0; }).map(function(i){
+      var d = parseIso(all[i].d); return '<text class="ax" x="'+X(i).toFixed(1)+'" y="'+y+'" text-anchor="middle">'+d.getDate()+'. '+MON[d.getMonth()]+'</text>'; }).join(""); }
+    var nowX = X(nAct-1);
+    function nowLine(H){ return '<line x1="'+nowX.toFixed(1)+'" x2="'+nowX.toFixed(1)+'" y1="0" y2="'+H+'" stroke="#8A8890" stroke-width="1.5"/>'; }
+    function hoverLine(H){ return '<line class="ld-x" x1="0" x2="0" y1="0" y2="'+H+'" stroke="#F4F2EE" stroke-width="1" opacity="0"/>'; }
+    var big = state.ldWin <= 45;
 
-    /* ---- Chart A: Fitness & Ermuedung ---- */
-    var HA = state.ldWin <= 45 ? 260 : 230, TA = 10, BA = 8;
-    var vals = []; all.forEach(function(x){ vals.push(x.ctl, x.atl); });
-    var lo = Math.min.apply(null, vals), hi = Math.max.apply(null, vals);
-    var gstep = (hi-lo) > 80 ? 20 : 10;
-    lo = Math.max(0, Math.floor((lo-4)/gstep)*gstep); hi = Math.ceil((hi+4)/gstep)*gstep;
-    function YA(v){ return TA + (hi-v)/(hi-lo||1)*(HA-TA-BA); }
-
-    var grid = "";
-    for(var g=lo; g<=hi+0.01; g+=gstep){
-      grid += '<line x1="'+L+'" x2="'+(W-R)+'" y1="'+YA(g).toFixed(1)+'" y2="'+YA(g).toFixed(1)+'" stroke="#2A2A2E" stroke-width="1"/>' +
-              '<text class="ax" x="'+(L-6)+'" y="'+(YA(g)+3).toFixed(1)+'" text-anchor="end">'+g+'</text>';
-    }
-    // Flaeche zwischen den Linien: gruen wo Fitness oben, orange wo Ermuedung oben.
-    function quad(x1,c1,t1,x2,c2,t2,pos,op){
-      return '<path d="M'+x1.toFixed(1)+' '+YA(c1).toFixed(1)+' L'+x2.toFixed(1)+' '+YA(c2).toFixed(1)+
-        ' L'+x2.toFixed(1)+' '+YA(t2).toFixed(1)+' L'+x1.toFixed(1)+' '+YA(t1).toFixed(1)+'Z" fill="'+
-        (pos?"#7BE07B":"#F08A24")+'" fill-opacity="'+op+'"/>';
-    }
-    var fills = "";
+    /* ---- Ramp Rate ---- */
+    var ramps = all.map(function(x){ return x.ramp; });
+    var HR_ = 92, rTop = 8, rBot = 22;
+    var rmax = Math.max(6, Math.ceil(Math.max.apply(null,ramps)+1)), rmin = Math.min(-6, Math.floor(Math.min.apply(null,ramps)-1));
+    function YR(v){ return rTop + (rmax-v)/(rmax-rmin)*(HR_-rTop-rBot); }
+    var rSegs = "";
     for(var i=0;i<n-1;i++){
-      var a = all[i], b = all[i+1];
-      var da = a.ctl-a.atl, db = b.ctl-b.atl;
-      var op = b.fc ? ".13" : ".30";
-      if((da>=0) === (db>=0)){
-        fills += quad(X(i),a.ctl,a.atl,X(i+1),b.ctl,b.atl, da+db>=0, op);
-      } else {
-        var t = da/(da-db), xm = X(i)+t*step, vm = a.ctl + t*(b.ctl-a.ctl);
-        fills += quad(X(i),a.ctl,a.atl,xm,vm,vm, da>=0, op) + quad(xm,vm,vm,X(i+1),b.ctl,b.atl, db>=0, op);
+      var g = (ramps[i]+ramps[i+1])/2 >= 2, c = g ? "#5CC95C" : LD_C.ctl, op = all[i+1].fc ? ".12" : ".28";
+      rSegs += '<path d="M'+X(i).toFixed(1)+' '+YR(0).toFixed(1)+' L'+X(i).toFixed(1)+' '+YR(ramps[i]).toFixed(1)+' L'+X(i+1).toFixed(1)+' '+YR(ramps[i+1]).toFixed(1)+' L'+X(i+1).toFixed(1)+' '+YR(0).toFixed(1)+'Z" fill="'+c+'" fill-opacity="'+op+'"/>' +
+               '<path d="M'+X(i).toFixed(1)+' '+YR(ramps[i]).toFixed(1)+' L'+X(i+1).toFixed(1)+' '+YR(ramps[i+1]).toFixed(1)+'" stroke="'+c+'" stroke-width="2" fill="none" stroke-linecap="round"'+(all[i+1].fc?' stroke-dasharray="4 3"':'')+'/>';
+    }
+    document.getElementById("ldR").innerHTML = '<svg width="'+W+'" height="'+HR_+'" viewBox="0 0 '+W+' '+HR_+'" role="img" aria-label="Ramp Rate">' +
+      vlines(HR_-rBot) + gridY(5,YR) + gridY(0,YR) + gridY(-5,YR) + rSegs + nowLine(HR_-rBot) + hoverLine(HR_-rBot) + xlabels(HR_-6) + '</svg>';
+
+    /* ---- Fitness & Ermüdung ---- */
+    var HA = big ? 250 : 220, TA = 8, BA = 24;
+    var vals = []; all.forEach(function(x){ vals.push(x.ctl, x.atl); });
+    var lo = Math.min.apply(null, vals), hi = Math.max.apply(null, vals), gs = (hi-lo) > 80 ? 20 : 10;
+    lo = Math.max(0, Math.floor((lo-4)/gs)*gs); hi = Math.ceil((hi+4)/gs)*gs;
+    function YA(v){ return TA + (hi-v)/(hi-lo||1)*(HA-TA-BA); }
+    var grid = ""; for(var gv=lo+gs; gv<=hi+0.01; gv+=gs) grid += gridY(gv, YA);
+    var ctl = all.map(function(x){ return x.ctl; }), atl = all.map(function(x){ return x.atl; });
+    var gid = "ldg"+Math.round(Math.random()*1e6);
+    var area = '<defs><linearGradient id="'+gid+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+LD_C.ctl+'" stop-opacity=".35"/><stop offset="1" stop-color="'+LD_C.ctl+'" stop-opacity=".06"/></linearGradient></defs>' +
+      '<path d="'+path(ctl,YA,0,n-1)+'L'+X(n-1).toFixed(1)+' '+(HA-BA)+' L'+X(0).toFixed(1)+' '+(HA-BA)+'Z" fill="url(#'+gid+')"/>';
+    var band = ""; for(var k=0;k<n-1;k++){
+      band += '<path d="M'+X(k).toFixed(1)+' '+YA(ctl[k]).toFixed(1)+' L'+X(k+1).toFixed(1)+' '+YA(ctl[k+1]).toFixed(1)+' L'+X(k+1).toFixed(1)+' '+YA(atl[k+1]).toFixed(1)+' L'+X(k).toFixed(1)+' '+YA(atl[k]).toFixed(1)+'Z" fill="'+LD_C.atl+'" fill-opacity="'+(all[k+1].fc?".12":".32")+'"/>';
+    }
+    var lines = '<path d="'+path(ctl,YA,0,nAct-1)+'" fill="none" stroke="'+LD_C.ctl+'" stroke-width="'+(big?3:2.4)+'" stroke-linejoin="round" stroke-linecap="round"/>' +
+      '<path d="'+path(atl,YA,0,nAct-1)+'" fill="none" stroke="'+LD_C.atl+'" stroke-width="2.2" stroke-dasharray="2 3.5" stroke-linecap="round"/>';
+    if(n>nAct) lines += '<path d="'+path(ctl,YA,nAct-1,n-1)+'" fill="none" stroke="'+LD_C.ctl+'" stroke-width="2" stroke-dasharray="6 4" opacity=".7"/>' +
+      '<path d="'+path(atl,YA,nAct-1,n-1)+'" fill="none" stroke="'+LD_C.atl+'" stroke-width="2" stroke-dasharray="2 3.5" opacity=".6"/>';
+    document.getElementById("ldA").innerHTML = '<svg width="'+W+'" height="'+HA+'" viewBox="0 0 '+W+' '+HA+'" role="img" aria-label="Fitness und Ermüdung">' +
+      vlines(HA-BA) + grid + area + band + lines + nowLine(HA-BA) + hoverLine(HA-BA) +
+      '<circle class="ld-hc" r="4" fill="'+LD_C.ctl+'" stroke="#0B0B0C" stroke-width="2" opacity="0"/>' +
+      '<circle class="ld-ha" r="4" fill="'+LD_C.atl+'" stroke="#0B0B0C" stroke-width="2" opacity="0"/>' + xlabels(HA-7) + '</svg>';
+
+    /* ---- Form: Linie, Flächen ab der Zonengrenze in Zonenfarbe ---- */
+    var HB = big ? 200 : 170, TB = 8, BB = 24;
+    var forms = all.map(function(x){ return x.ctl-x.atl; });
+    var flo = Math.min(-15, Math.floor((Math.min.apply(null,forms)-3)/5)*5), fhi = Math.max(10, Math.ceil((Math.max.apply(null,forms)+3)/5)*5);
+    function YB(v){ return TB + (fhi-v)/(fhi-flo)*(HB-TB-BB); }
+    var fg = ""; [25,5,-10,-30].forEach(function(v){ if(v>flo && v<fhi) fg += gridY(v, YB, v>0?v:String(v).replace("-","−")); });
+    function refOf(f){ return f>=25?25 : f>=5?5 : f>=-10?null : f>=-30?-10 : -30; }
+    var fAreas = "", fLine = "";
+    var SUB = 4;
+    for(var q=0;q<n-1;q++){
+      for(var sI=0;sI<SUB;sI++){
+        var t0=sI/SUB, t1=(sI+1)/SUB;
+        var f0=forms[q]+(forms[q+1]-forms[q])*t0, f1=forms[q]+(forms[q+1]-forms[q])*t1;
+        var x0=X(q)+step*t0, x1=X(q)+step*t1, fm=(f0+f1)/2, zz=ldZone(fm), ref=refOf(fm);
+        var fcq = all[q+1].fc;
+        if(ref!==null) fAreas += '<path d="M'+x0.toFixed(1)+' '+YB(ref).toFixed(1)+' L'+x0.toFixed(1)+' '+YB(f0).toFixed(1)+' L'+x1.toFixed(1)+' '+YB(f1).toFixed(1)+' L'+x1.toFixed(1)+' '+YB(ref).toFixed(1)+'Z" fill="'+zz.c+'" fill-opacity="'+(fcq?".14":".32")+'"/>';
+        fLine += '<path d="M'+x0.toFixed(1)+' '+YB(f0).toFixed(1)+' L'+x1.toFixed(1)+' '+YB(f1).toFixed(1)+'" stroke="'+(zz.k==="neutral"?"#B9B7BE":zz.c)+'" stroke-width="2.4" fill="none" stroke-linecap="round"'+(fcq?' stroke-dasharray="4 3" opacity=".7"':'')+'/>';
       }
     }
-    function line(key, from, to, color, dash){
-      var d = "";
-      for(var j=from;j<=to;j++){ d += (j===from?"M":"L")+X(j).toFixed(1)+" "+YA(all[j][key]).toFixed(1)+" "; }
-      return '<path d="'+d+'" fill="none" stroke="'+color+'" stroke-width="'+(state.ldWin<=45?3:2.4)+'" stroke-linejoin="round" stroke-linecap="round"'+
-        (dash?' stroke-dasharray="5 4"':'')+'/>';
-    }
-    var lines = line("ctl",0,nAct-1,"#F4F2EE") + line("atl",0,nAct-1,"#B26BC0");
-    if(n>nAct){ lines += line("ctl",nAct-1,n-1,"#F4F2EE",1) + line("atl",nAct-1,n-1,"#B26BC0",1); }
-    var todayX = X(nAct-1);
-    var todayMark = '<line x1="'+todayX.toFixed(1)+'" x2="'+todayX.toFixed(1)+'" y1="'+TA+'" y2="'+(HA-BA)+'" stroke="#55535B" stroke-width="1" stroke-dasharray="2 3"/>' +
-      (n>nAct ? '<text class="ax" x="'+(todayX+4).toFixed(1)+'" y="'+(TA+9)+'">Plan →</text>' : '');
-    var last = all[nAct-1];
-    var ends = '<circle cx="'+todayX.toFixed(1)+'" cy="'+YA(last.ctl).toFixed(1)+'" r="4" fill="#F4F2EE" stroke="#151517" stroke-width="2"/>' +
-               '<circle cx="'+todayX.toFixed(1)+'" cy="'+YA(last.atl).toFixed(1)+'" r="4" fill="#B26BC0" stroke="#151517" stroke-width="2"/>';
+    document.getElementById("ldB").innerHTML = '<svg width="'+W+'" height="'+HB+'" viewBox="0 0 '+W+' '+HB+'" role="img" aria-label="Form">' +
+      vlines(HB-BB) + fg + fAreas + fLine + nowLine(HB-BB) + hoverLine(HB-BB) +
+      '<circle class="ld-hf" r="4" fill="#F4F2EE" stroke="#0B0B0C" stroke-width="2" opacity="0"/>' + xlabels(HB-7) + '</svg>';
 
-    document.getElementById("ldA").innerHTML =
-      '<svg width="'+W+'" height="'+HA+'" viewBox="0 0 '+W+' '+HA+'" role="img" aria-label="Fitness und Ermüdung, '+n+' Tage">' +
-      grid + fills + lines + todayMark + ends +
-      '<line class="ld-x" x1="0" x2="0" y1="'+TA+'" y2="'+(HA-BA)+'" stroke="#8A8890" stroke-width="1" opacity="0"/>' +
-      '<circle class="ld-hc" r="4" fill="#F4F2EE" stroke="#151517" stroke-width="2" opacity="0"/>' +
-      '<circle class="ld-ha" r="4" fill="#B26BC0" stroke="#151517" stroke-width="2" opacity="0"/>' +
-      '</svg>';
-
-    /* ---- Chart B: Form als Tagesbalken in den Zonen ---- */
-    var HB = state.ldWin <= 45 ? 140 : 120, TB = 6, BB = 20;
-    var forms = all.map(function(x){ return x.ctl-x.atl; });
-    var flo = Math.min(-35, Math.floor((Math.min.apply(null,forms)-4)/5)*5);
-    var fhi = Math.max(30, Math.ceil((Math.max.apply(null,forms)+4)/5)*5);
-    function YB(v){ return TB + (fhi-v)/(fhi-flo)*(HB-TB-BB); }
-    var bands = "";
-    var edges = [[25,fhi,"#79C7E3"],[5,25,"#7BE07B"],[-10,5,"#E3C61B"],[-30,-10,"#F08A24"],[flo,-30,"#E0362C"]];
-    edges.forEach(function(e){
-      var y1 = YB(Math.min(e[1],fhi)), y2 = YB(Math.max(e[0],flo));
-      bands += '<rect x="'+L+'" width="'+(W-L-R)+'" y="'+y1.toFixed(1)+'" height="'+Math.max(0,y2-y1).toFixed(1)+'" fill="'+e[2]+'" fill-opacity=".07"/>';
-    });
-    [-30,-10,0,5,25].forEach(function(v){
-      if(v<flo||v>fhi) return;
-      bands += '<line x1="'+L+'" x2="'+(W-R)+'" y1="'+YB(v).toFixed(1)+'" y2="'+YB(v).toFixed(1)+'" stroke="'+(v===0?"#55535B":"#2A2A2E")+'" stroke-width="1"/>' +
-        (v===5 ? '' : '<text class="ax" x="'+(L-6)+'" y="'+(YB(v)+3).toFixed(1)+'" text-anchor="end">'+(v>0?"+":"")+v+'</text>');
-    });
-    var bw = Math.max(1.5, Math.min(16, step*0.62));
-    var bars = all.map(function(x,i){
-      var f = forms[i], q = ldZone(f), y0 = YB(0), y1 = YB(f);
-      var top = Math.min(y0,y1), h = Math.max(1, Math.abs(y1-y0));
-      return '<rect x="'+(X(i)-bw/2).toFixed(1)+'" y="'+top.toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+h.toFixed(1)+
-        '" rx="'+Math.min(2,bw/2)+'" fill="'+q.c+'" fill-opacity="'+(x.fc?".42":".9")+'"/>';
-    }).join("");
-    // Datumsachse: Montage beschriften, bei vielen Wochen nur jeden zweiten/vierten
-    var mondays = []; all.forEach(function(x,i){ if(parseIso(x.d).getDay()===1) mondays.push(i); });
-    var every = Math.max(1, Math.ceil(mondays.length*52/(W-L-R)));
-    var xl = mondays.filter(function(_,k){ return k%every===0; }).map(function(i){
-      return '<text class="ax" x="'+X(i).toFixed(1)+'" y="'+(HB-4)+'" text-anchor="middle">'+fmtDay(all[i].d).slice(0,-1)+'</text>';
-    }).join("");
-    document.getElementById("ldB").innerHTML =
-      '<svg width="'+W+'" height="'+HB+'" viewBox="0 0 '+W+' '+HB+'" role="img" aria-label="Form pro Tag">' +
-      bands + bars + xl +
-      '<line x1="'+todayX.toFixed(1)+'" x2="'+todayX.toFixed(1)+'" y1="'+TB+'" y2="'+(HB-BB)+'" stroke="#55535B" stroke-width="1" stroke-dasharray="2 3"/>' +
-      '<line class="ld-x" x1="0" x2="0" y1="'+TB+'" y2="'+(HB-BB)+'" stroke="#8A8890" stroke-width="1" opacity="0"/>' +
-      '</svg>';
-    var zn = ldZone(forms[nAct-1]);
-    document.getElementById("ldZoneNow").innerHTML = '<span style="color:'+zn.c+'">■</span> heute '+sgn(forms[nAct-1])+' · '+zn.label;
-
-    /* ---- Hover: Fadenkreuz ueber beide Charts + Tooltip ---- */
+    /* ---- Hover über alle drei Diagramme ---- */
     var tip = document.getElementById("ldTip");
-    var hc = host.querySelector(".ld-hc"), ha = host.querySelector(".ld-ha");
+    var hc = host.querySelector(".ld-hc"), ha = host.querySelector(".ld-ha"), hf = host.querySelector(".ld-hf");
     var xs = host.querySelectorAll(".ld-x");
     function move(ev){
       var r = host.getBoundingClientRect();
       var cx = (ev.touches ? ev.touches[0].clientX : ev.clientX) - r.left;
       var i = Math.max(0, Math.min(n-1, Math.round((cx-L)/step)));
-      var p = all[i], f = p.ctl-p.atl, q = ldZone(f), px = X(i);
-      Array.prototype.forEach.call(xs, function(l){ l.setAttribute("x1",px); l.setAttribute("x2",px); l.setAttribute("opacity",".6"); });
+      var p = all[i], f = p.ctl-p.atl, zq = ldZone(f), px = X(i);
+      Array.prototype.forEach.call(xs, function(l){ l.setAttribute("x1",px); l.setAttribute("x2",px); l.setAttribute("opacity",".55"); });
       hc.setAttribute("cx",px); hc.setAttribute("cy",YA(p.ctl)); hc.setAttribute("opacity","1");
       ha.setAttribute("cx",px); ha.setAttribute("cy",YA(p.atl)); ha.setAttribute("opacity","1");
+      hf.setAttribute("cx",px); hf.setAttribute("cy",YB(f)); hf.setAttribute("fill",zq.c); hf.setAttribute("opacity","1");
       tip.innerHTML = '<b>'+esc(shortDay(p.d))+(p.fc?' · Plan':'')+'</b><br>' +
-        '<span class="k" style="background:#F4F2EE"></span>Fitness '+nf(p.ctl,0)+'<br>' +
-        '<span class="k" style="background:#B26BC0"></span>Ermüdung '+nf(p.atl,0)+'<br>' +
-        '<span class="k" style="background:'+q.c+'"></span>Form '+sgn(f)+' · '+q.label+'<br>' +
-        'Last '+nf(p.load,0)+(p.name?'<br>'+esc(p.name).split(' + ').join('<br>'):'') +
+        '<span class="k" style="background:'+LD_C.ctl+'"></span>Fitness '+nf(p.ctl,0)+'<br>' +
+        '<span class="k" style="background:'+LD_C.atl+'"></span>Ermüdung '+nf(p.atl,0)+'<br>' +
+        '<span class="k" style="background:'+zq.c+'"></span>Form '+sgn(f)+' · '+zq.label+'<br>' +
+        'Rampe '+nf(p.ramp,1)+' · Last '+nf(p.load,0)+(p.name?'<br>'+esc(p.name).split(' + ').join('<br>'):'') +
         ((p.acts||[]).length ? '<br>'+p.acts.map(esc).join('<br>') : '') +
-        (p.src ? '<br><span style="color:#A3A1A8">Vorgeschichte: Wert von '+esc(p.src)+'</span>' : p.icu ? '<br><span style="color:#A3A1A8">intervals.icu: Form '+sgn(p.icu.ctl-p.icu.atl)+' (F '+nf(p.icu.ctl,0)+' / E '+nf(p.icu.atl,0)+')</span>' : '');
+        (p.icu ? '<br><span style="color:#A3A1A8">intervals.icu: Form '+sgn(p.icu.ctl-p.icu.atl)+' (F '+nf(p.icu.ctl,0)+' / E '+nf(p.icu.atl,0)+')</span>' : '');
       host.classList.add("on");
       var tw = tip.offsetWidth || 150, th = tip.offsetHeight || 90;
       var cy = (ev.touches ? ev.touches[0].clientY : ev.clientY) - r.top;
@@ -2411,7 +2403,7 @@ body{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset
     function off(){
       host.classList.remove("on");
       Array.prototype.forEach.call(xs, function(l){ l.setAttribute("opacity","0"); });
-      hc.setAttribute("opacity","0"); ha.setAttribute("opacity","0");
+      hc.setAttribute("opacity","0"); ha.setAttribute("opacity","0"); hf.setAttribute("opacity","0");
     }
     host.addEventListener("mousemove", move);
     host.addEventListener("touchstart", move, {passive:true});
@@ -2870,7 +2862,7 @@ body{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset
   /* Wochenwechsel: Kacheln und Wochenansicht springen montags von selbst um – auch wenn die Seite seit gestern offen ist */
   function ckRollover(){
     try{
-      subscribeOsWeek();
+      subscribeOsWeek(); renderBrief();
       if(state.mode === "week"){ var mNow = iso(mondayOf(new Date())); if(state.lastAutoMonday !== mNow){ var had = state.lastAutoMonday; state.lastAutoMonday = mNow; if(had && iso(state.anchor) === had) setAnchor(new Date()); } }
     }catch(e){}
   }
@@ -2960,6 +2952,39 @@ body{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset
     if(e.data.type === "tos-ready"){ tosReady = true; var l = document.getElementById("spLoad"); if(l) l.remove(); osSend(); if(VIEW!=="overview") tosFrame.contentWindow.postMessage({type:"tos-view", view:VIEW}, "*"); }
     if(e.data.type === "tos-height" && e.data.h > 0){ tosFrame.style.height = Math.ceil(e.data.h) + "px"; tosFrame.style.minHeight = "0"; }
   });
+
+  /* ---------------- Morgen-Briefing: nur Werte, keine Erklärungen ---------------- */
+  var mbDoc = null;
+  function renderBrief(){
+    var el = document.getElementById("mbCard"); if(!el) return;
+    var b = mbDoc; if(!b || !b.d){ el.hidden = true; return; }
+    el.hidden = false; el.classList.toggle("stale", b.d !== todayIso());
+    var AMP = {g:"#8BD17C", y:"#E8D200", r:"#E0362C"};
+    var SC = {rad:"#E8D200", lauf:"#EE6A3E", schwimmen:"#B26BC0", kraft:"#F4F2EE", rest:"#6E6C74"};
+    function v(x, dec){ return x==null || x==="" ? "–" : (typeof x === "number" ? nf(x, dec||0) : esc(String(x))); }
+    function pair(a, b, ua, ub){ return '<div class="mb-p"><div><b>'+a+'</b><small>'+ua+'</small></div><div><b>'+b+'</b><small>'+ub+'</small></div></div>'; }
+    var p = b.d.split("-"), wd = ["So","Mo","Di","Mi","Do","Fr","Sa"][new Date(+p[0], +p[1]-1, +p[2], 12).getDay()];
+    var hrv = b.hrv||{}, rhr = b.rhr||{}, sl = b.sleep||{}, fo = b.form||{};
+    var fz = fo.v!=null ? ldZone(fo.v) : null;
+    var sh = sl.h!=null ? Math.floor(sl.h)+":"+pad(Math.round((sl.h%1)*60)) : "–";
+    var h = '<div class="mb-h"><span><b>Morgen</b> · '+wd+' '+p[2]+"."+p[1]+'.</span><span>'+esc(b.t||"")+'</span></div>' +
+      '<div class="mb-g">' +
+        '<div class="mb-t" style="--k:#2CC5BD;--vc:'+(AMP[hrv.amp]||"var(--text)")+'"><div class="mb-l"><span class="mb-d"></span>HRV</div>'+pair(v(hrv.fb), v(hrv.gm), "Fitbit", "Garmin")+'<div class="mb-s">ms · Ø 7 T. '+v(hrv.avg7)+'</div></div>' +
+        '<div class="mb-t" style="--k:#EE6A3E"><div class="mb-l">Ruhepuls</div>'+pair(v(rhr.fb), v(rhr.gm), "Fitbit", "Garmin")+'<div class="mb-s">bpm</div></div>' +
+        '<div class="mb-t" style="--k:#B26BC0"><div class="mb-l">Schlaf</div><div class="mb-v"><b>'+sh+'</b><small>h</small></div><div class="mb-s">Score '+v(sl.score)+(sl.src?' · '+esc(sl.src):'')+'</div></div>' +
+        '<div class="mb-t" style="--k:#F4F2EE;--vc:'+(fz?fz.c:"var(--text)")+'"><div class="mb-l"><span class="mb-d"></span>Form</div><div class="mb-v"><b>'+(fo.v!=null?sgn(fo.v):"–")+'</b><small>'+(fz?esc(fz.label):"")+'</small></div><div class="mb-s">Fitness '+v(fo.ctl)+' · Ermüdung '+v(fo.atl)+'</div></div>' +
+      '</div>';
+    if(b.today && b.today.length){
+      h += '<div class="mb-today">' + b.today.map(function(x){
+        return '<div class="mb-x" style="--k:'+(SC[x.s]||"#F4F2EE")+'"><b>'+esc(x.n||"")+'</b>'+(x.r?'<span>'+esc(x.r)+'</span>':'')+'</div>';
+      }).join("") + '</div>';
+    }
+    el.innerHTML = h;
+  }
+  function subscribeBrief(){
+    if(!state.db) return;
+    state.db.doc("athlete/briefing").onSnapshot(function(snap){ mbDoc = (snap.exists && snap.data()) ? snap.data() : null; renderBrief(); }, function(){});
+  }
   function subscribeOsWeek(){
     if(!state.db) return;
     var key = iso(mondayOf(new Date()));
@@ -3267,6 +3292,7 @@ body{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset
       subscribeOsWeek();
       subscribeSeason();
       subscribeActs();
+      subscribeBrief();
     }).catch(function(){});
 
   }
