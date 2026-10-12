@@ -1,5 +1,5 @@
 {
- "updated": "12.10. 16:00",
+ "updated": "12.10. 16:05",
  "units": [
   {
    "id": "2026-10-05-Ride-27970c",
@@ -56,10 +56,10 @@
    "src": "15 | Einlaufen (dazu 3x20 s Steigerung) | HF 130–145 | easy\n5 | Locker | HF 120–145 | easy\n30 | 30' Zeitversuch gleichmaessig so schnell wie moeglich (flach, ohne Ampeln) | frei | hard\n10 | Auslaufen | HF 130–145 | easy"
   },
   {
-   "id": "2026-10-12-Ride-803bd8",
+   "id": "2026-10-12-Ride-320798",
    "date": "2026-10-12",
-   "name": "12.10. Mo · RAD GA 60 locker (175-200 W)",
-   "src": "10 | Einfahren | 140–175 W | easy\n45 | Grundlage | 175–200 W | ga1\n5 | Ausfahren | 100–150 W | easy"
+   "name": "12.10. Mo · RAD GA 90 locker (175-200 W)",
+   "src": "10 | Einfahren | 140–175 W | easy\n75 | Grundlage | 175–200 W | ga1\n5 | Ausfahren | 100–150 W | easy"
   },
   {
    "id": "2026-10-12-WeightTraining-14160d",
