@@ -1,5 +1,5 @@
 {
- "updated": "12.10. 16:05",
+ "updated": "13.10. 09:01",
  "units": [
   {
    "id": "2026-10-05-Ride-27970c",
@@ -68,16 +68,16 @@
    "src": "1:00 | Katze-Kuh | langsam, 6–8×, Rücken nur mobilisieren | easy\n0:15 | Wechsel | auf die linke Seite legen, Rücken an die Wand | rec\n0:45 | Beinheben seitlich RECHTS | Ferse führt, Fußspitze leicht nach unten, 2 s oben halten | sweet\n0:45 | Beinheben seitlich links | Ferse führt, 2 s oben halten | ga1\n0:45 | Beinheben seitlich RECHTS | Extrasatz – gleiche Wdh-Zahl wie Satz 1 | sweet\n0:20 | Pause | Miniband an die Knie (wenn vorhanden) | rec\n0:45 | Clamshell RECHTS | Füße zusammen, Becken nicht nach hinten kippen, 2 s oben | sweet\n0:45 | Clamshell links | Füße zusammen, 2 s oben | ga1\n0:45 | Clamshell RECHTS | Extrasatz | sweet\n0:20 | Pause | auf den Rücken legen | rec\n0:45 | Glute Bridge einbeinig RECHTS | Becken bleibt waagerecht, oben 2 s drücken | sweet\n0:45 | Glute Bridge einbeinig links | Becken waagerecht | ga1\n0:45 | Glute Bridge einbeinig RECHTS | Extrasatz | sweet\n0:20 | Pause | aufstehen, Hand an die Wand | rec\n0:45 | RDL einbeinig RECHTS | 3 s runter, Knie über 2. Zeh, Hüfte bleibt gerade | sweet\n0:45 | RDL einbeinig links | 3 s runter | ga1\n0:45 | RDL einbeinig RECHTS | Extrasatz – nur so tief wie sauber | sweet\n0:20 | Pause | auf den Rücken legen – McGill Big 3 | rec\n1:20 | McGill Curl-up | ein Bein angestellt, Hände unter LWS, 6× 10 s halten | ga1\n0:15 | Wechsel | auf die rechte Seite, Unterarm | rec\n1:00 | Seitstütz RECHTS | 5× 10 s halten, kurz ablegen | sweet\n1:00 | Seitstütz links | 5× 10 s halten | ga1\n0:15 | Wechsel | Vierfüßlerstand | rec\n1:20 | Bird Dog | abwechselnd, je 10 s halten, Faust machen, Hüfte ruhig | ga1\n0:20 | Pause | Runde 2 kürzer | rec\n0:50 | McGill Curl-up | 4× 10 s, anderes Bein angestellt | ga1\n0:40 | Seitstütz RECHTS | 3× 10 s | sweet\n0:40 | Seitstütz links | 3× 10 s | ga1\n0:50 | Bird Dog | abwechselnd, 4 pro Seite × 10 s | ga1"
   },
   {
-   "id": "2026-10-13-Ride-867bb8",
+   "id": "2026-10-13-Ride-4f626c",
    "date": "2026-10-13",
-   "name": "13.10. Di · RAD GA 90 (175-200 W)",
-   "src": "10 | Einfahren | 140–175 W | easy\n75 | Grundlage | 175–200 W | ga1\n5 | Ausfahren | 100–150 W | easy"
+   "name": "13.10. Di · RAD FTP-Test 20 min",
+   "src": "20 | Einfahren | 150–200 W | easy\n3x [1 | Intervall hart | 290–310 W | hard ; 1 | Pause | 100–150 W | rec]\n5 | Locker | 100–150 W | easy\n5 | 5' all-out | frei | hard\n10 | Locker | 140–160 W | easy\n20 | 20' Zeitversuch so gleichmaessig wie moeglich (FTP = 95 % vom Schnitt) | frei | hard\n10 | Ausfahren | 100–150 W | easy"
   },
   {
-   "id": "2026-10-14-Ride-4f626c",
+   "id": "2026-10-14-Ride-867bb8",
    "date": "2026-10-14",
-   "name": "14.10. Mi · RAD FTP-Test 20 min",
-   "src": "20 | Einfahren | 150–200 W | easy\n3x [1 | Intervall hart | 290–310 W | hard ; 1 | Pause | 100–150 W | rec]\n5 | Locker | 100–150 W | easy\n5 | 5' all-out | frei | hard\n10 | Locker | 140–160 W | easy\n20 | 20' Zeitversuch so gleichmaessig wie moeglich (FTP = 95 % vom Schnitt) | frei | hard\n10 | Ausfahren | 100–150 W | easy"
+   "name": "14.10. Mi · RAD GA 90 (175-200 W)",
+   "src": "10 | Einfahren | 140–175 W | easy\n75 | Grundlage | 175–200 W | ga1\n5 | Ausfahren | 100–150 W | easy"
   },
   {
    "id": "2026-10-15-Run-815d23",
