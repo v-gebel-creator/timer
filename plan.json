@@ -1,5 +1,5 @@
 {
- "updated": "16.10. 06:07",
+ "updated": "16.10. 14:59",
  "units": [
   {
    "id": "2026-10-05-Ride-27970c",
@@ -98,10 +98,16 @@
    "src": "1:00 | Katze-Kuh | langsam, 6–8×, Rücken nur mobilisieren | easy\n0:15 | Wechsel | auf die linke Seite legen, Rücken an die Wand | rec\n0:45 | Beinheben seitlich RECHTS | Ferse führt, Fußspitze leicht nach unten, 2 s oben halten | sweet\n0:45 | Beinheben seitlich links | Ferse führt, 2 s oben halten | ga1\n0:45 | Beinheben seitlich RECHTS | Extrasatz – gleiche Wdh-Zahl wie Satz 1 | sweet\n0:20 | Pause | Miniband an die Knie (wenn vorhanden) | rec\n0:45 | Clamshell RECHTS | Füße zusammen, Becken nicht nach hinten kippen, 2 s oben | sweet\n0:45 | Clamshell links | Füße zusammen, 2 s oben | ga1\n0:45 | Clamshell RECHTS | Extrasatz | sweet\n0:20 | Pause | auf den Rücken legen | rec\n0:45 | Glute Bridge einbeinig RECHTS | Becken bleibt waagerecht, oben 2 s drücken | sweet\n0:45 | Glute Bridge einbeinig links | Becken waagerecht | ga1\n0:45 | Glute Bridge einbeinig RECHTS | Extrasatz | sweet\n0:20 | Pause | aufstehen, Hand an die Wand | rec\n0:45 | RDL einbeinig RECHTS | 3 s runter, Knie über 2. Zeh, Hüfte bleibt gerade | sweet\n0:45 | RDL einbeinig links | 3 s runter | ga1\n0:45 | RDL einbeinig RECHTS | Extrasatz – nur so tief wie sauber | sweet\n0:20 | Pause | auf den Rücken legen – McGill Big 3 | rec\n1:20 | McGill Curl-up | ein Bein angestellt, Hände unter LWS, 6× 10 s halten | ga1\n0:15 | Wechsel | auf die rechte Seite, Unterarm | rec\n1:00 | Seitstütz RECHTS | 5× 10 s halten, kurz ablegen | sweet\n1:00 | Seitstütz links | 5× 10 s halten | ga1\n0:15 | Wechsel | Vierfüßlerstand | rec\n1:20 | Bird Dog | abwechselnd, je 10 s halten, Faust machen, Hüfte ruhig | ga1\n0:20 | Pause | Runde 2 kürzer | rec\n0:50 | McGill Curl-up | 4× 10 s, anderes Bein angestellt | ga1\n0:40 | Seitstütz RECHTS | 3× 10 s | sweet\n0:40 | Seitstütz links | 3× 10 s | ga1\n0:50 | Bird Dog | abwechselnd, 4 pro Seite × 10 s | ga1"
   },
   {
-   "id": "2026-10-17-Ride-9dc475",
+   "id": "2026-10-17-Ride-72dfcb",
    "date": "2026-10-17",
-   "name": "17.10. Sa · RAD Hotelrad 45 nach Puls (CVG, optional)",
-   "src": "5 | Einfahren | HF 110–125 | easy\n35 | Locker | HF 125–138 | easy\n5 | Ausfahren | HF 100–125 | easy"
+   "name": "17.10. Sa · RAD Hotelrad GA 70 nach Puls (CVG)",
+   "src": "10 | Einfahren | HF 110–128 | easy\n55 | Locker | HF 128–135 | easy\n5 | Ausfahren | HF 100–125 | easy"
+  },
+  {
+   "id": "2026-10-17-WeightTraining-14160d",
+   "date": "2026-10-17",
+   "name": "17.10. Sa · STABI Hüfte + McGill Big 3 (20 min)",
+   "src": "1:00 | Katze-Kuh | langsam, 6–8×, Rücken nur mobilisieren | easy\n0:15 | Wechsel | auf die linke Seite legen, Rücken an die Wand | rec\n0:45 | Beinheben seitlich RECHTS | Ferse führt, Fußspitze leicht nach unten, 2 s oben halten | sweet\n0:45 | Beinheben seitlich links | Ferse führt, 2 s oben halten | ga1\n0:45 | Beinheben seitlich RECHTS | Extrasatz – gleiche Wdh-Zahl wie Satz 1 | sweet\n0:20 | Pause | Miniband an die Knie (wenn vorhanden) | rec\n0:45 | Clamshell RECHTS | Füße zusammen, Becken nicht nach hinten kippen, 2 s oben | sweet\n0:45 | Clamshell links | Füße zusammen, 2 s oben | ga1\n0:45 | Clamshell RECHTS | Extrasatz | sweet\n0:20 | Pause | auf den Rücken legen | rec\n0:45 | Glute Bridge einbeinig RECHTS | Becken bleibt waagerecht, oben 2 s drücken | sweet\n0:45 | Glute Bridge einbeinig links | Becken waagerecht | ga1\n0:45 | Glute Bridge einbeinig RECHTS | Extrasatz | sweet\n0:20 | Pause | aufstehen, Hand an die Wand | rec\n0:45 | RDL einbeinig RECHTS | 3 s runter, Knie über 2. Zeh, Hüfte bleibt gerade | sweet\n0:45 | RDL einbeinig links | 3 s runter | ga1\n0:45 | RDL einbeinig RECHTS | Extrasatz – nur so tief wie sauber | sweet\n0:20 | Pause | auf den Rücken legen – McGill Big 3 | rec\n1:20 | McGill Curl-up | ein Bein angestellt, Hände unter LWS, 6× 10 s halten | ga1\n0:15 | Wechsel | auf die rechte Seite, Unterarm | rec\n1:00 | Seitstütz RECHTS | 5× 10 s halten, kurz ablegen | sweet\n1:00 | Seitstütz links | 5× 10 s halten | ga1\n0:15 | Wechsel | Vierfüßlerstand | rec\n1:20 | Bird Dog | abwechselnd, je 10 s halten, Faust machen, Hüfte ruhig | ga1\n0:20 | Pause | Runde 2 kürzer | rec\n0:50 | McGill Curl-up | 4× 10 s, anderes Bein angestellt | ga1\n0:40 | Seitstütz RECHTS | 3× 10 s | sweet\n0:40 | Seitstütz links | 3× 10 s | ga1\n0:50 | Bird Dog | abwechselnd, 4 pro Seite × 10 s | ga1"
   },
   {
    "id": "2026-10-18-Run-2c87cc",
@@ -122,6 +128,12 @@
    "src": "35 | Grundlage | HF 140–148 | ga1\n8 | Steigerungen 6x20 s bis ~4:30/km, je 1' traben | frei | hard\n5 | Auslaufen | HF 120–145 | easy"
   },
   {
+   "id": "2026-10-20-Ride-1a6a26",
+   "date": "2026-10-20",
+   "name": "20.10. Di · RAD GA 60 (175-200 W) Di",
+   "src": "10 | Einfahren | 140–175 W | easy\n45 | Grundlage | 175–200 W | ga1\n5 | Ausfahren | 100–150 W | easy"
+  },
+  {
    "id": "2026-10-20-WeightTraining-14160d",
    "date": "2026-10-20",
    "name": "20.10. Di · STABI Hüfte + McGill Big 3 (20 min)",
@@ -140,16 +152,22 @@
    "src": "15 | Einlaufen | HF 130–145 | easy\n2x [10 | Intervall hart | 4:40–4:48 /km | hard ; 3 | Pause | HF 110–145 | rec]\n10 | Auslaufen | HF 130–145 | easy"
   },
   {
-   "id": "2026-10-23-Ride-867bb8",
+   "id": "2026-10-23-Ride-4f0985",
    "date": "2026-10-23",
-   "name": "23.10. Fr · RAD GA 90 (175-200 W)",
-   "src": "10 | Einfahren | 140–175 W | easy\n75 | Grundlage | 175–200 W | ga1\n5 | Ausfahren | 100–150 W | easy"
+   "name": "23.10. Fr · RAD GA 150 (175-200 W) Fr",
+   "src": "10 | Einfahren | 140–175 W | easy\n135 | Grundlage | 175–200 W | ga1\n5 | Ausfahren | 100–150 W | easy"
   },
   {
    "id": "2026-10-24-Run-e64042",
    "date": "2026-10-24",
    "name": "24.10. Sa · LAUF lang 90 (HF 140-150, ab 60 min bis 155)",
    "src": "60 | Grundlage | HF 140–150 | ga1\n30 | Grundlage | HF 140–155 | ga1"
+  },
+  {
+   "id": "2026-10-24-Ride-e7acfc",
+   "date": "2026-10-24",
+   "name": "24.10. Sa · RAD locker 45 (160-175 W)",
+   "src": "5 | Einfahren | 130–160 W | easy\n35 | Locker | 160–175 W | easy\n5 | Ausfahren | 100–140 W | easy"
   },
   {
    "id": "2026-10-24-WeightTraining-14160d",
