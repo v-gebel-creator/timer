@@ -1016,7 +1016,7 @@ body{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset
 .mb.stale{opacity:.55}
 .mb-h{display:flex; justify-content:space-between; align-items:baseline; margin:0 2px 10px; font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--text-faint); font-weight:650}
 .mb-h b{color:#2CC5BD; font-weight:700}
-.mb-g{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px}
+.mb-g{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px}
 .mb-t{position:relative; background:#1B1B1E; border-radius:14px; padding:12px 12px 10px; overflow:hidden; min-width:0}
 .mb-t:before{content:""; position:absolute; left:0; right:0; top:0; height:3px; background:var(--k)}
 .mb-l{font-size:11px; color:var(--text-dim); font-weight:600; letter-spacing:.02em}
@@ -2164,7 +2164,7 @@ body{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset
     [["athlete/vitals","vitals"],["athlete/weight","weight"],["athlete/volume","volume"]]
       .forEach(function(pair){
         state.db.doc(pair[0]).onSnapshot(function(snap){
-          if(snap.exists && snap.data()){ state.metrics[pair[1]] = snap.data(); renderVitals(); if(pair[1]==="vitals" && VIEW==="saison") renderSeason(); }
+          if(snap.exists && snap.data()){ state.metrics[pair[1]] = snap.data(); renderVitals(); if(pair[1]==="vitals") renderBrief(); if(pair[1]==="vitals" && VIEW==="saison") renderSeason(); }
         }, function(){});
       });
   }
@@ -2423,7 +2423,7 @@ body{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset
   function subscribeLoad(){
     if(!state.db) return;
     state.db.doc("athlete/load").onSnapshot(function(snap){
-      if(snap.exists && snap.data()){ state.load = snap.data(); renderLoad(); renderSportCards(); osSend(); }
+      if(snap.exists && snap.data()){ state.load = snap.data(); renderLoad(); renderSportCards(); osSend(); renderBrief(); }
     }, function(){});
   }
 
@@ -2958,6 +2958,50 @@ body{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset
 
   /* ---------------- Morgen-Briefing: nur Werte, keine Erklärungen ---------------- */
   var mbDoc = null;
+  /* Erholung 0–100 und Tagesbelastung 0–21 (Idee aus WHOOP/NOOP, eigene Formeln):
+     Erholung = HRV (ln, 50 %) + Ruhepuls (30 %) + Schlaf (20 %) gegen die eigene Grundlinie der letzten 60 Tage,
+     50 = dein Normalwert; unter 14 Messnächten wird noch kalibriert.
+     Tagesbelastung = 21 × (1 − e^(−Coach-Last/91)), also Last 100 ≈ 14, Last 200 ≈ 19 (nur Ausdauer). */
+  function phiN(z){ var t = 1/(1+0.2316419*Math.abs(z)), d = 0.3989423*Math.exp(-z*z/2),
+    q = d*t*(0.3193815+t*(-0.3565638+t*(1.781478+t*(-1.821256+t*1.330274)))); return z > 0 ? 1-q : q; }
+  function recScore(day, hrv, rhr, sleepH){
+    var ser = (state.metrics && state.metrics.vitals && state.metrics.vitals.series) || [];
+    var t0 = new Date(day+"T12:00:00"), from = new Date(+t0 - 60*864e5);
+    var H = [], R = [];
+    ser.forEach(function(x){ var d = new Date(x.d+"T12:00:00"); if(d < from || d >= t0) return;
+      if(x.hrv) H.push(Math.log(x.hrv)); if(x.rhr) R.push(x.rhr); });
+    if(H.length < 14) return {cal:true, n:H.length};
+    if(hrv == null) return {cal:false, v:null};
+    function ms(a){ var m = a.reduce(function(s,v){ return s+v; },0)/a.length;
+      var sd = Math.sqrt(a.reduce(function(s,v){ return s+(v-m)*(v-m); },0)/Math.max(1,a.length-1)); return [m, sd]; }
+    var h = ms(H), zH = (Math.log(hrv)-h[0])/Math.max(h[1], 0.05), sum = 0.5*zH, w = 0.5;
+    if(rhr != null && R.length >= 14){ var r = ms(R); sum += 0.3*(r[0]-rhr)/Math.max(r[1], 1.5); w += 0.3; }
+    if(sleepH != null){ sum += 0.2*Math.max(-1.5, Math.min(1, (sleepH-7.5)/1.0)); w += 0.2; }
+    return {cal:false, v:Math.max(1, Math.min(99, Math.round(100*phiN((sum/w)*0.8))))};
+  }
+  function strainOf(load){ return 21*(1-Math.exp(-(+load||0)/91)); }
+  function strainCol(x){ return x >= 18 ? "#E0362C" : x >= 14 ? "#EE6A3E" : x >= 10 ? "#E8D200" : "#8BD17C"; }
+  function strainLab(x){ return x >= 18 ? "sehr hoch" : x >= 14 ? "hoch" : x >= 10 ? "mittel" : "locker"; }
+  function recTile(b, hrv, rhr, sl){
+    var ser = (state.metrics && state.metrics.vitals && state.metrics.vitals.series) || [];
+    var last = ser.filter(function(x){ return x.d === b.d; })[0] || {};
+    var hv = hrv.fb != null ? hrv.fb : last.hrv, rv = rhr.fb != null ? rhr.fb : last.rhr;
+    var r = recScore(b.d, hv, rv, sl.h);
+    if(r.cal) return '<div class="mb-t" style="--k:#8BD17C" title="Braucht mindestens 14 Nächte mit HRV als Grundlinie"><div class="mb-l">Erholung</div><div class="mb-v"><b style="font-size:17px">kalibriert</b></div><div class="mb-s">'+r.n+' von 14 Nächten</div></div>';
+    var c = r.v == null ? "var(--text)" : r.v >= 67 ? "#8BD17C" : r.v >= 34 ? "#E8D200" : "#E0362C";
+    return '<div class="mb-t" style="--k:#8BD17C;--vc:'+c+'" title="HRV 50 % · Ruhepuls 30 % · Schlaf 20 % gegen deine Grundlinie der letzten 60 Tage (Fitbit). 50 = dein Normalwert."><div class="mb-l"><span class="mb-d"></span>Erholung</div><div class="mb-v"><b>'+(r.v==null?"–":r.v)+'</b><small>%</small></div><div class="mb-s">HRV · Ruhepuls · Schlaf · 50 = normal</div></div>';
+  }
+  function strainTile(b){
+    var LD = (state.load && state.load.days) || []; if(!LD.length) return "";
+    var t = LD.filter(function(x){ return x.d === b.d; })[0], i = LD.indexOf(t);
+    var y = i > 0 ? LD[i-1] : (t ? null : LD[LD.length-1]);
+    var cur = t && t.load ? t : y;
+    if(!cur) return "";
+    var yd = new Date(new Date(b.d+"T12:00:00") - 864e5), ydIso = yd.getFullYear()+"-"+pad(yd.getMonth()+1)+"-"+pad(yd.getDate());
+    var lab = cur.d === b.d ? "heute" : cur.d === ydIso ? "gestern" : cur.d.slice(8,10)+"."+cur.d.slice(5,7)+".";
+    var x = strainOf(cur.load), w = LD.slice(-7), avg = w.reduce(function(s,d){ return s+strainOf(d.load); },0)/w.length;
+    return '<div class="mb-t" style="--k:#EE6A3E;--vc:'+strainCol(x)+'" title="Tagesbelastung 0–21 aus der Coach-Last (nur Ausdauer): 21 × (1 − e^(−Last/91)). Last 100 ≈ 14, Last 200 ≈ 19."><div class="mb-l"><span class="mb-d"></span>Tagesbelastung</div><div class="mb-v"><b>'+nf(x,1)+'</b><small>/ 21 · '+lab+'</small></div><div class="mb-s">'+strainLab(x)+' · Ø 7 T. '+nf(avg,1)+'</div></div>';
+  }
   function renderBrief(){
     var el = document.getElementById("mbCard"); if(!el) return;
     var b = mbDoc; if(!b || !b.d){ el.hidden = true; return; }
@@ -2976,6 +3020,7 @@ body{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset
         '<div class="mb-t" style="--k:#EE6A3E"><div class="mb-l">Ruhepuls</div>'+pair(v(rhr.fb), v(rhr.gm), "Fitbit", "Garmin")+'<div class="mb-s">bpm</div></div>' +
         '<div class="mb-t" style="--k:#B26BC0"><div class="mb-l">Schlaf</div><div class="mb-v"><b>'+sh+'</b><small>h</small></div><div class="mb-s">Score '+v(sl.score)+(sl.src?' · '+esc(sl.src):'')+'</div></div>' +
         '<div class="mb-t" style="--k:#F4F2EE;--vc:'+(fz?fz.c:"var(--text)")+'"><div class="mb-l"><span class="mb-d"></span>Form</div><div class="mb-v"><b>'+(fo.v!=null?sgn(fo.v):"–")+'</b><small>'+(fz?esc(fz.label):"")+'</small></div><div class="mb-s">Fitness '+v(fo.ctl)+' · Ermüdung '+v(fo.atl)+'</div></div>' +
+        recTile(b, hrv, rhr, sl) + strainTile(b) +
       '</div>';
     if(b.today && b.today.length){
       h += '<div class="mb-today">' + b.today.map(function(x){
