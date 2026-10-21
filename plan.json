@@ -1,5 +1,5 @@
 {
- "updated": "20.10. 15:24",
+ "updated": "21.10. 14:04",
  "units": [
   {
    "id": "2026-10-05-Ride-27970c",
@@ -17,7 +17,7 @@
    "id": "2026-10-06-Run-263eb4",
    "date": "2026-10-06",
    "name": "06.10. Di · LAUF Schwelle 3x8' (5:05-5:10)",
-   "src": "15 | Einlaufen (dazu 3x20 s Steigerung) | HF 130–145 | easy\n3x [8 | Intervall hart | 5:05–5:10 /km | hard ; 2 | Pause | HF 110–145 | rec]\n30 | Auslaufen locker (ersetzt den Koppellauf vom Mo) | HF 130–145 | easy"
+   "src": "15 | Einlaufen (dazu 3x20 s Steigerung) | HF 130–145 | easy\n8 | Intervall 1/3 | 5:05–5:10 /km | hard\n2 | Pause 1/3 | HF 110–145 | rec\n8 | Intervall 2/3 | 5:05–5:10 /km | hard\n2 | Pause 2/3 | HF 110–145 | rec\n8 | Intervall 3/3 | 5:05–5:10 /km | hard\n2 | Pause 3/3 | HF 110–145 | rec\n30 | Auslaufen locker (ersetzt den Koppellauf vom Mo) | HF 130–145 | easy"
   },
   {
    "id": "2026-10-08-Run-8e9daf",
@@ -35,7 +35,7 @@
    "id": "2026-10-10-Run-a89a08",
    "date": "2026-10-10",
    "name": "10.10. Sa · LAUF locker 40 + Steigerungen (HKG Laufband 1 %)",
-   "src": "30 | Grundlage | HF 140–148 | ga1\n8 | Steigerungen 6x20 s bis ~4:30/km, je 1' traben | frei | hard\n5 | Auslaufen | HF 120–145 | easy"
+   "src": "30 | Grundlage | HF 140–148 | ga1\n0:20 | Steigerung 1/6 | 4:10–4:30 /km | hard\n1 | Traben 1/6 | HF 100–145 | rec\n0:20 | Steigerung 2/6 | 4:10–4:30 /km | hard\n1 | Traben 2/6 | HF 100–145 | rec\n0:20 | Steigerung 3/6 | 4:10–4:30 /km | hard\n1 | Traben 3/6 | HF 100–145 | rec\n0:20 | Steigerung 4/6 | 4:10–4:30 /km | hard\n1 | Traben 4/6 | HF 100–145 | rec\n0:20 | Steigerung 5/6 | 4:10–4:30 /km | hard\n1 | Traben 5/6 | HF 100–145 | rec\n0:20 | Steigerung 6/6 | 4:10–4:30 /km | hard\n1 | Traben 6/6 | HF 100–145 | rec\n5 | Auslaufen | HF 120–145 | easy"
   },
   {
    "id": "2026-10-10-Ride-d9e755",
@@ -125,7 +125,7 @@
    "id": "2026-10-20-Run-e90dc1",
    "date": "2026-10-20",
    "name": "20.10. Di · LAUF locker 45 + Steigerungen (Di)",
-   "src": "35 | Grundlage | HF 140–148 | ga1\n8 | Steigerungen 6x20 s bis ~4:30/km, je 1' traben | frei | hard\n5 | Auslaufen | HF 120–145 | easy"
+   "src": "35 | Grundlage | HF 140–148 | ga1\n0:20 | Steigerung 1/6 | 4:10–4:30 /km | hard\n1 | Traben 1/6 | HF 100–145 | rec\n0:20 | Steigerung 2/6 | 4:10–4:30 /km | hard\n1 | Traben 2/6 | HF 100–145 | rec\n0:20 | Steigerung 3/6 | 4:10–4:30 /km | hard\n1 | Traben 3/6 | HF 100–145 | rec\n0:20 | Steigerung 4/6 | 4:10–4:30 /km | hard\n1 | Traben 4/6 | HF 100–145 | rec\n0:20 | Steigerung 5/6 | 4:10–4:30 /km | hard\n1 | Traben 5/6 | HF 100–145 | rec\n0:20 | Steigerung 6/6 | 4:10–4:30 /km | hard\n1 | Traben 6/6 | HF 100–145 | rec\n5 | Auslaufen | HF 120–145 | easy"
   },
   {
    "id": "2026-10-20-Ride-1a6a26",
@@ -143,13 +143,13 @@
    "id": "2026-10-21-Ride-4f626c",
    "date": "2026-10-21",
    "name": "21.10. Mi · RAD FTP-Test 20 min",
-   "src": "20 | Einfahren | 150–200 W | easy\n3x [1 | Intervall hart | 290–310 W | hard ; 1 | Pause | 100–150 W | rec]\n5 | Locker | 100–150 W | easy\n5 | 5' all-out | frei | hard\n10 | Locker | 140–160 W | easy\n20 | 20' Zeitversuch so gleichmaessig wie moeglich (FTP = 95 % vom Schnitt) | frei | hard\n10 | Ausfahren | 100–150 W | easy"
+   "src": "20 | Einfahren | 150–200 W | easy\n1 | Intervall 1/3 | 290–310 W | hard\n1 | Pause 1/3 | 100–150 W | rec\n1 | Intervall 2/3 | 290–310 W | hard\n1 | Pause 2/3 | 100–150 W | rec\n1 | Intervall 3/3 | 290–310 W | hard\n1 | Pause 3/3 | 100–150 W | rec\n5 | Locker | 100–150 W | easy\n5 | 5' all-out | frei | hard\n10 | Locker | 140–160 W | easy\n20 | 20' Zeitversuch so gleichmaessig wie moeglich (FTP = 95 % vom Schnitt) | frei | hard\n10 | Ausfahren | 100–150 W | easy"
   },
   {
    "id": "2026-10-22-Run-274ed7",
    "date": "2026-10-22",
    "name": "22.10. Do · LAUF Schwelle 2x10'",
-   "src": "15 | Einlaufen | HF 130–145 | easy\n2x [10 | Intervall hart | 4:40–4:48 /km | hard ; 3 | Pause | HF 110–145 | rec]\n10 | Auslaufen | HF 130–145 | easy"
+   "src": "15 | Einlaufen | HF 130–145 | easy\n10 | Intervall 1/2 | 4:40–4:48 /km | hard\n3 | Pause 1/2 | HF 110–145 | rec\n10 | Intervall 2/2 | 4:40–4:48 /km | hard\n3 | Pause 2/2 | HF 110–145 | rec\n10 | Auslaufen | HF 130–145 | easy"
   },
   {
    "id": "2026-10-23-Ride-4f0985",
@@ -185,7 +185,7 @@
    "id": "2026-10-25-Ride-d854e3",
    "date": "2026-10-25",
    "name": "25.10. So · RAD 90 mit 3x15 Z3 (So)",
-   "src": "20 | Einrollen | 175–200 W | easy\n3x [15 | Schwelle | 201–240 W | sweet ; 5 | Pause | 175–200 W | rec]\n10 | Grundlage | 175–200 W | ga1\n5 | Ausfahren | 100–150 W | easy"
+   "src": "20 | Einrollen | 175–200 W | easy\n15 | Intervall 1/3 | 201–240 W | sweet\n5 | Grundlage 1/3 | 175–200 W | ga1\n15 | Intervall 2/3 | 201–240 W | sweet\n5 | Grundlage 2/3 | 175–200 W | ga1\n15 | Intervall 3/3 | 201–240 W | sweet\n5 | Grundlage 3/3 | 175–200 W | ga1\n10 | Grundlage | 175–200 W | ga1\n5 | Ausfahren | 100–150 W | easy"
   },
   {
    "id": "2026-10-26-Run-0e26f4",
